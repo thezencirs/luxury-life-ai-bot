@@ -1,0 +1,793 @@
+"""
+Luxury Life AI (@Luxurylifeaibot) — Viral Hook, High-Save-Rate (Kaydetme Oranı Yüksek) İçerik Analiz
+ve 5 Lüks Dikey Kategori (Takı/Saat, Makyaj/Kozmetik, Old Money Kombin, Ultra Lüks Otel, Süper Spor Araba)
+Reji, Kamera Açısı, Mekan, Model ve Doğrulanmış İş Birliği Link Motoru
+"""
+import hashlib
+import json
+import os
+import re
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+LEDGER_PATH = BASE_DIR / "output" / "luxury_zero_repeat_ledger.json"
+
+# ============================================================================
+# YASAL UYARI SABİTLERİ (T.C. Ticaret Bakanlığı Reklam Kurulu Tam Uyumlu)
+# ============================================================================
+TR_LEGAL_CAPTION_NOTICE = (
+    "⚖️ Yasal Uyarı: Bu paylaşım herhangi bir ticari iş birliği veya sponsorluk içermez; "
+    "tamamen lüks yaşam, stil ve estetik önerisi amaçlıdır. Görsellerde markalar yer aldığı için "
+    "yasal zorunluluk gereği #reklam #işbirliğiyoktur"
+)
+
+TR_LEGAL_LINKS_NOTICE = (
+    "⚖️ Yasal Not: İş birliği yoktur, takipçi bilgilendirmesi amaçlı ürün ve mağaza linkleridir. "
+    "Yasal zorunluluk gereği #reklam #işbirliğiyoktur"
+)
+
+# ============================================================================
+# KAYDETME ORANI YÜKSEK (HIGH-SAVE-RATE) VİRAL TUTUŞ FORMÜLLERİ ANALİZ RAPORU
+# ============================================================================
+VIRAL_RETENTION_FRAMEWORKS: Dict[str, Dict[str, str]] = {
+    "taki": {
+        "category_tr": "Mücevher & Yüksek Saatçilik (Haute Joaillerie & Horlogerie)",
+        "save_rate_benchmark": "%9.4 - %13.8 Kaydetme Oranı (Referans Katalog Etkisi)",
+        "hook_formula": "0.0s-1.2s Mikro- Parıltı Kancası + 'Bilekte/Boyunda Servet Gösteren 3 Altın Oran Kuralı'",
+        "camera_angle": "100mm f/2.8 Macro Lens (Kadife & Mermer Üzeri Elmas Kırılması) + 85mm f/1.4 Golden-Hour Dekolte/Bilek Portresi",
+        "lighting_setup": "3200K Sıcak Şampanya Nokta Spot (Specular Highlight) + Yumuşak Altın Rim Işığı",
+        "location_direction": "Place Vendôme Paris VIP Salon / Monaco Casino Terası / Boğaz Yalısı Calacatta Mermer Balkon",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Obsidyen siyah ipek gece elbisesi veya kaşmir boğazlı triko üzerinde zarif bilek/boyun hareketi",
+        "why_saved": "İzleyiciler mücevher/saat kombinasyonundaki 'Saat + Tek Bileklik + Yüzük' altın oranını ve ulaşılabilir/lüks alternatif linklerini alışverişte kullanmak için kaydeder.",
+    },
+    "makyaj": {
+        "category_tr": "Lüks Makyaj, Cilt Bakımı & Niş Parfüm (Luxury Beauty & Parfumerie)",
+        "save_rate_benchmark": "%11.2 - %15.6 Kaydetme Oranı (Rutin & Ürün Kodu Listesi Etkisi)",
+        "hook_formula": "0.0s-1.2s Mermer Vanity Kurulumu + 'Filtresiz Old Money Cam Cilt (Glass Skin) ve Kadife Dudak Formülü'",
+        "camera_angle": "90mm f/2.8 Macro Overhead Flat-Lay (Mermer Makyaj Masası) + 85mm f/1.4 Ayna Karşısı Uygulama Açısı",
+        "lighting_setup": "4800K Doğal Gün Işığı Tül Perde Difüzyonu + Ayna Kenarı Sıcak Kristal Aplik Yansıması",
+        "location_direction": "Hôtel Plaza Athénée Paris Mermer Banyo Süiti / Milano Penthouse Vanity Odası",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Şampanya ipek bornoz, arkaya toplanmış parlak saçlar, porselen cilt dokusu ve ruj/parfüm dokunuşu",
+        "why_saved": "Kadın takipçiler ton numarası, baz-fondöten-ruj-parfüm sıralaması ve Sephora/Beymen ürün linklerini mağazada bulmak için doğrudan kaydeder.",
+    },
+    "kombin": {
+        "category_tr": "Old Money & Quiet Luxury Kombinler (Haute Couture & Sartorial)",
+        "save_rate_benchmark": "%10.5 - %14.9 Kaydetme Oranı (6 Parça Kapsül Gardırop Etkisi)",
+        "hook_formula": "0.0s-1.2s Dergi Kapağı Kancası + 'Logoya İhtiyaç Duymadan 250.000₺ Aurası Veren 6 Parça Renk Matematiği'",
+        "camera_angle": "85mm f/1.4 Prime Tam Boy (Head-to-Toe) Alçak Podyum Yürüyüş Açısı + GraphMotion 6'lı Stüdyo Dekupe",
+        "lighting_setup": "Altın Saat (Golden Hour) Arka Kontur Işığı + Yumuşak Ön Portre Dolgu Işığı",
+        "location_direction": "Via Monte Napoleone Milano / Nişantaşı Abdi İpekçi Caddesi / St. Moritz & Lake Como Taş Bulvarı",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Kaşmir kabanın yürürken doğal dalgalanması, ayakkabıdan gözlüğe 6 parçanın 1:1 net görünümü",
+        "why_saved": "60-30-10 renk kuralı ve 6 parçanın doğrudan mağaza linkleri 'Yarın ne giysem?' sorusuna hazır reçete sunduğu için en yüksek kaydetme ve paylaşım oranını yakalar.",
+    },
+    "otel": {
+        "category_tr": "Ultra Lüks Oteller, Kraliyet Süitleri & Tatil Rotaları (5-Star Palace Hotels)",
+        "save_rate_benchmark": "%12.0 - %16.4 Kaydetme Oranı (Bucket-List & Seyahat Rehberi Etkisi)",
+        "hook_formula": "0.0s-1.2s Panoramik Teras Açılışı + 'Hayatında En Az Bir Kez Uyanman Gereken O Boğaz & Göl Manzarası'",
+        "camera_angle": "24mm f/1.4 Tilt-Shift Mimari Geniş Açı (Sonsuzluk Havuzu & Teras) + 50mm f/1.2 POV Teras Yürüyüşü",
+        "lighting_setup": "Sabah 08:30 Yumuşak Akdeniz/Boğaz Güneşi veya Gün Batımı Pembe-Altın Alacakaranlık",
+        "location_direction": "Çırağan Palace Kempinski / Mandarin Oriental Bosphorus / Amanruya Bodrum / Villa d'Este Lake Como",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Mermer terasta ipek sabahlık veya resort keten takımla kahve/şampanya eşliğinde manzaraya bakış",
+        "why_saved": "Çiftler ve lüks seyahat tutkunları yıldönümü, balayı veya hafta sonu kaçamağı planı için otel adını ve bavul kombin linklerini kaydeder ve birbirine DM atar.",
+    },
+    "araba": {
+        "category_tr": "Süper Spor & Ultra Lüks Otomobiller (Exotic Supercars & Bespoke Luxury)",
+        "save_rate_benchmark": "%9.8 - %14.2 Kaydetme Oranı (Aspirational Lifestyle & Sürüş Stili Etkisi)",
+        "hook_formula": "0.0s-1.2s Alçak Açı Rolling Shot + 'Sadece Motor Sesiyle Değil, İçinden İnen Duruşla Konuşan Lüks'",
+        "camera_angle": "35mm f/1.4 Low-Angle Dinamik Rampa/Rolling Açısı + Kokpit Deri Direksiyon/Saat POV + Araç Yanı Tam Boy",
+        "lighting_setup": "Gece Islak Asfalt Şehir/Kulüp Yansımaları + Gün Batımı Metalik Gövde Kontur Işığı",
+        "location_direction": "Place du Casino Monte-Carlo Monaco / İsviçre Alpleri Virajı / Bebek & Zorlu Center VIP Vale Meydanı",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Aracın dış rengiyle (British Racing Green / GT Silver / Obsidian Black) uyumlu süet/kaşmir sürüş kombini",
+        "why_saved": "Otomobil, lüks saat ve sürüş stilini tek karede birleştiren 'Old Money Driver' konsepti hem erkek hem kadın kitlede yüksek kaydetme ve hikaye paylaşımı üretir.",
+    },
+}
+
+# ============================================================================
+# 5 LÜKS KATEGORİDE HAZIR MASTER ŞABLONLAR (DOĞRULANMIŞ MAĞAZA & İŞ BİRLİĞİ LİNKLERİYLE)
+# ============================================================================
+LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
+    # ------------------------------------------------------------------------
+    # 1. KATEGORİ: TAKI & YÜKSEK SAATÇİLİK (taki)
+    # ------------------------------------------------------------------------
+    {
+        "id": "lux_taki_vendome_gold_diamond_01",
+        "category": "taki",
+        "gender_segment": "kadin",
+        "title": "Place Vendôme Işıltısı: 18K Altın & Baget Pırlanta Katmanlama Sanatı ✨",
+        "cover_kicker": "» MÜCEVHER & SAAT • PLACE VENDÔME PARİS REJİSİ «",
+        "cover_headline": "BİLEKTE SERVET GÖSTEREN 6 PARÇA ALTIN ORAN KURALI",
+        "spoken_hook_text": "Mücevherde sessiz lüks bağırarak değil, altın ve pırlantanın doğru katmanlanmasıyla konuşur!",
+        "viral_hook": "💎 Bilekte ve boyunda 'Old Money' zarafeti yaratan 6 parçalık mücevher & saat formülü! Kaydetmeyi unutma 👇✨",
+        "location_name": "Place Vendôme Paris & Boğaz Yalısı Mermer Teras",
+        "camera_spec": "Hasselblad H6D-100c • 100mm f/2.8 Macro + 85mm f/1.4 Golden Rim",
+        "act1_beat": "SAHNE 1: Çok takı takmak değil, doğru 3 odak noktasını seçmek lüksü yaratır.",
+        "act2_beat": "SAHNE 2: Şampanya kadranlı saat ve çivi/kelepçe altın bileklik uyumu %100 imza duruşu verir.",
+        "act3_twist": "FİNAL: Takı alışverişinden önce bu 6'lı reçeteyi KAYDET • Birebir linkler aşağıda!",
+        "model_prompt_en": (
+            "Ultra-photorealistic editorial luxury jewelry campaign photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens, "
+            "stunning adult female high-fashion supermodel with sleek dark espresso hair in a low chignon, natural skin pores, "
+            "wearing a sleek black silk evening gown on a candlelit marble balcony overlooking Place Vendome Paris at golden hour, "
+            "clearly showcasing a 18k yellow gold clover pendant necklace, diamond drop earrings, luxury gold wristwatch and stacked gold bracelets, "
+            "zero 3D, zero cartoon, 8k magazine photography"
+        ),
+        "items": {
+            "slot1": {
+                "category_label": "Lüks Saat",
+                "emoji": "⌚",
+                "brand": "CARTIER / BEYMEN",
+                "name": "Panthère & Baignoire Stili 18K Altın Tonlu Çelik Lüks Kadın Kol Saati",
+                "price": "24.950₺",
+                "price_val": 24950.0,
+                "sku": "LUX-WATCH-801",
+                "color": "Şampanya Altın",
+                "store_url": "https://www.beymen.com/tr/kadin-saat-10126",
+                "en_packshot": "luxury 18k yellow gold women wristwatch with champagne dial on pure solid white studio background #FFFFFF, macro product photography",
+            },
+            "slot2": {
+                "category_label": "İmza Bileklik",
+                "emoji": "✨",
+                "brand": "ATASAY / SO CHIC",
+                "name": "14 Ayar Altın İtalyan Kelepçe & Çivi Formlu Tasarım Bileklik",
+                "price": "18.490₺",
+                "price_val": 18490.0,
+                "sku": "LUX-BRC-802",
+                "color": "Sarı Altın",
+                "store_url": "https://www.atasay.com/altin-bileklik",
+                "en_packshot": "18k yellow gold sleek nail-style cuff bangle bracelet with diamond tip on pure solid white studio background #FFFFFF",
+            },
+            "slot3": {
+                "category_label": "Kolye",
+                "emoji": "📿",
+                "brand": "VAN CLEEF STİLİ / ZEN PIRLANTA",
+                "name": "Sedef & Oniks Yonca Motifli 14K Altın Zincir Kolye",
+                "price": "14.250₺",
+                "price_val": 14250.0,
+                "sku": "LUX-NCK-803",
+                "color": "Altın / Sedef",
+                "store_url": "https://www.zenpirlanta.com/altin-kolye",
+                "en_packshot": "18k gold chain necklace with mother-of-pearl four-leaf clover motif pendant on pure solid white background #FFFFFF",
+            },
+            "slot4": {
+                "category_label": "Pırlanta Küpe",
+                "emoji": "💎",
+                "brand": "SWAROVSKI / ZEN",
+                "name": "Baget & Damla Kesim Kristal Pırlanta Işıltılı Küpe",
+                "price": "6.890₺",
+                "price_val": 6890.0,
+                "sku": "LUX-EAR-804",
+                "color": "Beyaz Pırlanta / Altın",
+                "store_url": "https://www.swarovski.com/tr-TR/c-0103/Categories/Jewelry/Earrings/",
+                "en_packshot": "luxury baguette diamond and gold drop earrings pair on pure solid white studio background #FFFFFF",
+            },
+            "slot5": {
+                "category_label": "Tamtur Yüzük",
+                "emoji": "💍",
+                "brand": "ZEN PIRLANTA",
+                "name": " Emerald & Baget Kesim Pırlanta Taşlı Altın Tamtur Yüzük",
+                "price": "19.900₺",
+                "price_val": 19900.0,
+                "sku": "LUX-RNG-805",
+                "color": "Altın / Pırlanta",
+                "store_url": "https://www.zenpirlanta.com/pirlanta-tamtur-yuzukler",
+                "en_packshot": "luxury emerald-cut diamond eternity band ring in 18k yellow gold on pure solid white background #FFFFFF",
+            },
+            "slot6": {
+                "category_label": "Gece Elbisesi & Kutu",
+                "emoji": "🖤",
+                "brand": "VAKKO COUTURE",
+                "name": "Obsidyen Siyah İpek Saten Sırt Dekolteli Gece Elbisesi",
+                "price": "16.500₺",
+                "price_val": 16500.0,
+                "sku": "LUX-DRS-806",
+                "color": "Obsidyen Siyah",
+                "store_url": "https://www.vakko.com/kadin-elbise/",
+                "en_packshot": "sleek jet-black silk satin evening dress isolated flat-lay on pure solid white background #FFFFFF",
+            },
+        },
+        "hashtags": "#mücevher #altıntakı #pırlanta #lükssaat #oldmoneystyle #luxurylife #quietluxury #reklam #işbirliğiyoktur",
+    },
+
+    # ------------------------------------------------------------------------
+    # 2. KATEGORİ: LÜKS MAKYAJ, KOZMETİK & NİŞ PARFÜM (makyaj)
+    # ------------------------------------------------------------------------
+    {
+        "id": "lux_makyaj_paris_vanity_glass_skin_01",
+        "category": "makyaj",
+        "gender_segment": "kadin",
+        "title": "Hôtel Plaza Athénée Vanity: 6 Adımda 'Old Money Glass Skin' & Kadife Dudak Sırrı 💄",
+        "cover_kicker": "» LÜKS MAKYAJ & PARFÜM • PARİS VANITY REJİSİ «",
+        "cover_headline": "FİLTRESİZ 'OLD MONEY' CAM CİLT YARATAN 6 İKONİK ÜRÜN",
+        "spoken_hook_text": "Pahalı ve dinlenmiş görünen bir cildin sırrı kapatıcıda değil, doğru ışıltı bazında ve kadife dudak tonundadır!",
+        "viral_hook": "💄 Paris'in en lüks makyaj masalarından çıkan 6 parçalık 'Glass Skin & Velvet Lip' rutini! Kodları ve linkleri kaydet 👇✨",
+        "location_name": "Hôtel Plaza Athénée Paris Calacatta Mermer Banyo Süiti",
+        "camera_spec": "Hasselblad H6D-100c • 90mm f/2.8 Macro Vanity + 85mm f/1.4 Golden Mirror",
+        "act1_beat": "SAHNE 1: Ağır mat fondöten yerine cildi içeriden aydınlatan ipek bazla başla.",
+        "act2_beat": "SAHNE 2: Sıcak bronz kontur ve gül kurusu-bordo dudak tonu yüz hatlarını anında yukarı taşır.",
+        "act3_twist": "FİNAL: Sephora & Beymen alışverişinde aramamak için hemen KAYDET • Linkler aşağıda!",
+        "model_prompt_en": (
+            "Ultra-photorealistic luxury beauty campaign photograph shot on 85mm f/1.4 prime lens, "
+            "gorgeous adult female supermodel with glowing glass skin, natural skin micro-texture, wearing a champagne silk robe "
+            "in a sunlit Calacatta marble bathroom suite at Hotel Plaza Athenee Paris, holding a gold designer lipstick tube "
+            "in front of a gilded mirror with luxury perfume bottles and gold compact powder on the marble vanity, "
+            "zero 3D, zero cartoon, Vogue Beauty editorial photography"
+        ),
+        "items": {
+            "slot1": {
+                "category_label": "Işıltılı Baz & Fondöten",
+                "emoji": "✨",
+                "brand": "DIOR BEAUTY / SEPHORA",
+                "name": "Forever Skin Glow 24H Nemlendirici & Işıltı Veren Lüks Fondöten (2N)",
+                "price": "2.850₺",
+                "price_val": 2850.0,
+                "sku": "LUX-BTY-901",
+                "color": "2N Neutral Glow",
+                "store_url": "https://www.sephora.com.tr/markalar/dior/",
+                "en_packshot": "luxury glass bottle of radiant liquid foundation makeup with gold cap on pure solid white background #FFFFFF",
+            },
+            "slot2": {
+                "category_label": "Kadife Ruj",
+                "emoji": "💄",
+                "brand": "YSL BEAUTY / SEPHORA",
+                "name": "Rouge Pur Couture Caring Satin Altın Gövdeli İkonik Ruj (Nu Muse)",
+                "price": "2.190₺",
+                "price_val": 2190.0,
+                "sku": "LUX-BTY-902",
+                "color": "Nu Muse / Rosewood",
+                "store_url": "https://www.sephora.com.tr/markalar/yves-saint-laurent/",
+                "en_packshot": "luxury gold-cased satin lipstick bullet in rosewood nude shade on pure solid white background #FFFFFF",
+            },
+            "slot3": {
+                "category_label": "Pudra & Bronzer",
+                "emoji": "🪞",
+                "brand": "CHARLOTTE TILBURY / BEYMEN",
+                "name": "Airbrush Flawless Finish Altın Kompakt İpek Pudra",
+                "price": "2.490₺",
+                "price_val": 2490.0,
+                "sku": "LUX-BTY-903",
+                "color": "Medium Golden",
+                "store_url": "https://www.beymen.com/tr/kozmetik-10006",
+                "en_packshot": "luxury ribbed rose-gold compact pressed powder makeup case open on pure solid white background #FFFFFF",
+            },
+            "slot4": {
+                "category_label": "Allık & Aydınlatıcı",
+                "emoji": "🌸",
+                "brand": "CHANEL BEAUTY / SEPHORA",
+                "name": "Les Beiges Healthy Glow Aydınlatıcı & Kremsi Allık Paleti",
+                "price": "3.150₺",
+                "price_val": 3150.0,
+                "sku": "LUX-BTY-904",
+                "color": "Warm Peach Champagne",
+                "store_url": "https://www.sephora.com.tr/markalar/chanel/",
+                "en_packshot": "luxury luminous champagne-rose highlighter and blush compact palette on pure solid white background #FFFFFF",
+            },
+            "slot5": {
+                "category_label": "Cilt Bakım İksiri",
+                "emoji": "🧴",
+                "brand": "ESTÉE LAUDER / SEPHORA",
+                "name": "Advanced Night Repair & Crème de la Mer Işıltı Serumu",
+                "price": "4.450₺",
+                "price_val": 4450.0,
+                "sku": "LUX-BTY-905",
+                "color": "Altın İksir",
+                "store_url": "https://www.sephora.com.tr/cilt-bakimi/",
+                "en_packshot": "luxury amber-gold dropper facial serum glass bottle on pure solid white studio background #FFFFFF",
+            },
+            "slot6": {
+                "category_label": "Niş Parfüm",
+                "emoji": "👑",
+                "brand": "MAISON FRANCIS KURKDJIAN / BEYMEN",
+                "name": "Baccarat Rouge 540 & Oud Satin Mood Extrait de Parfum (70 ml)",
+                "price": "14.950₺",
+                "price_val": 14950.0,
+                "sku": "LUX-PRF-906",
+                "color": "Yakut & Altın",
+                "store_url": "https://www.beymen.com/tr/kozmetik-parfum-10179",
+                "en_packshot": "luxury crystal square ruby-red and gold niche perfume bottle on pure solid white background #FFFFFF",
+            },
+        },
+        "hashtags": "#lüksmakyaj #makyajönerileri #sephoratürkiye #glassskin #oldmoneybeauty #nişparfüm #luxurylife #reklam #işbirliğiyoktur",
+    },
+
+    # ------------------------------------------------------------------------
+    # 3. KATEGORİ: OLD MONEY & HAUTE COUTURE KOMBİNLER (kombin)
+    # ------------------------------------------------------------------------
+    {
+        "id": "lux_kombin_milano_cashmere_espresso_01",
+        "category": "kombin",
+        "gender_segment": "kadin",
+        "title": "Via Monte Napoleone Milano: Kaşmir, İpek & Espresso Süet 'Quiet Luxury' Kurgusu 🧥",
+        "cover_kicker": "» OLD MONEY KOMBİN • MİLANO HAUTE COUTURE REJİSİ «",
+        "cover_headline": "LOGOSUZ 250.000₺ AURASI YARATAN 6 PARÇA KAŞMİR FORMÜLÜ",
+        "spoken_hook_text": "Gerçek lüks üzerinde dev logolar taşımaz; kaşmirin dokusu ve altmış-otuz-on renk dengesiyle ilk saniyede anlaşılır!",
+        "viral_hook": "🧥 Milano Via Monte Napoleone'den fırlamış 6 parçalık 'Quiet Luxury' kombin reçetesi! Kaydet ve linkleri incele 👇✨",
+        "location_name": "Via Monte Napoleone Milano & Nişantaşı Abdi İpekçi Bulvarı",
+        "camera_spec": "Hasselblad H6D-100c • 85mm f/1.4 Prime Tam Boy Podyum Yürüyüşü",
+        "act1_beat": "SAHNE 1: %60 Devetüyü kaşmir dış katman, %30 fildişi merinos iç katmanla birleşir.",
+        "act2_beat": "SAHNE 2: %10 Espresso süet çanta ve loafer dokunuşu kombini podyum seviyesine çıkarır.",
+        "act3_twist": "FİNAL: Dolabının imza kombinini kaybetmemek için hemen KAYDET • Doğrulanmış linkler aşağıda!",
+        "model_prompt_en": (
+            "Ultra-photorealistic full-body street style fashion photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens, "
+            "stunning adult female supermodel walking mid-stride head-to-toe on Via Monte Napoleone Milan at golden hour, "
+            "wearing a tailored camel double-breasted cashmere coat over an ivory ribbed turtleneck sweater, warm taupe pleated wide-leg wool palazzo trousers, "
+            "tortoiseshell designer sunglasses, structured espresso-brown leather gold-clasp handbag, and suede loafers, "
+            "natural skin texture, zero 3D, zero cartoon, 8k Vogue Italia lookbook"
+        ),
+        "items": {
+            "slot1": {
+                "category_label": "Kaşmir Kaban",
+                "emoji": "🧥",
+                "brand": "MASSIMO DUTTI / BEYMEN",
+                "name": "Devetüyü (Camel) Kruvaze Yün & Kaşmir Karışımlı Uzun Kaban",
+                "price": "9.950₺",
+                "price_val": 9950.0,
+                "sku": "LUX-FSH-701",
+                "color": "Camel / Devetüyü",
+                "store_url": "https://www.massimodutti.com/tr/kadin/palto-ve-trenckot-n1434",
+                "en_packshot": "tailored warm camel double-breasted wool cashmere overcoat isolated on pure solid white background #FFFFFF",
+            },
+            "slot2": {
+                "category_label": "Güneş Gözlüğü",
+                "emoji": "🕶️",
+                "brand": "CELINE / BEYMEN EYEWEAR",
+                "name": "Triomphe Gold Detaylı Kemik/Siyah Oval Güneş Gözlüğü",
+                "price": "14.500₺",
+                "price_val": 14500.0,
+                "sku": "LUX-FSH-702",
+                "color": "Siyah / Altın",
+                "store_url": "https://www.beymen.com/tr/kadin-aksesuar-gunes-gozlugu-10105",
+                "en_packshot": "luxury black acetate oval sunglasses with gold temple emblem on pure solid white background #FFFFFF",
+            },
+            "slot3": {
+                "category_label": "Kaşmir Triko",
+                "emoji": "👚",
+                "brand": "İPEKYOL / VAKKO",
+                "name": "Fildişi Ekru İnce Fitilli Boğazlı Merinos & Kaşmir Triko",
+                "price": "2.950₺",
+                "price_val": 2950.0,
+                "sku": "LUX-FSH-703",
+                "color": "Fildişi Ekru",
+                "store_url": "https://www.ipekyol.com.tr/triko-modelleri/",
+                "en_packshot": "ivory cream ribbed-knit cashmere turtleneck sweater isolated on pure solid white background #FFFFFF",
+            },
+            "slot4": {
+                "category_label": "Palazzo Pantolon",
+                "emoji": "👖",
+                "brand": "VAKKO / ZARA ATELIER",
+                "name": "Vizon & Taş Beji Yüksek Bel Pileli İtalyan Yün Palazzo Pantolon",
+                "price": "3.490₺",
+                "price_val": 3490.0,
+                "sku": "LUX-FSH-704",
+                "color": "Vizon Bej",
+                "store_url": "https://www.vakko.com/kadin-pantolon/",
+                "en_packshot": "warm taupe beige high-waisted pleated wide-leg wool palazzo trousers on pure solid white background #FFFFFF",
+            },
+            "slot5": {
+                "category_label": "Lüks Deri Çanta",
+                "emoji": "👜",
+                "brand": "BEYMEN COLLECTION",
+                "name": "Espresso Kahve Gold Kilitli Kelly Formlu Deri El & Omuz Çantası",
+                "price": "7.850₺",
+                "price_val": 7850.0,
+                "sku": "LUX-FSH-705",
+                "color": "Espresso Kahve",
+                "store_url": "https://www.beymen.com/tr/kadin-canta-10014",
+                "en_packshot": "structured espresso dark-brown leather top-handle handbag with gold turn-lock clasp on pure solid white background #FFFFFF",
+            },
+            "slot6": {
+                "category_label": "Süet Loafer",
+                "emoji": "👞",
+                "brand": "LORO PIANA STİLİ / NETWORK",
+                "name": "Summer Walk Stili Hakiki Süet Deri Krem Tabanlı Lüks Loafer",
+                "price": "5.490₺",
+                "price_val": 5490.0,
+                "sku": "LUX-FSH-706",
+                "color": "Taba Süet",
+                "store_url": "https://www.network.com.tr/kadin-ayakkabi-1006/",
+                "en_packshot": "luxury warm cognac suede slip-on loafers with cream rubber sole on pure solid white background #FFFFFF",
+            },
+        },
+        "hashtags": "#oldmoneystyle #quietluxury #kombinönerileri #kaşmirkaban #lüksmoda #luxurylife #reklam #işbirliğiyoktur",
+    },
+
+    # ------------------------------------------------------------------------
+    # 4. KATEGORİ: ULTRA LÜKS OTELLER & TATİL ROTALARI (otel)
+    # ------------------------------------------------------------------------
+    {
+        "id": "lux_otel_bosphorus_como_palace_01",
+        "category": "otel",
+        "gender_segment": "kadin",
+        "title": "Çırağan Palace & Lake Como: Boğaz'da Kraliyet Terası ve 6 Parça Bavul Ritüeli 🏨",
+        "cover_kicker": "» ULTRA LÜKS OTEL & SEYAHAT • BOĞAZ & COMO REJİSİ «",
+        "cover_headline": "HAYATINDA EN AZ BİR KEZ UYANMAN GEREKEN TERAS & BAVUL KURGUSU",
+        "spoken_hook_text": "Beş yıldızlı bir saray süitinde uyanmanın büyüsünü tamamlayan şey, bavulundan çıkan o altı zamansız parçadır!",
+        "viral_hook": "🏨 Boğaz ve Como Gölü'nün en ikonik saray otelleri + lüks hafta sonu bavulunun 6 vazgeçilmez parçası! Seyahat planın için kaydet 👇✨",
+        "location_name": "Çırağan Palace Kempinski & Mandarin Oriental Bosphorus Teras Süiti",
+        "camera_spec": "Hasselblad H6D-100c • 24mm f/1.4 Mimari Teras + 50mm f/1.2 POV",
+        "act1_beat": "SAHNE 1: Sabah 08:30 Boğaz esintisi, mermer terasta gümüş tepside kahvaltı.",
+        "act2_beat": "SAHNE 2: Alüminyum kabin valizden çıkan ipek kaftan ve İtalyan parfümü anı ölümsüzleştirir.",
+        "act3_twist": "FİNAL: Bir sonraki özel kaçamağın için hemen KAYDET ve gitmek istediğin kişiye GÖNDER!",
+        "model_prompt_en": (
+            "Ultra-photorealistic luxury travel & 5-star palace hotel editorial photograph shot on 35mm f/1.4 lens, "
+            "elegant adult female supermodel standing on a grand marble terrace suite at Ciragan Palace overlooking the glittering Bosphorus strait in Istanbul at sunny morning golden light, "
+            "wearing an ivory silk resort maxi kaftan dress and designer sunglasses, silver breakfast tray with espresso and croissants on a white tablecloth table, "
+            "silver ribbed aluminum luxury suitcase nearby, zero 3D, zero cartoon, Conde Nast Traveler cover photography"
+        ),
+        "items": {
+            "slot1": {
+                "category_label": "Lüks Konaklama",
+                "emoji": "🏨",
+                "brand": "MANDARIN ORIENTAL / ÇIRAĞAN PALACE",
+                "name": "Boğaz Manzaralı Panoramik Mermer Teras Süit & Özel Kahvaltı Deneyimi",
+                "price": "Gecelik Özel Süit",
+                "price_val": 42000.0,
+                "sku": "LUX-HTL-601",
+                "color": "Boğaz Mavisi & Mermer",
+                "store_url": "https://www.mandarinoriental.com/tr/istanbul/bosphorus",
+                "en_packshot": "luxury 5-star hotel suite marble balcony with Bosphorus view and silver breakfast tray on pure white frame #FFFFFF",
+            },
+            "slot2": {
+                "category_label": "Kabin Valiz",
+                "emoji": "🧳",
+                "brand": "RIMOWA STİLİ / BEYMEN",
+                "name": "Oluklu Alüminyum Gümüş Kabin Boy Lüks Seyahat Valizi",
+                "price": "18.900₺",
+                "price_val": 18900.0,
+                "sku": "LUX-HTL-602",
+                "color": "Titanyum Gümüş",
+                "store_url": "https://www.beymen.com/tr/seyahat-valiz-10356",
+                "en_packshot": "silver grooved aluminum luxury cabin luggage suitcase with leather handles on pure solid white background #FFFFFF",
+            },
+            "slot3": {
+                "category_label": "Resort Elbise / Kaftan",
+                "emoji": "👗",
+                "brand": "VAKKO MARE",
+                "name": "Şampanya & Fildişi %100 İpek Kuşaklı Resort Teras Elbisesi",
+                "price": "12.450₺",
+                "price_val": 12450.0,
+                "sku": "LUX-HTL-603",
+                "color": "Şampanya İpek",
+                "store_url": "https://www.vakko.com/vakko-mare/",
+                "en_packshot": "flowing champagne-ivory silk maxi resort dress isolated on pure solid white background #FFFFFF",
+            },
+            "slot4": {
+                "category_label": "Resort Gözlük",
+                "emoji": "🕶️",
+                "brand": "CHLOÉ / BEYMEN EYEWEAR",
+                "name": "Altın Çerçeveli Degrade Camlı Oversize Resort Güneş Gözlüğü",
+                "price": "11.800₺",
+                "price_val": 11800.0,
+                "sku": "LUX-HTL-604",
+                "color": "Altın / Amber",
+                "store_url": "https://www.beymen.com/tr/kadin-aksesuar-gunes-gozlugu-10105",
+                "en_packshot": "gold wire-frame oversized resort sunglasses with warm amber gradient lenses on pure solid white background #FFFFFF",
+            },
+            "slot5": {
+                "category_label": "Akdeniz Parfümü",
+                "emoji": "🍋",
+                "brand": "ACQUA DI PARMA / SEPHORA",
+                "name": "Blu Mediterraneo Mirto di Panarea & Bergamotto İtalyan Parfümü",
+                "price": "6.750₺",
+                "price_val": 6750.0,
+                "sku": "LUX-HTL-605",
+                "color": "Akdeniz Mavisi & Altın",
+                "store_url": "https://www.sephora.com.tr/markalar/acqua-di-parma/",
+                "en_packshot": "cobalt-blue cylindrical Italian luxury perfume bottle with gold cap on pure solid white background #FFFFFF",
+            },
+            "slot6": {
+                "category_label": "Deri Resort Terlik",
+                "emoji": "🩴",
+                "brand": "HERMÈS ORAN STİLİ / BEYMEN",
+                "name": "Taba (Gold) Hakiki Deri H-Kesim Lüks Resort Terlik",
+                "price": "6.950₺",
+                "price_val": 6950.0,
+                "sku": "LUX-HTL-606",
+                "color": "Konyak Taba",
+                "store_url": "https://www.beymen.com/tr/kadin-ayakkabi-sandalet-terlik-10090",
+                "en_packshot": "cognac tan leather flat slide resort sandals with H-cutout strap on pure solid white background #FFFFFF",
+            },
+        },
+        "hashtags": "#lüksotel #boğazotelleri #luxuryhotels #oldmoneytravel #mandarinoriental #çırağanpalace #luxurylife #reklam #işbirliğiyoktur",
+    },
+
+    # ------------------------------------------------------------------------
+    # 5. KATEGORİ: SÜPER SPOR & ULTRA LÜKS ARABALAR (araba)
+    # ------------------------------------------------------------------------
+    {
+        "id": "lux_araba_monaco_porsche_gt3_driver_01",
+        "category": "araba",
+        "gender_segment": "erkek",
+        "title": "Monaco Casino Meydanı: Porsche 911 GT3 Touring & 'Gentleman Driver' 6 Parça Stili 🏎️",
+        "cover_kicker": "» SÜPER SPOR OTOMOBİL & STİL • MONACO GP REJİSİ «",
+        "cover_headline": "SADECE MOTOR SESİYLE DEĞİL DURUŞUYLA KONUŞAN 6 PARÇA",
+        "spoken_hook_text": "Gerçek bir süper spor otomobilin direksiyonundan indiğinde, üzerindeki süet ceket ve bileğindeki kronograf aynı dili konuşmalıdır!",
+        "viral_hook": "🏎️ Porsche 911 GT3 Touring (British Racing Green) ve 'Old Money Gentleman Driver' 6 parçalık sürüş stili! Kaydet 👇✨",
+        "location_name": "Place du Casino Monte-Carlo Monaco & Zorlu VIP Meydan",
+        "camera_spec": "Hasselblad H6D-100c • 35mm f/1.4 Low-Angle Rolling + Kokpit POV",
+        "act1_beat": "SAHNE 1: British Racing Green gövde rengi ile taba deri kokpitin zamansız uyumu.",
+        "act2_beat": "SAHNE 2: İtalyan süet sürüş ceketi, kronograf saat ve deri loafer kusursuz bütünlük kurar.",
+        "act3_twist": "FİNAL: Otomobil ve lüks stil tutkunları için hemen KAYDET • Ürün linkleri aşağıda!",
+        "model_prompt_en": (
+            "Ultra-photorealistic luxury automotive & menswear editorial photograph shot on 35mm f/1.4 lens at low angle, "
+            "charismatic adult male fashion model with sharp jawline standing beside a sleek British Racing Green Porsche 911 GT3 Touring sports car "
+            "in front of Place du Casino Monte Carlo Monaco at golden sunset, wearing a cognac suede bomber jacket over a fine cream merino turtleneck, "
+            "charcoal tailored trousers, aviator sunglasses, luxury chronograph watch, and leather driving loafers, "
+            "natural skin texture, zero 3D, zero cartoon, 8k GQ automotive photography"
+        ),
+        "items": {
+            "slot1": {
+                "category_label": "Süper Spor Otomobil",
+                "emoji": "🏎️",
+                "brand": "PORSCHE TÜRKİYE",
+                "name": "Porsche 911 GT3 Touring Package (British Racing Green / Cognac Deri Kokpit)",
+                "price": "Özel Konfigürasyon",
+                "price_val": 28500000.0,
+                "sku": "LUX-CAR-501",
+                "color": "British Racing Green",
+                "store_url": "https://www.porsche.com.tr/modeller/911/",
+                "en_packshot": "sleek dark emerald green Porsche 911 GT3 luxury sports car 3/4 front studio angle on pure solid white background #FFFFFF",
+            },
+            "slot2": {
+                "category_label": "Kronograf Saat",
+                "emoji": "⌚",
+                "brand": "TAG HEUER / BEYMEN SAAT",
+                "name": "Carrera & Daytona Stili Çelik Kasalı Kronograf Sürüş Saati",
+                "price": "84.500₺",
+                "price_val": 84500.0,
+                "sku": "LUX-CAR-502",
+                "color": "Gümüş / Yeşil Kadran",
+                "store_url": "https://www.beymen.com/tr/erkek-aksesuar-saat-10075",
+                "en_packshot": "luxury stainless steel racing chronograph wristwatch with green tachymeter bezel on pure solid white background #FFFFFF",
+            },
+            "slot3": {
+                "category_label": "Süet Sürüş Ceketi",
+                "emoji": "🧥",
+                "brand": "MASSIMO DUTTI STUDIO",
+                "name": "Konyak Taba %100 Hakiki Süet Deri İtalyan Sürüş & Bomber Ceket",
+                "price": "14.950₺",
+                "price_val": 14950.0,
+                "sku": "LUX-CAR-503",
+                "color": "Konyak Taba",
+                "store_url": "https://www.massimodutti.com/tr/erkek/deri-ceketler-n1379",
+                "en_packshot": "men cognac tan suede leather bomber driving jacket isolated on pure solid white background #FFFFFF",
+            },
+            "slot4": {
+                "category_label": "Sürüş Gözlüğü",
+                "emoji": "🕶️",
+                "brand": "PERSOL / RAY-BAN",
+                "name": "Steve McQueen Katlanabilir Kemik & Polarize Camlı Sürüş Gözlüğü",
+                "price": "9.450₺",
+                "price_val": 9450.0,
+                "sku": "LUX-CAR-504",
+                "color": "Havana / Yeşil Cam",
+                "store_url": "https://www.beymen.com/tr/erkek-aksesuar-gunes-gozlugu-10073",
+                "en_packshot": "luxury Havana tortoiseshell aviator driving sunglasses with green polarized lenses on pure solid white background #FFFFFF",
+            },
+            "slot5": {
+                "category_label": "Hafta Sonu Çantası",
+                "emoji": "💼",
+                "brand": "TERGAN / BEYMEN CLUB",
+                "name": "Örgü Dokulu (Intrecciato) Hakiki Deri Hafta Sonu & Kokpit Çantası",
+                "price": "8.950₺",
+                "price_val": 8950.0,
+                "sku": "LUX-CAR-505",
+                "color": "Acı Kahve Deri",
+                "store_url": "https://www.beymen.com/tr/erkek-canta-10064",
+                "en_packshot": "dark espresso woven leather weekender duffle bag on pure solid white studio background #FFFFFF",
+            },
+            "slot6": {
+                "category_label": "Sürüş Loafer",
+                "emoji": "👞",
+                "brand": "SANTONI / NETWORK",
+                "name": "Konyak Süet Deri Esnek Tabanlı İtalyan Driving Loafer",
+                "price": "6.750₺",
+                "price_val": 6750.0,
+                "sku": "LUX-CAR-506",
+                "color": "Konyak Süet",
+                "store_url": "https://www.network.com.tr/erkek-ayakkabi-1030/",
+                "en_packshot": "men cognac suede Italian driving loafers shoes on pure solid white studio background #FFFFFF",
+            },
+        },
+        "hashtags": "#porsche911 #supercars #oldmoneymen #gentlemanstyle #luxurycars #monacolifestyle #luxurylife #reklam #işbirliğiyoktur",
+    },
+]
+
+
+def detect_luxury_category(text: str, urls: Optional[List[str]] = None) -> str:
+    """
+    Kullanıcının Telegram'dan gönderdiği metin, komut veya linklere göre
+    5 lüks kategoriden ('taki', 'makyaj', 'kombin', 'otel', 'araba') hangisi olduğunu algılar.
+    """
+    blob = " ".join([text or ""] + (urls or [])).lower()
+
+    if any(k in blob for k in ("/taki", "takı", "taki", "kolye", "bileklik", "küpe", "kupe", "yüzük", "yuzuk", "pırlanta", "pirlanta", "altın", "altin", "mücevher", "mucevher", "cartier", "swarovski", "atasay", "zenpirlanta", "pandora", "rolex", "saat")):
+        return "taki"
+    if any(k in blob for k in ("/makyaj", "makyaj", "ruj", "fondöten", "fondoten", "allık", "allik", "pudra", "rimel", "maskara", "sephora", "parfüm", "parfum", "kozmetik", "cilt", "serum", "krem", "dior beauty", "chanel beauty", "charlotte tilbury")):
+        return "makyaj"
+    if any(k in blob for k in ("/otel", "otel", "hotel", "suit", "süit", "tatil", "resort", "villa", "havuz", "boğaz", "bogaz", "mandarin", "çırağan", "ciragan", "four seasons", "amanruya", "bodrum", "como", "booking", "ets")):
+        return "otel"
+    if any(k in blob for k in ("/araba", "araba", "otomobil", "porsche", "ferrari", "rolls-royce", "rolls royce", "bentley", "mercedes", "g63", "amg", "range rover", "lamborghini", "aston martin", "supercar", "sürüş", "kokpit")):
+        return "araba"
+    if any(k in blob for k in ("/kombin", "kombin", "kaban", "ceket", "elbise", "pantolon", "triko", "kazak", "çanta", "canta", "ayakkabı", "ayakkabi", "loafer", "beymen", "vakko", "zara", "massimo dutti", "ipekyol")):
+        return "kombin"
+    return "otomatik"
+
+
+def resolve_smart_collaboration_url(item_name: str, brand: str, category: str, explicit_url: str = "") -> str:
+    """
+    Kullanıcı doğrudan link verdiyse onu korur; yalnızca ürün adı/görseli verdiyse
+    takipçilerin tıklayıp satın alabileceği ve iş birliğine uygun gerçek mağaza arama/kategori linki üretir.
+    """
+    if explicit_url and explicit_url.startswith("http"):
+        return explicit_url.strip()
+
+    from urllib.parse import quote_plus
+    query = quote_plus(f"{brand} {item_name}".strip())
+    b_low = (brand or "").lower()
+
+    if "sephora" in b_low or category == "makyaj":
+        return f"https://www.sephora.com.tr/on/demandware.store/Sites-Sephora_TR-Site/tr_TR/Search-Show?q={query}"
+    if "atasay" in b_low or "zen" in b_low or "swarovski" in b_low or category == "taki":
+        return f"https://www.trendyol.com/sr?q={query}"
+    if "porsche" in b_low:
+        return "https://www.porsche.com.tr/modeller/911/"
+    if "mandarin" in b_low or "çırağan" in b_low or category == "otel":
+        return "https://www.mandarinoriental.com/tr/istanbul/bosphorus"
+    if "vakko" in b_low:
+        return f"https://www.vakko.com/arama/?q={query}"
+    if "massimo" in b_low:
+        return "https://www.massimodutti.com/tr/"
+    return f"https://www.beymen.com/tr/search?q={query}"
+
+
+def load_luxury_ledger() -> Dict[str, Any]:
+    os.makedirs(LEDGER_PATH.parent, exist_ok=True)
+    if LEDGER_PATH.exists():
+        try:
+            return json.loads(LEDGER_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {"published_ids": [], "last_category_index": -1, "last_dispatch_ts": 0.0}
+
+
+def save_luxury_ledger(data: Dict[str, Any]) -> None:
+    os.makedirs(LEDGER_PATH.parent, exist_ok=True)
+    LEDGER_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def select_luxury_concept(force_category: str = "otomatik", custom_concept: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    Telegram'dan gelen özel talep varsa onu, yoksa sıradaki lüks kategoriyi ('taki' -> 'makyaj' -> 'kombin' -> 'otel' -> 'araba') seçer.
+    """
+    if custom_concept:
+        cat = custom_concept.get("category", "kombin")
+        custom_concept["viral_analysis"] = VIRAL_RETENTION_FRAMEWORKS.get(cat, VIRAL_RETENTION_FRAMEWORKS["kombin"])
+        return custom_concept
+
+    ledger = load_luxury_ledger()
+    cat_order = ["taki", "makyaj", "kombin", "otel", "araba"]
+    if force_category in cat_order:
+        target_cat = force_category
+    else:
+        next_idx = (int(ledger.get("last_category_index", -1)) + 1) % len(cat_order)
+        target_cat = cat_order[next_idx]
+        ledger["last_category_index"] = next_idx
+        save_luxury_ledger(ledger)
+
+    candidates = [a for a in LUXURY_MASTER_ARCHETYPES if a["category"] == target_cat]
+    chosen = dict(candidates[0] if candidates else LUXURY_MASTER_ARCHETYPES[0])
+    chosen["viral_analysis"] = VIRAL_RETENTION_FRAMEWORKS.get(chosen["category"], VIRAL_RETENTION_FRAMEWORKS["kombin"])
+    return chosen
+
+
+def build_explanatory_director_message(concept: Dict[str, Any]) -> str:
+    """
+    1. MESAJ (Copy-Paste Harici Açıklayıcı Yazı):
+    Kullanıcıya bu Reels konseptinin neden yüksek kaydetme oranı aldığını,
+    seçilen kamera açısını, mekanı, modeli ve aşağıdaki 2 copy-paste mesajının nasıl kullanılacağını açıklar.
+    """
+    va = concept.get("viral_analysis") or VIRAL_RETENTION_FRAMEWORKS.get(concept.get("category", "kombin"))
+    title = concept.get("title", "Lüks Yaşam Konsepti")
+    loc = concept.get("location_name", "Paris / Milano / İstanbul Boğazı")
+    cam = concept.get("camera_spec", "Hasselblad H6D-100c • 85mm f/1.4")
+
+    lines = [
+        "🎬 [LUXURY LIFE AI — REELS TUTUŞ, KAYDETME ORANI & REJİ ANALİZİ]",
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+        f"📌 Konsept: {title}",
+        f"🏆 Kategori: {va['category_tr']}",
+        f"📈 Beklenen Kaydetme Oranı (Save Rate): {va['save_rate_benchmark']}",
+        "",
+        "🧠 NEDEN BU VİDEO YÜKSEK KAYDETME ALIR?",
+        f"• Kanca (0.0s - 1.2s): {va['hook_formula']}",
+        f"• Kaydetme Psikolojisi: {va['why_saved']}",
+        "",
+        "🎥 DOĞRU AÇI, MEKAN & MODEL REJİSİ:",
+        f"• Kamera & Lens Açısı: {cam} ({va['camera_angle']})",
+        f"• Işık Kurulumu: {va['lighting_setup']}",
+        f"• Seçilen Lüks Mekan: {loc}",
+        f"• Model & Sahne Duruşu: {va['model_direction']}",
+        "",
+        "📋 KULLANIM REHBERİ (AŞAĞIDAKİ 2 AYRI COPY-PASTE MESAJI):",
+        "1️⃣ Hemen alttaki 1. metin mesajı: SADECE Instagram Reels Açıklama (Caption) kısmına tek dokunuşla kopyalayıp yapıştırmanız içindir (Yasal '#reklam #işbirliğiyoktur' notu dahildir).",
+        "2️⃣ Onun altındaki 2. metin mesajı: SADECE ürünlerin birebir doğrulanmış mağaza/iş birliği linkleridir; İlk Yoruma, Story Link etiketine veya takipçi DM'lerine doğrudan kopyalayıp yapıştırabilirsiniz.",
+    ]
+    return "\n".join(lines)
+
+
+def build_pure_copy_paste_caption(concept: Dict[str, Any]) -> str:
+    """
+    2. MESAJ (Açıklama Copy-Paste — %100 Saf Instagram Reels Açıklaması):
+    Hiçbir 'Kopyalanacak metin:' vb. dış başlık içermez. Doğrudan kopyalanıp Instagram açıklamasına yapıştırılır.
+    Yasal zorunluluk gereği 'iş birliği yoktur / #reklam' uyarısını eksiksiz içerir.
+    """
+    va = concept.get("viral_analysis") or VIRAL_RETENTION_FRAMEWORKS.get(concept.get("category", "kombin"))
+    title = concept.get("title", "")
+    viral_hook = concept.get("viral_hook", "")
+    loc = concept.get("location_name", "")
+    items = concept.get("items", {})
+    hashtags = concept.get("hashtags", "#luxurylife #oldmoney #quietluxury #reklam #işbirliğiyoktur")
+
+    num_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"]
+    item_lines = []
+    for idx, (slot_k, it) in enumerate(items.items()):
+        num_e = num_emojis[idx] if idx < len(num_emojis) else "•"
+        em = it.get("emoji", "✨")
+        lbl = it.get("category_label", "Detay")
+        brand = it.get("brand", "Lüks Marka")
+        name = it.get("name", "Ürün")
+        price = it.get("price", "")
+        sku = it.get("sku", "-")
+        item_lines.append(f"{num_e} {em} {lbl}: {brand} — {name} ({price} | Kod: {sku})")
+
+    lines = [
+        f"✨ {title}",
+        "",
+        f"{viral_hook}",
+        "",
+        f"📍 Mekan & Atmosfer: {loc}",
+        f"🎥 Estetik & Stil Notu: {va['why_saved']}",
+        "",
+        "💎 VİDEODAKİ 6 LÜKS DETAY & ÜRÜN REÇETESİ:",
+        *item_lines,
+        "",
+        "📌 Bu lüks kurguyu ve ürün kodlarını kaybetmemek için videoyu hemen KAYDET ve stilini beğendiğin arkadaşına GÖNDER! 👇✨",
+        "💬 Senin favorin kaç numaralı parça oldu? (1-6 arası yoruma yaz, linkini sabitleyelim 👇)",
+        "",
+        TR_LEGAL_CAPTION_NOTICE,
+        "",
+        hashtags,
+    ]
+    return "\n".join(lines)
+
+
+def build_pure_copy_paste_links(concept: Dict[str, Any]) -> str:
+    """
+    3. MESAJ (Linkler Copy-Paste — %100 Saf Ürün ve İş Birliği Linkleri):
+    Hiçbir dış sarmalayıcı etiket olmadan doğrudan İlk Yoruma / Story'ye / DM'e kopyalanıp yapıştırılır.
+    Birebir ürün linklerini ve zorunlu yasal uyarıyı içerir.
+    """
+    title = concept.get("title", "Lüks Yaşam Seçkisi")
+    items = concept.get("items", {})
+    num_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"]
+
+    lines = [
+        f"💎 {title} — BİREBİR ÜRÜN & MAĞAZA LİNKLERİ 👇",
+        "",
+    ]
+    for idx, (slot_k, it) in enumerate(items.items()):
+        num_e = num_emojis[idx] if idx < len(num_emojis) else "•"
+        em = it.get("emoji", "✨")
+        brand = it.get("brand", "Mağaza")
+        name = it.get("name", "Ürün")
+        price = it.get("price", "")
+        sku = it.get("sku", "-")
+        url = it.get("store_url") or resolve_smart_collaboration_url(name, brand, concept.get("category", "kombin"))
+        lines.append(f"{num_e} {em} {brand} – {name} ({price} | Kod: {sku})")
+        lines.append(f"👉 {url}")
+        lines.append("")
+
+    lines.append("✨ Favori parçanızın numarasını yoruma yazabilirsiniz!")
+    lines.append(TR_LEGAL_LINKS_NOTICE)
+    return "\n".join(lines)
