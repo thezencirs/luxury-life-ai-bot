@@ -308,9 +308,9 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
         "viral_hook": "💎 Bilekte ve boyunda 'Old Money' zarafeti yaratan 6 parçalık mücevher & saat formülü! Kaydetmeyi unutma 👇✨",
         "location_name": "Haute Joaillerie Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)",
         "camera_spec": "Hasselblad H6D-100c • 100mm f/2.8 Macro + 85mm f/1.4 White Studio",
-        "act1_beat": "SAHNE 1: Saf beyaz stüdyo ışığında doğru 3 odak noktasını seçmek lüksü yaratır.",
-        "act2_beat": "SAHNE 2: Şampanya kadranlı saat ve çivi/kelepçe altın bileklik uyumu %100 imza duruşu verir.",
-        "act3_twist": "FİNAL: Takı alışverişinden önce bu 6'lı reçeteyi KAYDET • Birebir linkler aşağıda!",
+        "act1_beat": "SAHNE 1: Kolda saat ve bilekte altın kelepçe + yüzde/boyunda pırlanta odak noktası.",
+        "act2_beat": "SAHNE 2: Manken üzerinde 6 parçanın kusursuz 'Old Money' renk ve oran dengesi.",
+        "act3_twist": "SAHNE 3: Yürürken bile fark edilen sessiz zenginlik • Hemen KAYDET & linkleri incele!",
         "model_prompt_en": (
             "Ultra-photorealistic editorial luxury jewelry campaign photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens "
             "inside a bright minimalist pure white cyclorama photography studio (#FFFFFF seamless white studio background, professional Profoto softbox and beauty dish studio lighting), "
@@ -320,7 +320,7 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
         ),
         "items": {
             "slot1": {
-                "category_label": "Lüks Saat",
+                "category_label": "Kolda Lüks Saat",
                 "emoji": "⌚",
                 "brand": "CARTIER / BEYMEN",
                 "name": "Panthère & Baignoire Stili 18K Altın Tonlu Çelik Lüks Kadın Kol Saati",
@@ -329,10 +329,10 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
                 "sku": "LUX-WATCH-801",
                 "color": "Şampanya Altın",
                 "store_url": "https://www.beymen.com/tr/kadin-saat-10126",
-                "en_packshot": "luxury 18k yellow gold women wristwatch with champagne dial on pure solid white studio background #FFFFFF, macro product photography",
+                "en_packshot": "macro studio close-up of a luxury 18k yellow gold women wristwatch with champagne dial worn on a female model slender wrist in a pure solid white photography studio #FFFFFF",
             },
             "slot2": {
-                "category_label": "İmza Bileklik",
+                "category_label": "Bilekte Kelepçe",
                 "emoji": "✨",
                 "brand": "ATASAY / SO CHIC",
                 "name": "14 Ayar Altın İtalyan Kelepçe & Çivi Formlu Tasarım Bileklik",
@@ -341,10 +341,10 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
                 "sku": "LUX-BRC-802",
                 "color": "Sarı Altın",
                 "store_url": "https://www.atasay.com/altin-bileklik",
-                "en_packshot": "18k yellow gold sleek nail-style cuff bangle bracelet with diamond tip on pure solid white studio background #FFFFFF",
+                "en_packshot": "macro studio close-up of 18k yellow gold sleek nail-style cuff and bangle bracelets stacked on a female model wrist in a pure solid white photography studio #FFFFFF",
             },
             "slot3": {
-                "category_label": "Kolye",
+                "category_label": "Boyunda Kolye",
                 "emoji": "📿",
                 "brand": "VAN CLEEF STİLİ / ZEN PIRLANTA",
                 "name": "Sedef & Oniks Yonca Motifli 14K Altın Zincir Kolye",
@@ -353,10 +353,10 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
                 "sku": "LUX-NCK-803",
                 "color": "Altın / Sedef",
                 "store_url": "https://www.zenpirlanta.com/altin-kolye",
-                "en_packshot": "18k gold chain necklace with mother-of-pearl four-leaf clover motif pendant on pure solid white background #FFFFFF",
+                "en_packshot": "macro studio close-up of an 18k gold chain necklace with mother-of-pearl four-leaf clover motif pendant worn on a female model collarbone and neck in a pure solid white studio #FFFFFF",
             },
             "slot4": {
-                "category_label": "Pırlanta Küpe",
+                "category_label": "Yüzde Pırlanta Küpe",
                 "emoji": "💎",
                 "brand": "SWAROVSKI / ZEN",
                 "name": "Baget & Damla Kesim Kristal Pırlanta Işıltılı Küpe",
@@ -365,10 +365,10 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
                 "sku": "LUX-EAR-804",
                 "color": "Beyaz Pırlanta / Altın",
                 "store_url": "https://www.swarovski.com/tr-TR/c-0103/Categories/Jewelry/Earrings/",
-                "en_packshot": "luxury baguette diamond and gold drop earrings pair on pure solid white studio background #FFFFFF",
+                "en_packshot": "macro studio close-up of luxury baguette diamond and 18k gold drop earrings worn on a female model ear beside her sleek jawline in a pure solid white studio #FFFFFF",
             },
             "slot5": {
-                "category_label": "Tamtur Yüzük",
+                "category_label": "Elde Tamtur Yüzük",
                 "emoji": "💍",
                 "brand": "ZEN PIRLANTA",
                 "name": "Emerald & Baget Kesim Pırlanta Taşlı Altın Tamtur Yüzük",
@@ -377,10 +377,10 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
                 "sku": "LUX-RNG-805",
                 "color": "Altın / Pırlanta",
                 "store_url": "https://www.zenpirlanta.com/pirlanta-tamtur-yuzukler",
-                "en_packshot": "luxury emerald-cut diamond eternity band ring in 18k yellow gold on pure solid white background #FFFFFF",
+                "en_packshot": "macro studio close-up of a luxury emerald-cut diamond eternity band ring in 18k yellow gold worn on a female model graceful finger and hand in a pure solid white studio #FFFFFF",
             },
             "slot6": {
-                "category_label": "Gece Elbisesi & Kutu",
+                "category_label": "Mankende İpek Elbise",
                 "emoji": "🖤",
                 "brand": "VAKKO COUTURE",
                 "name": "Obsidyen Siyah İpek Saten Sırt Dekolteli Gece Elbisesi",
@@ -389,7 +389,7 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
                 "sku": "LUX-DRS-806",
                 "color": "Obsidyen Siyah",
                 "store_url": "https://www.vakko.com/kadin-elbise/",
-                "en_packshot": "sleek jet-black silk satin evening dress isolated flat-lay on pure solid white background #FFFFFF",
+                "en_packshot": "editorial studio shot of a sleek jet-black silk satin evening dress worn on a female supermodel silhouette in a pure solid white photography studio #FFFFFF",
             },
         },
         "hashtags": "#mücevher #altıntakı #pırlanta #lükssaat #oldmoneystyle #luxurylife #quietluxury #reklam #işbirliğiyoktur",
@@ -984,6 +984,100 @@ def _generate_procedural_luxury_concept(category: str, seq_idx: int) -> Dict[str
     return template
 
 
+def build_3stage_studio_scene_prompts(concept: Dict[str, Any]) -> List[str]:
+    """
+    Her lüks konsept için %100 mantıklı, izletme odaklı 3 aşamalı Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF) sahnesi üretir:
+    1) SAHNE 1 (step1): KOLDA, BİLEKTE VE YÜZDE MİKRO-SERGİ (85mm f/1.4 Close-Up On-Wrist & On-Face Exhibition)
+    2) SAHNE 2 (step2): MANKEN ÜZERİNDE BÜTÜNSEL LÜKS DURUŞ (50mm f/1.4 Mid-Full On-Model Studio Exhibition)
+    3) SAHNE 3 (step3): YÜRÜRKEN FARK EDİLEN ZENGİN & LÜKS HAREKET (35mm f/1.4 Full-Body Dynamic Catwalk Walk In-Motion)
+    """
+    cat = concept.get("category", "taki")
+    base_p = concept.get("model_prompt_en", "")
+
+    if cat == "taki":
+        return [
+            (
+                "Ultra-photorealistic close-up luxury jewelry campaign portrait shot on Hasselblad H6D-100c 85mm f/1.4 macro lens "
+                "inside a pure solid white cyclorama photography studio (#FFFFFF background, Profoto beauty dish lighting), "
+                "real adult female supermodel with natural skin pores raising her slender wrist and hand gracefully beside her jawline and collarbone, "
+                "clearly showcasing a luxury 18k yellow gold wristwatch, stacked gold cuff bracelets, emerald-cut diamond ring on her finger, "
+                "baguette diamond drop earrings on her ear, and 18k gold clover pendant necklace at her neck, zero 3D, zero cartoon, 8k Cartier & Vogue studio close-up"
+            ),
+            base_p,
+            (
+                "Ultra-photorealistic full-body dynamic catwalk motion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens "
+                "inside a pure solid white cyclorama photography studio (#FFFFFF seamless white studio background and floor), "
+                "real adult female supermodel walking confidently forward toward the camera mid-stride in a sleek black silk evening gown, "
+                "her wrist and hand clearly visible in motion showcasing an 18k yellow gold wristwatch and stacked gold diamond bracelets, "
+                "clover pendant necklace at her collarbone and diamond earrings gleaming on her face as she walks, zero 3D, zero cartoon, 8k runway studio photography"
+            ),
+        ]
+    if cat == "makyaj":
+        return [
+            (
+                "Ultra-photorealistic close-up luxury beauty portrait shot on Hasselblad H6D-100c 90mm f/2.8 macro lens "
+                "inside a pure solid white cyclorama photography studio (#FFFFFF background, Profoto beauty dish and ring light), "
+                "real adult female supermodel with luminous glass skin and natural skin pores holding a luxury gold lipstick near her velvet rosewood lips, "
+                "gold bracelet gleaming on her wrist, champagne highlighter on cheekbones, zero 3D, zero cartoon, 8k Vogue Beauty close-up"
+            ),
+            base_p,
+            (
+                "Ultra-photorealistic full-body dynamic motion beauty & fashion photograph shot on Hasselblad H6D-100c 50mm f/1.4 lens "
+                "inside a pure solid white cyclorama photography studio (#FFFFFF seamless white studio background), "
+                "real adult female supermodel walking confidently forward toward the camera mid-stride in a flowing champagne silk dress, "
+                "hair moving naturally in the studio breeze, radiant glass skin and velvet lipstick on her face, gold bracelet on her wrist, zero 3D, zero cartoon"
+            ),
+        ]
+    if cat == "kombin":
+        return [
+            (
+                "Ultra-photorealistic upper-body close-up fashion editorial portrait shot on Hasselblad H6D-100c 85mm f/1.4 lens "
+                "inside a pure solid white cyclorama photography studio (#FFFFFF background), "
+                "real adult female supermodel adjusting her designer sunglasses with her hand, showcasing a luxury watch and bracelet on her wrist, "
+                "ivory cashmere turtleneck collar, and tailored camel cashmere coat lapel on her shoulders, natural skin texture, zero 3D, zero cartoon"
+            ),
+            base_p,
+            (
+                "Ultra-photorealistic full-body dynamic runway motion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens "
+                "inside a pure solid white cyclorama photography studio (#FFFFFF seamless white studio background), "
+                "real adult female supermodel walking briskly and confidently forward toward the camera mid-stride, "
+                "tailored camel cashmere coat flowing in motion over ivory turtleneck and pleated wool palazzo trousers, "
+                "carrying structured espresso leather gold-clasp handbag on her wrist with suede loafers stepping forward, zero 3D, zero cartoon"
+            ),
+        ]
+    if cat == "araba":
+        return [
+            (
+                "Ultra-photorealistic close-up luxury gentleman driver portrait shot on Hasselblad H6D-100c 85mm f/1.4 lens "
+                "inside a pure solid white automotive photography studio (#FFFFFF background), "
+                "charismatic real adult male model wearing Havana aviator sunglasses on his face and cognac suede jacket, "
+                "raising his wrist in foreground to showcase a stainless steel racing chronograph wristwatch, natural skin texture, zero 3D, zero cartoon"
+            ),
+            base_p,
+            (
+                "Ultra-photorealistic full-body dynamic motion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens "
+                "inside a pure solid white cyclorama automotive photography studio (#FFFFFF background), "
+                "charismatic real adult male model walking confidently forward toward the camera mid-stride in front of a sleek British Racing Green Porsche 911 GT3, "
+                "cognac suede bomber jacket, chronograph watch gleaming on his moving wrist, aviator sunglasses on his face, zero 3D, zero cartoon"
+            ),
+        ]
+    return [
+        (
+            "Ultra-photorealistic close-up luxury resort & jewelry portrait shot on Hasselblad H6D-100c 85mm f/1.4 lens "
+            "inside a bright pure white photography studio (#FFFFFF background), "
+            "real adult female supermodel in crisp white Italian linen resort shirt holding a crystal white wine glass, "
+            "showcasing python leather and 18k gold cuff bracelets on her wrist and diamond earrings by her face, zero 3D, zero cartoon"
+        ),
+        base_p,
+        (
+            "Ultra-photorealistic full-body dynamic resort runway photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens "
+            "inside a pure solid white cyclorama photography studio (#FFFFFF background), "
+            "real adult female supermodel walking effortlessly forward toward the camera mid-stride in crisp white Italian linen resort outfit, "
+            "stacked 18k gold and leather cuff bracelets gleaming on her moving wrist, wealthy summer aura, zero 3D, zero cartoon"
+        ),
+    ]
+
+
 def select_luxury_concept(force_category: str = "otomatik", custom_concept: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     ledger = load_zero_repeat_ledger()
     used_ids = set(ledger.get("used_outfit_ids") or []) | set(ledger.get("used_concept_ids") or []) | set(ledger.get("published_ids") or [])
@@ -995,6 +1089,7 @@ def select_luxury_concept(force_category: str = "otomatik", custom_concept: Opti
             req_hash = hashlib.md5(f"{custom_concept.get('id')}_{time.time()}".encode("utf-8")).hexdigest()[:6]
             custom_concept["id"] = f"{custom_concept.get('id')}_{req_hash}"
         custom_concept["viral_analysis"] = VIRAL_RETENTION_FRAMEWORKS.get(cat, VIRAL_RETENTION_FRAMEWORKS["otel"])
+        custom_concept["scene_prompts_en"] = build_3stage_studio_scene_prompts(custom_concept)
         return custom_concept
 
     cat_order = ["otel", "taki", "makyaj", "kombin", "araba"]
@@ -1018,6 +1113,7 @@ def select_luxury_concept(force_category: str = "otomatik", custom_concept: Opti
 
     chosen["is_3d_avatar"] = False
     chosen["viral_analysis"] = VIRAL_RETENTION_FRAMEWORKS.get(chosen["category"], VIRAL_RETENTION_FRAMEWORKS["otel"])
+    chosen["scene_prompts_en"] = build_3stage_studio_scene_prompts(chosen)
     return chosen
 
 

@@ -576,12 +576,76 @@ def _format_user_photo_to_9_16_cinema(user_img: Image.Image, zoom_mode: str = "f
     return bg
 
 
+def _call_hf_flux_space(space_base: str, payload_data: list, timeout_sec: int = 75) -> Optional[Image.Image]:
+    """
+    HuggingFace Gradio 5 HTTP API üzerinden doğrudan FLUX.1 fotogerçekçi stüdyo görseli üretir.
+    """
+    post_r = requests.post(
+        f"{space_base}/gradio_api/call/infer",
+        json={"data": payload_data},
+        timeout=25,
+    )
+    if post_r.status_code != 200:
+        return None
+    event_id = post_r.json().get("event_id")
+    if not event_id:
+        return None
+
+    sse_r = requests.get(f"{space_base}/gradio_api/call/infer/{event_id}", timeout=timeout_sec)
+    if sse_r.status_code != 200:
+        return None
+
+    img_url = None
+    for line in sse_r.text.splitlines():
+        if line.startswith("data:"):
+            raw_json = line[len("data:"):].strip()
+            try:
+                parsed = json.loads(raw_json)
+                if isinstance(parsed, list) and parsed and isinstance(parsed[0], dict):
+                    img_url = parsed[0].get("url")
+                    if not img_url and parsed[0].get("path"):
+                        img_url = f"{space_base}/gradio_api/file={parsed[0]['path']}"
+                    if img_url:
+                        break
+            except Exception:
+                continue
+
+    if not img_url:
+        return None
+
+    dl = requests.get(img_url, timeout=35)
+    if dl.status_code == 200 and len(dl.content) > 5000:
+        return Image.open(BytesIO(dl.content)).convert("RGB")
+    return None
+
+
 def fetch_ai_luxury_image(prompt: str, width: int = 768, height: int = 1024, seed: int = 42) -> Optional[Image.Image]:
-    studio_prompt = f"{prompt}, shot inside a bright pure solid white seamless cyclorama photography studio #FFFFFF with professional Profoto softbox lighting"
+    studio_prompt = (
+        f"{prompt}, shot inside a bright pure solid white seamless cyclorama photography studio #FFFFFF "
+        f"with professional Profoto softbox lighting, 100% photorealistic real human and luxury photography, zero CGI"
+    )
+    w = max(512, min(1024, (width // 64) * 64))
+    h = max(512, min(1344, (height // 64) * 64))
+    safe_seed = int(abs(seed) % 2147483000)
+
+    providers = [
+        ("https://black-forest-labs-flux-1-schnell.hf.space", [studio_prompt, safe_seed, False, w, h, 4]),
+        ("https://multimodalart-flux-1-merged.hf.space", [studio_prompt, safe_seed, False, w, h, 3.5, 6]),
+    ]
+    for space_url, p_data in providers:
+        try:
+            img = _call_hf_flux_space(space_url, p_data, timeout_sec=65)
+            if img is not None:
+                if (img.width, img.height) != (width, height):
+                    img = img.resize((width, height), Image.Resampling.LANCZOS)
+                return img
+        except Exception:
+            pass
+
     encoded = quote(studio_prompt)
-    url = f"https://image.pollinations.ai/prompt/{encoded}?width={width}&height={height}&seed={seed}&model=flux-realism&nologo=true"
+    url = f"https://image.pollinations.ai/prompt/{encoded}?width={width}&height={height}&seed={safe_seed}&model=flux-realism&nologo=true"
     try:
-        r = requests.get(url, timeout=18)
+        r = requests.get(url, timeout=22)
         if r.status_code == 200 and len(r.content) > 4000:
             return Image.open(BytesIO(r.content)).convert("RGB")
     except Exception:
@@ -713,30 +777,39 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
             card_cut.save(abs_cut, format="PNG")
             saved = True
 
-        # 3) Bulut AI Packshot veya Lüks Madalyon
+        # 3) Bulut AI Makro Stüdyo Kartı (Kolda / Yüzde / Mankende Makro Ürün Çekimi)
         if not saved and not abs_cut.exists():
             if use_cloud_ai and os.environ.get("FAST_PROCEDURAL_CARDS", "0") != "1":
-                pack_prompt = it.get("en_packshot") or f"luxury {it.get('name', 'item')} isolated on pure solid white background #FFFFFF"
-                ai_im = fetch_ai_luxury_image(pack_prompt, width=512, height=512, seed=seed_base + idx * 11)
+                pack_prompt = it.get("en_packshot") or f"luxury {it.get('name', 'item')} worn on model in pure solid white studio #FFFFFF"
+                ai_im = fetch_ai_luxury_image(pack_prompt, width=512, height=512, seed=seed_base + idx * 17)
                 if ai_im is not None:
-                    remove_white_studio_background(ai_im).save(abs_cut, format="PNG")
+                    _make_rounded_gold_photo_card(ai_im, crop_box=None, size=580).save(abs_cut, format="PNG")
                     saved = True
             if not saved:
                 _render_procedural_luxury_packshot(it, idx).save(abs_cut, format="PNG")
 
         it["cutout_path"] = str(abs_cut)
 
-    # 3 Sahne Karesini (`model_frames`) Hazırla
+    # 3 Sahne Karesini (`model_frames`) Hazırla:
+    # Sahne 1 (step1): KOLDA, BİLEKTE VE YÜZDE MİKRO-SERGİ
+    # Sahne 2 (step2): MANKEN ÜZERİNDE BÜTÜNSEL LÜKS DURUŞ
+    # Sahne 3 (step3): YÜRÜRKEN FARK EDİLEN ZENGİN & LÜKS HAREKET
     model_frames: List[str] = []
     zoom_modes = ["hero_fill", "full", "detail_focus"]
     base_prompt = concept.get("model_prompt_en", "")
+    scene_prompts = concept.get("scene_prompts_en") or [
+        f"{base_prompt}, close-up studio portrait focusing on luxury items worn on wrist, hand, neck and face",
+        f"{base_prompt}, medium-full editorial studio portrait showcasing full luxury styling on model",
+        f"{base_prompt}, full-body dynamic catwalk motion shot walking confidently toward the camera in pure white studio",
+    ]
+
+    is_scenic_hotel_photo = bool(loaded_user_pils and concept.get("category") == "otel" and "santorini" in cid.lower())
 
     for s_idx in range(1, 4):
         rel_frame = f"assets/{cid}_step{s_idx}.jpg"
         abs_frame = BASE_DIR / rel_frame
 
-        if loaded_user_pils:
-            # Kullanıcının gönderdiği fotoğraf(lar)ı doğrudan 3 sinema sahnesinin başrolü yap!
+        if is_scenic_hotel_photo:
             chosen_pil = loaded_user_pils[(s_idx - 1) % len(loaded_user_pils)]
             z_mode = zoom_modes[(s_idx - 1) % len(zoom_modes)]
             scene_im = _format_user_photo_to_9_16_cinema(chosen_pil, zoom_mode=z_mode)
@@ -744,17 +817,32 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
         elif not abs_frame.exists():
             saved_f = False
             if use_cloud_ai:
+                step_prompt = scene_prompts[min(s_idx - 1, len(scene_prompts) - 1)]
                 ai_scene = fetch_ai_luxury_image(
-                    f"{base_prompt}, step {s_idx} cinematic angle",
+                    step_prompt,
                     width=768,
                     height=1344,
-                    seed=seed_base + s_idx * 31,
+                    seed=seed_base + s_idx * 37,
                 )
                 if ai_scene is not None:
-                    ai_scene.resize((1080, 1920), Image.Resampling.LANCZOS).save(abs_frame, format="JPEG", quality=95)
+                    scene_9_16 = ai_scene.resize((1080, 1920), Image.Resampling.LANCZOS)
+                    # Kullanıcı kendi ürün fotoğrafını gönderdiyse, stüdyo manken sahnesinin sağ üst köşesine
+                    # 18K altın çerçeveli "Gönderilen Ürün Referansı" PiP kartı olarak da işle!
+                    if loaded_user_pils:
+                        ref_pil = loaded_user_pils[(s_idx - 1) % len(loaded_user_pils)]
+                        pip_card = _make_rounded_gold_photo_card(ref_pil, crop_box=None, size=280)
+                        scene_rgba = scene_9_16.convert("RGBA")
+                        scene_rgba.paste(pip_card, (1080 - 316, 220), pip_card)
+                        scene_9_16 = scene_rgba.convert("RGB")
+                    scene_9_16.save(abs_frame, format="JPEG", quality=95)
                     saved_f = True
             if not saved_f:
-                _render_procedural_luxury_scene(concept, s_idx).save(abs_frame, format="JPEG", quality=95)
+                if loaded_user_pils:
+                    chosen_pil = loaded_user_pils[(s_idx - 1) % len(loaded_user_pils)]
+                    z_mode = zoom_modes[(s_idx - 1) % len(zoom_modes)]
+                    _format_user_photo_to_9_16_cinema(chosen_pil, zoom_mode=z_mode).save(abs_frame, format="JPEG", quality=96)
+                else:
+                    _render_procedural_luxury_scene(concept, s_idx).save(abs_frame, format="JPEG", quality=95)
 
         model_frames.append(str(abs_frame))
 

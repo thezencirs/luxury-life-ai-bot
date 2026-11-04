@@ -9,13 +9,13 @@
   "viral_hook": "💎 Bilekte ve boyunda 'Old Money' zarafeti yaratan 6 parçalık mücevher & saat formülü! Kaydetmeyi unutma 👇✨",
   "location_name": "Haute Joaillerie Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)",
   "camera_spec": "Hasselblad H6D-100c • 100mm f/2.8 Macro + 85mm f/1.4 White Studio",
-  "act1_beat": "SAHNE 1: Saf beyaz stüdyo ışığında doğru 3 odak noktasını seçmek lüksü yaratır.",
-  "act2_beat": "SAHNE 2: Şampanya kadranlı saat ve çivi/kelepçe altın bileklik uyumu %100 imza duruşu verir.",
-  "act3_twist": "FİNAL: Takı alışverişinden önce bu 6'lı reçeteyi KAYDET • Birebir linkler aşağıda!",
+  "act1_beat": "SAHNE 1: Kolda saat ve bilekte altın kelepçe + yüzde/boyunda pırlanta odak noktası.",
+  "act2_beat": "SAHNE 2: Manken üzerinde 6 parçanın kusursuz 'Old Money' renk ve oran dengesi.",
+  "act3_twist": "SAHNE 3: Yürürken bile fark edilen sessiz zenginlik • Hemen KAYDET & linkleri incele!",
   "model_prompt_en": "Ultra-photorealistic editorial luxury jewelry campaign photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens inside a bright minimalist pure white cyclorama photography studio (#FFFFFF seamless white studio background, professional Profoto softbox and beauty dish studio lighting), stunning adult female high-fashion supermodel with sleek dark espresso hair in a low chignon, natural skin pores, wearing a sleek black silk evening gown, clearly showcasing a 18k yellow gold clover pendant necklace, diamond drop earrings, luxury gold wristwatch and stacked gold bracelets, zero 3D, zero cartoon, 8k Cartier & Vogue studio photography",
   "items": {
     "slot1": {
-      "category_label": "Lüks Saat",
+      "category_label": "Kolda Lüks Saat",
       "emoji": "⌚",
       "brand": "CARTIER / BEYMEN",
       "name": "Panthère & Baignoire Stili 18K Altın Tonlu Çelik Lüks Kadın Kol Saati",
@@ -24,11 +24,11 @@
       "sku": "LUX-WATCH-801",
       "color": "Şampanya Altın",
       "store_url": "https://www.beymen.com/tr/kadin-saat-10126",
-      "en_packshot": "luxury 18k yellow gold women wristwatch with champagne dial on pure solid white studio background #FFFFFF, macro product photography",
+      "en_packshot": "macro studio close-up of a luxury 18k yellow gold women wristwatch with champagne dial worn on a female model slender wrist in a pure solid white photography studio #FFFFFF",
       "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_taki_vendome_gold_diamond_01_slot1.png"
     },
     "slot2": {
-      "category_label": "İmza Bileklik",
+      "category_label": "Bilekte Kelepçe",
       "emoji": "✨",
       "brand": "ATASAY / SO CHIC",
       "name": "14 Ayar Altın İtalyan Kelepçe & Çivi Formlu Tasarım Bileklik",
@@ -37,11 +37,11 @@
       "sku": "LUX-BRC-802",
       "color": "Sarı Altın",
       "store_url": "https://www.atasay.com/altin-bileklik",
-      "en_packshot": "18k yellow gold sleek nail-style cuff bangle bracelet with diamond tip on pure solid white studio background #FFFFFF",
+      "en_packshot": "macro studio close-up of 18k yellow gold sleek nail-style cuff and bangle bracelets stacked on a female model wrist in a pure solid white photography studio #FFFFFF",
       "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_taki_vendome_gold_diamond_01_slot2.png"
     },
     "slot3": {
-      "category_label": "Kolye",
+      "category_label": "Boyunda Kolye",
       "emoji": "📿",
       "brand": "VAN CLEEF STİLİ / ZEN PIRLANTA",
       "name": "Sedef & Oniks Yonca Motifli 14K Altın Zincir Kolye",
@@ -50,11 +50,11 @@
       "sku": "LUX-NCK-803",
       "color": "Altın / Sedef",
       "store_url": "https://www.zenpirlanta.com/altin-kolye",
-      "en_packshot": "18k gold chain necklace with mother-of-pearl four-leaf clover motif pendant on pure solid white background #FFFFFF",
+      "en_packshot": "macro studio close-up of an 18k gold chain necklace with mother-of-pearl four-leaf clover motif pendant worn on a female model collarbone and neck in a pure solid white studio #FFFFFF",
       "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_taki_vendome_gold_diamond_01_slot3.png"
     },
     "slot4": {
-      "category_label": "Pırlanta Küpe",
+      "category_label": "Yüzde Pırlanta Küpe",
       "emoji": "💎",
       "brand": "SWAROVSKI / ZEN",
       "name": "Baget & Damla Kesim Kristal Pırlanta Işıltılı Küpe",
@@ -63,11 +63,11 @@
       "sku": "LUX-EAR-804",
       "color": "Beyaz Pırlanta / Altın",
       "store_url": "https://www.swarovski.com/tr-TR/c-0103/Categories/Jewelry/Earrings/",
-      "en_packshot": "luxury baguette diamond and gold drop earrings pair on pure solid white studio background #FFFFFF",
+      "en_packshot": "macro studio close-up of luxury baguette diamond and 18k gold drop earrings worn on a female model ear beside her sleek jawline in a pure solid white studio #FFFFFF",
       "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_taki_vendome_gold_diamond_01_slot4.png"
     },
     "slot5": {
-      "category_label": "Tamtur Yüzük",
+      "category_label": "Elde Tamtur Yüzük",
       "emoji": "💍",
       "brand": "ZEN PIRLANTA",
       "name": "Emerald & Baget Kesim Pırlanta Taşlı Altın Tamtur Yüzük",
@@ -76,11 +76,11 @@
       "sku": "LUX-RNG-805",
       "color": "Altın / Pırlanta",
       "store_url": "https://www.zenpirlanta.com/pirlanta-tamtur-yuzukler",
-      "en_packshot": "luxury emerald-cut diamond eternity band ring in 18k yellow gold on pure solid white background #FFFFFF",
+      "en_packshot": "macro studio close-up of a luxury emerald-cut diamond eternity band ring in 18k yellow gold worn on a female model graceful finger and hand in a pure solid white studio #FFFFFF",
       "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_taki_vendome_gold_diamond_01_slot5.png"
     },
     "slot6": {
-      "category_label": "Gece Elbisesi & Kutu",
+      "category_label": "Mankende İpek Elbise",
       "emoji": "🖤",
       "brand": "VAKKO COUTURE",
       "name": "Obsidyen Siyah İpek Saten Sırt Dekolteli Gece Elbisesi",
@@ -89,7 +89,7 @@
       "sku": "LUX-DRS-806",
       "color": "Obsidyen Siyah",
       "store_url": "https://www.vakko.com/kadin-elbise/",
-      "en_packshot": "sleek jet-black silk satin evening dress isolated flat-lay on pure solid white background #FFFFFF",
+      "en_packshot": "editorial studio shot of a sleek jet-black silk satin evening dress worn on a female supermodel silhouette in a pure solid white photography studio #FFFFFF",
       "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_taki_vendome_gold_diamond_01_slot6.png"
     }
   },
@@ -105,6 +105,11 @@
     "model_direction": "%100 Fotogerçekçi Süpermodel — Profesyonel saf beyaz fotoğraf stüdyosunda (#FFFFFF), zarif bilek ve boyun duruşuyla mücevher/saat odaklı çekim",
     "why_saved": "Saf beyaz fotoğraf stüdyosu fonu mücevher ve saatin altın/pırlanta işçiliğini %100 net gösterdiği için izleyiciler alışveriş referansı olarak kaydeder."
   },
+  "scene_prompts_en": [
+    "Ultra-photorealistic close-up luxury jewelry campaign portrait shot on Hasselblad H6D-100c 85mm f/1.4 macro lens inside a pure solid white cyclorama photography studio (#FFFFFF background, Profoto beauty dish lighting), real adult female supermodel with natural skin pores raising her slender wrist and hand gracefully beside her jawline and collarbone, clearly showcasing a luxury 18k yellow gold wristwatch, stacked gold cuff bracelets, emerald-cut diamond ring on her finger, baguette diamond drop earrings on her ear, and 18k gold clover pendant necklace at her neck, zero 3D, zero cartoon, 8k Cartier & Vogue studio close-up",
+    "Ultra-photorealistic editorial luxury jewelry campaign photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens inside a bright minimalist pure white cyclorama photography studio (#FFFFFF seamless white studio background, professional Profoto softbox and beauty dish studio lighting), stunning adult female high-fashion supermodel with sleek dark espresso hair in a low chignon, natural skin pores, wearing a sleek black silk evening gown, clearly showcasing a 18k yellow gold clover pendant necklace, diamond drop earrings, luxury gold wristwatch and stacked gold bracelets, zero 3D, zero cartoon, 8k Cartier & Vogue studio photography",
+    "Ultra-photorealistic full-body dynamic catwalk motion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens inside a pure solid white cyclorama photography studio (#FFFFFF seamless white studio background and floor), real adult female supermodel walking confidently forward toward the camera mid-stride in a sleek black silk evening gown, her wrist and hand clearly visible in motion showcasing an 18k yellow gold wristwatch and stacked gold diamond bracelets, clover pendant necklace at her collarbone and diamond earrings gleaming on her face as she walks, zero 3D, zero cartoon, 8k runway studio photography"
+  ],
   "model_frames": [
     "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\lux_taki_vendome_gold_diamond_01_step1.jpg",
     "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\lux_taki_vendome_gold_diamond_01_step2.jpg",

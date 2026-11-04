@@ -428,19 +428,20 @@ def render_luxury_graphmotion_reel(
 
     bg_stage = create_obsidian_gold_stage(watermark)
 
-    # 6 Bento Kartının GraphMotion Plus Koordinat ve Yaylanma (Spring) Zamanlaması
+    # 6 Bento Kartının GraphMotion Plus Koordinat ve Hızlı Yaylanma (Spring) Zamanlaması
     slot_configs = [
-        {"slot": "slot1", "box": (S(50), S(245), S(470), S(470)), "start_xy": (S(-520), S(180)), "t_in": 0.40},
-        {"slot": "slot2", "box": (S(560), S(245), S(470), S(470)), "start_xy": (S(1180), S(180)), "t_in": 0.90},
-        {"slot": "slot3", "box": (S(50), S(755), S(470), S(470)), "start_xy": (S(-520), S(755)), "t_in": 1.40},
-        {"slot": "slot4", "box": (S(560), S(755), S(470), S(470)), "start_xy": (S(1180), S(755)), "t_in": 1.90},
-        {"slot": "slot5", "box": (S(50), S(1265), S(470), S(470)), "start_xy": (S(-520), S(1420)), "t_in": 2.40},
-        {"slot": "slot6", "box": (S(560), S(1265), S(470), S(470)), "start_xy": (S(1180), S(1420)), "t_in": 2.90},
+        {"slot": "slot1", "box": (S(50), S(245), S(470), S(470)), "start_xy": (S(-520), S(180)), "t_in": 0.35},
+        {"slot": "slot2", "box": (S(560), S(245), S(470), S(470)), "start_xy": (S(1180), S(180)), "t_in": 0.65},
+        {"slot": "slot3", "box": (S(50), S(755), S(470), S(470)), "start_xy": (S(-520), S(755)), "t_in": 0.95},
+        {"slot": "slot4", "box": (S(560), S(755), S(470), S(470)), "start_xy": (S(1180), S(755)), "t_in": 1.25},
+        {"slot": "slot5", "box": (S(50), S(1265), S(470), S(470)), "start_xy": (S(-520), S(1420)), "t_in": 1.55},
+        {"slot": "slot6", "box": (S(560), S(1265), S(470), S(470)), "start_xy": (S(1180), S(1420)), "t_in": 1.85},
     ]
 
+    f_mini = get_font(16, bold=True)
     f_crest = get_font(18, bold=True)
     f_kicker = get_font(22, bold=True)
-    f_title = get_font(26, bold=True)
+    f_title = get_font(25, bold=True)
     f_brand = get_font(20, bold=True)
     f_price = get_font(19, bold=True)
 
@@ -531,21 +532,27 @@ def render_luxury_graphmotion_reel(
 
     hook_cover_rgb = generate_hook_cover_and_story_collage(concept, scene_frames, prepared_cards, out_dir)
 
-    total_duration = 11.0
+    total_duration = 13.5
     total_frames = int(total_duration * FPS)
-    bento_end_sec = 5.20
+    bento_end_sec = 3.60
 
     va = concept.get("viral_analysis", {})
     cam_hud = _tr_upper(concept.get("camera_spec", "HASSELBLAD 85MM F/1.4 • WHITE STUDIO"))[:48]
     loc_hud = _tr_upper(concept.get("location_name", "SAF BEYAZ FOTOĞRAF STÜDYOSU (#FFFFFF)"))[:46]
 
+    stage_headers = [
+        "✨ SAHNE 1/3 • KOLDA, BİLEKTE & YÜZDE MİKRO-SERGİ",
+        "👑 SAHNE 2/3 • MANKEN ÜZERİNDE BÜTÜNSEL LÜKS DURUŞ",
+        "🚶‍♀️ SAHNE 3/3 • YÜRÜRKEN FARK EDİLEN SESSİZ ZENGİNLİK",
+    ]
+
     for f_idx in range(total_frames):
         t = f_idx / float(FPS)
 
-        # ACT I (0.00s - 0.40s): Scroll-Stopper Dergi Kapağı Kancası
-        if t < 0.40:
+        # ACT I (0.00s - 0.35s): Scroll-Stopper Dergi Kapağı Kancası
+        if t < 0.35:
             frame_rgb = hook_cover_rgb.copy()
-        # ACT II (0.40s - 5.20s): Saf Beyaz Fotoğraf Stüdyosu 6'lı Bento & Remotion Yay Fiziği
+        # ACT II (0.35s - 3.60s): Saf Beyaz Fotoğraf Stüdyosu 6'lı Bento & Remotion Yay Fiziği
         elif t < bento_end_sec:
             canvas = bg_stage.copy()
             draw = ImageDraw.Draw(canvas)
@@ -595,12 +602,12 @@ def render_luxury_graphmotion_reel(
             )
             draw.text(
                 (W // 2, S(1805)),
-                _tr_upper(concept.get("act1_beat", "SAHNE 1: 6 PARÇA LÜKS REÇETEYİ KAYDET"))[:46],
+                "KOLDA • YÜZDE • MANKENDE VE YÜRÜRKEN 6 LÜKS DETAY",
                 fill=(18, 16, 20, 255),
                 font=f_brand,
                 anchor="mm",
             )
-            bar_w = int((W - S(160)) * min(1.0, (t - 0.40) / (bento_end_sec - 0.40)))
+            bar_w = int((W - S(160)) * min(1.0, (t - 0.35) / (bento_end_sec - 0.35)))
             draw.rounded_rectangle(
                 (S(80), S(1842), S(80) + max(S(24), bar_w), S(1862)),
                 radius=S(10),
@@ -608,84 +615,136 @@ def render_luxury_graphmotion_reel(
             )
             frame_rgb = canvas.convert("RGB")
 
-            # Bento tamamlandığında (3.45s - 4.95s) Specular Champagne Gold Işık Dalgası
-            if 3.45 <= t <= 4.95:
-                shimmer_p = (t - 3.45) / 1.50
-                frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.18 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
+            # Bento tamamlandığında (2.30s - 3.45s) Specular Champagne Gold Işık Dalgası
+            if 2.30 <= t <= 3.45:
+                shimmer_p = (t - 2.30) / 1.15
+                frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.22 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
 
-        # ACT III (5.20s - 11.00s): 3-Adımlı Gimbal Parallax %100 Fotogerçekçi Stüdyo Manken & Sahne Sineması
+        # ACT III (3.60s - 13.50s): 3 Aşamalı İzletme Odaklı Stüdyo Sineması
+        # Sahne 1 (3.60s-6.90s): Kolda, Bilekte ve Yüzde Mikro-Sergi (#1 & #2 Canlı Ürün Kartı)
+        # Sahne 2 (6.90s-10.20s): Manken Üzerinde Bütünsel Lüks Duruş (#3 & #4 Canlı Ürün Kartı)
+        # Sahne 3 (10.20s-13.50s): Yürürken Fark Edilen Zengin Lüks Hareket (#5 & #6 Canlı Ürün Kartı)
         else:
-            walk_t = (t - bento_end_sec) / max(0.01, (total_duration - bento_end_sec))
-            n_sc = len(scene_frames)
-            pos = walk_t * (n_sc - 1)
-            idx0 = min(n_sc - 1, int(math.floor(pos)))
-            idx1 = min(n_sc - 1, idx0 + 1)
-            frac = ease_in_out_cubic(pos - idx0)
+            scene_dur = (total_duration - bento_end_sec) / 3.0
+            rel_t = t - bento_end_sec
+            stage_idx = min(2, int(rel_t // scene_dur))
+            stage_local_t = rel_t - (stage_idx * scene_dur)
+            stage_p = min(1.0, max(0.0, stage_local_t / scene_dur))
 
-            if idx0 == idx1 or frac <= 0.001:
-                base_sc = scene_frames[idx0].copy()
+            cur_frame_im = scene_frames[min(stage_idx, len(scene_frames) - 1)]
+            if stage_idx < len(scene_frames) - 1 and stage_local_t > (scene_dur - 0.38):
+                blend_p = ease_in_out_cubic((stage_local_t - (scene_dur - 0.38)) / 0.38)
+                base_sc = Image.blend(cur_frame_im, scene_frames[stage_idx + 1], blend_p)
             else:
-                base_sc = Image.blend(scene_frames[idx0], scene_frames[idx1], frac)
+                base_sc = cur_frame_im.copy()
 
-            # Gimbal Push-In (1.00x -> 1.065x)
-            zoom = 1.0 + 0.065 * math.sin(walk_t * math.pi)
+            # Sahneye Özel Kamera Dinamiği (Sahne 3'te yürüyüş adımı ritmi + tracking push-in)
+            if stage_idx == 2:
+                zoom = 1.01 + 0.08 * ease_in_out_cubic(stage_p)
+                walk_bob_y = int(round(S(7) * math.sin(stage_local_t * math.pi * 3.4)))
+            else:
+                zoom = 1.00 + 0.055 * ease_in_out_cubic(stage_p)
+                walk_bob_y = 0
+
             zw, zh = int(W * zoom), int(H * zoom)
             zoomed = base_sc.resize((zw, zh), Image.Resampling.BILINEAR)
             left = (zw - W) // 2
-            top = (zh - H) // 2
+            top = max(0, min(zh - H, (zh - H) // 2 + walk_bob_y))
             cropped = zoomed.crop((left, top, left + W, top + H)).convert("RGBA")
 
-            # Üst ve alt Saf Beyaz Fotoğraf Stüdyosu HUD Kartları
+            # Üst Stüdyo Reji Kartı + Alt Canlı Ürün Eşleştirme Vitrini (Live On-Body Product HUD)
             ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
             odraw = ImageDraw.Draw(ov)
-            odraw.rounded_rectangle((S(36), S(54), W - S(36), S(185)), radius=S(26), fill=(255, 255, 255, 242), outline=(198, 160, 88, 240), width=S(2))
-            odraw.text((W // 2, S(96)), f"📍 {loc_hud}", fill=(154, 114, 42, 255), font=f_kicker, anchor="mm")
-            odraw.text((W // 2, S(144)), f"🎥 {cam_hud}", fill=(18, 16, 20, 255), font=f_crest, anchor="mm")
-
-            # Alt 3 Perdeli Viral Senaryo & Kaydetme Çağrısı Kutusu (Saf Beyaz + Remotion Spring)
-            hud_spring = min(1.0, _remotion_spring(t - bento_end_sec, damping=14.0, stiffness=120.0, mass=0.8))
-            y_offset_hud = int(round((1.0 - hud_spring) * S(120)))
-            beat_txt = concept.get("act2_beat", "") if walk_t < 0.55 else concept.get("act3_twist", "")
             odraw.rounded_rectangle(
-                (S(42), H - S(320) + y_offset_hud, W - S(42), H - S(120) + y_offset_hud),
-                radius=S(30),
+                (S(36), S(48), W - S(36), S(162)),
+                radius=S(24),
+                fill=(255, 255, 255, 242),
+                outline=(198, 160, 88, 240),
+                width=S(2),
+            )
+            odraw.text((W // 2, S(84)), stage_headers[stage_idx], fill=(154, 114, 42, 255), font=f_kicker, anchor="mm")
+            odraw.text((W // 2, S(130)), f"📍 {loc_hud}", fill=(18, 16, 20, 255), font=f_crest, anchor="mm")
+
+            # Alt Canlı Ürün Eşleşmesi Kutusu (Her sahnede o sahnede sergilenen 2 ürünü canlı küçük görseliyle gösterir!)
+            hud_spring = min(1.0, _remotion_spring(stage_local_t, damping=14.0, stiffness=120.0, mass=0.8))
+            y_offset_hud = int(round((1.0 - hud_spring) * S(140)))
+            hud_top = H - S(395) + y_offset_hud
+            hud_bot = H - S(95) + y_offset_hud
+
+            odraw.rounded_rectangle(
+                (S(32), hud_top, W - S(32), hud_bot),
+                radius=S(28),
                 fill=(255, 255, 255, 246),
-                outline=(198, 160, 88, 248),
+                outline=(198, 160, 88, 250),
                 width=S(3),
             )
-            odraw.text(
-                (W // 2, H - S(252) + y_offset_hud),
-                _tr_upper(beat_txt)[:44],
+
+            pair_start = stage_idx * 2
+            pair_cards = prepared_cards[pair_start:pair_start + 2]
+            for p_i, p_item in enumerate(pair_cards):
+                item_num = pair_start + p_i + 1
+                box_w = S(486)
+                box_h = S(182)
+                bx = S(48) + p_i * (box_w + S(12))
+                by = hud_top + S(20)
+
+                odraw.rounded_rectangle(
+                    (bx, by, bx + box_w, by + box_h),
+                    radius=S(20),
+                    fill=(248, 244, 236, 255),
+                    outline=(198, 160, 88, 210),
+                    width=S(2),
+                )
+                mini_im = p_item["cutout"].copy()
+                mini_im.thumbnail((S(142), S(142)), Image.Resampling.LANCZOS)
+                ov.paste(
+                    mini_im,
+                    (bx + S(14) + (S(142) - mini_im.width) // 2, by + (box_h - mini_im.height) // 2),
+                    mini_im,
+                )
+
+                it_d = p_item["data"]
+                lbl_t = _tr_upper(f"#{item_num} {it_d.get('category_label', 'LÜKS DETAY')}")[:20]
+                br_t = _tr_upper(str(it_d.get("brand", "LUXURY")).split("/")[0].strip())[:18]
+                nm_t = str(it_d.get("name", ""))[:22]
+                pr_t = f"{it_d.get('price', '')} • {it_d.get('sku', '')}"[:22]
+
+                tx_left = bx + S(168)
+                odraw.text((tx_left, by + S(34)), lbl_t, fill=(154, 114, 42, 255), font=f_mini, anchor="lm")
+                odraw.text((tx_left, by + S(74)), br_t, fill=(18, 16, 20, 255), font=f_brand, anchor="lm")
+                odraw.text((tx_left, by + S(112)), nm_t, fill=(62, 56, 50, 255), font=f_mini, anchor="lm")
+                odraw.text((tx_left, by + S(148)), pr_t, fill=(142, 104, 36, 255), font=f_crest, anchor="lm")
+
+            odraw.rounded_rectangle(
+                (S(48), hud_bot - S(76), W - S(48), hud_bot - S(16)),
+                radius=S(16),
                 fill=(18, 16, 20, 255),
-                font=f_title,
-                anchor="mm",
+                outline=(198, 160, 88, 240),
+                width=S(2),
             )
             odraw.text(
-                (W // 2, H - S(178) + y_offset_hud),
-                "📌 VİDEOYU KAYDET • BİREBİR ÜRÜN LİNKLERİ AÇIKLAMADA!",
-                fill=(154, 114, 42, 255),
-                font=f_brand,
+                (W // 2, hud_bot - S(46)),
+                "📌 6 LÜKS ÜRÜNÜN BİREBİR MAĞAZA LİNKLERİ AÇIKLAMADA • KAYDET!",
+                fill=(242, 214, 158, 255),
+                font=f_crest,
                 anchor="mm",
             )
 
             frame_rgb = Image.alpha_composite(cropped, ov).convert("RGB")
 
         # Sahne Geçişlerinde Anamorfik Film Light-Leak (Işık Sızıntısı) Geçiş Efekti
-        # 1) Act I -> Act II geçişi (0.34s - 0.50s)
-        if 0.34 <= t <= 0.50:
-            lp = (t - 0.34) / 0.16
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.58 * math.sin(lp * math.pi), sweep_pos=lp)
-        # 2) Act II -> Act III ana sahne geçişi (5.00s - 5.42s)
-        elif 5.00 <= t <= 5.42:
-            lp = (t - 5.00) / 0.42
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.78 * math.sin(lp * math.pi), sweep_pos=lp)
-        # 3) Act III Gimbal kare geçişleri (7.05s - 7.35s ve 8.95s - 9.25s)
-        elif 7.05 <= t <= 7.35:
-            lp = (t - 7.05) / 0.30
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.42 * math.sin(lp * math.pi), sweep_pos=lp)
-        elif 8.95 <= t <= 9.25:
-            lp = (t - 8.95) / 0.30
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.42 * math.sin(lp * math.pi), sweep_pos=1.0 - lp)
+        if 0.28 <= t <= 0.44:
+            lp = (t - 0.28) / 0.16
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.55 * math.sin(lp * math.pi), sweep_pos=lp)
+        elif 3.42 <= t <= 3.82:
+            lp = (t - 3.42) / 0.40
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.72 * math.sin(lp * math.pi), sweep_pos=lp)
+        elif 6.72 <= t <= 7.08:
+            lp = (t - 6.72) / 0.36
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.46 * math.sin(lp * math.pi), sweep_pos=lp)
+        elif 10.02 <= t <= 10.38:
+            lp = (t - 10.02) / 0.36
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.46 * math.sin(lp * math.pi), sweep_pos=1.0 - lp)
 
         # Üst Kenar 6px Şampanya Altın İzlenme Tutma (Retention) İlerleme Çubuğu
         top_draw = ImageDraw.Draw(frame_rgb)
