@@ -62,7 +62,7 @@ jobs:
       - name: "💎 @Luxurylifeaibot Kuyruk Analizi, 2K GraphMotion Plus Reels Üretimi & 3-Mesajlı Telegram Teslimatı"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '995164733' }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '8874878004' }}
           GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           LUXURY_CATEGORY: ${{ github.event.inputs.category || 'otomatik' }}
           FORCE_RUN: ${{ github.event.inputs.force_run || '0' }}

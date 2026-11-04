@@ -62,10 +62,10 @@ def configure_luxury_bot_profile(token: Optional[str] = None) -> Dict[str, Any]:
         "setMyDescription",
         {
             "description": (
-                "💎 Luxury Life AI (@Luxurylifeaibot) — Eksiksiz Lüks Yaşam Instagram Reels Otomasyonu\n\n"
-                "• 📸 Bota takı, makyaj malzemesi, kombin, otel veya lüks araba fotoğrafı/videosu ya da ürün linki gönderin.\n"
-                "• 🎬 Doğru kamera açısı, mekan, %100 gerçekçi model ve 2K GraphMotion Plus akışıyla 5-10 dk içinde videonuzu hazırlayıp size teslim eder.\n"
-                "• 📋 Her teslimatta: 1) Açıklayıcı Reji & Kaydetme Oranı Analizi, 2) Saf Copy-Paste Instagram Açıklaması (#reklam #işbirliğiyoktur dahil) ve 3) Saf Copy-Paste Ürün/İş Birliği Linkleri ayrı mesajlar halinde sunulur."
+                "💎 Luxury Life AI (@luxurylifeaibot) — 2K Lüks Yaşam Instagram Reels Otomasyonu\n\n"
+                "• 📸 Bota takı, makyaj, kombin, otel veya lüks araba fotoğrafı, videosu ya da ürün linki gönderin.\n"
+                "• 🎬 Gönderdiğiniz tüm görüntü ve yazıları otomatik tetikleyici olarak kullanır; yazım hatalarını düzeltir, doğru açı ve mekanla 2K GraphMotion Plus Reels hazırlar.\n"
+                "• 📋 1) Açıklayıcı Analiz, 2) Saf Copy-Paste Açıklama (#reklam #işbirliğiyoktur) ve 3) Saf Copy-Paste Ürün Linkleri sunar."
             )
         },
         token=tok,

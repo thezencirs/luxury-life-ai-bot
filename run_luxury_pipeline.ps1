@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = "Stop"
 $env:PYTHONIOENCODING = "utf-8"
 $env:TELEGRAM_BOT_TOKEN = "9244899175:AAGEkK0KD_sMxMB_wJaS_4Mlrjh8IGLgr7c"
-$env:TELEGRAM_CHAT_ID = "995164733"
+$env:TELEGRAM_CHAT_ID = "8874878004"
 $env:PYTHONPATH = "C:\Users\zenci\.gemini\antigravity\scratch\luxury-life-ai-bot\src;$env:PYTHONPATH"
 $env:PATH = "C:\Users\zenci\.gemini\antigravity\scratch\tools\python\tools\Lib\site-packages\imageio_ffmpeg\binaries;$env:PATH"
 
