@@ -1,0 +1,24 @@
+{
+  "used_outfit_ids": [
+    "lux_otel_santorini_oia_caldera_twilight"
+  ],
+  "used_concept_ids": [
+    "lux_otel_santorini_oia_caldera_twilight"
+  ],
+  "used_model_frames": [
+    "lux_otel_santorini_oia_caldera_twilight_step1.jpg"
+  ],
+  "published_ids": [
+    "lux_otel_santorini_oia_caldera_twilight"
+  ],
+  "history": [
+    {
+      "id": "lux_otel_santorini_oia_caldera_twilight",
+      "category": "otel",
+      "title": "Santorini Oia Caldera: Alacakaranlık Terası, Kristal Kadeh & Hermès Bileklik Zarafeti ✨",
+      "published_at_utc": "2026-11-04T19:28:06.330364Z"
+    }
+  ],
+  "last_category_index": 0,
+  "last_dispatch_ts": 1793820486.3303645
+}
