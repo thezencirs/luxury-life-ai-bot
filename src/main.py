@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from luxury_viral_concepts import select_luxury_concept
 from render_luxury_reels import render_luxury_graphmotion_reel
+from system_health_auditor import audit_luxury_system_health
 from telegram_luxury_ingestor import (
     ensure_concept_assets_ready,
     poll_and_enqueue_telegram_requests,
@@ -67,6 +68,9 @@ def main() -> None:
 
     if not args.no_telegram_publish:
         deliver_luxury_package_to_telegram(concept, out_dir=out_dir)
+
+    health = audit_luxury_system_health(out_dir=out_dir)
+    print(f"🩺 [Sistem Sağlığı Skoru]: %{health['overall_health_score']} ({health['status']})")
 
 
 if __name__ == "__main__":

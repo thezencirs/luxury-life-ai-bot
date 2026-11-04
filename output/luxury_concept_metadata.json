@@ -1,0 +1,154 @@
+{
+  "id": "tg_lux_otel_6c84f1",
+  "category": "otel",
+  "gender_segment": "kadin",
+  "title": "Santorini Oia Caldera: Alacakaranlık Terası, Kristal Kadeh & Hermès Bileklik Zarafeti ✨",
+  "cover_kicker": "» ULTRA LÜKS OTEL & MÜCEVHER • SANTORİNİ OİA REJİSİ «",
+  "cover_headline": "SANTORİNİ CALDERA TERASINDA UNUTULMAZ AKŞAM RİTÜELİ",
+  "spoken_hook_text": "Santorini'de gün batıp mavi saat başladığında, terastaki kadehin ışıltısı ve bilekteki zarafet tüm hikayeyi anlatır!",
+  "viral_hook": "🌅 Santorini Oia'nın beyaz teraslarında alacakaranlık büyüsü, bilekteki Hermès & altın kelepçe uyumu ve lüks tatil detayları! Kaydetmeyi unutma 👇✨",
+  "location_name": "Katikies & Canaves Oia Luxury Suites • Santorini, Yunanistan",
+  "camera_spec": "Hasselblad H6D-100c • 24mm f/1.4 Blue-Hour Terrace + 50mm f/1.2 POV",
+  "act1_beat": "SAHNE 1: Ege Kalderası üzerinde mavi saat ve yamaçtaki sıcak altın villa ışıkları.",
+  "act2_beat": "SAHNE 2: Kristal kadehler, Hermès deri-altın kelepçe ve şans bilekliğiyle kusursuz POV.",
+  "act3_twist": "FİNAL: Bu büyülü rotayı ve bileklik/stil linklerini kaybetmemek için hemen KAYDET!",
+  "model_prompt_en": "Ultra-photorealistic luxury travel & lifestyle photograph shot on 35mm f/1.4 lens at blue hour twilight in Oia Santorini Greece, overlooking the deep blue Aegean caldera sea and whitewashed cliffside boutique hotel villas glowing with warm golden lights, elegant couple terrace table with two chilled crystal white wine glasses, luxury python leather and gold cuff bracelet on wrist, zero 3D, zero cartoon, Conde Nast Traveler cover photography",
+  "items": {
+    "slot1": {
+      "category_label": "Lüks Teras Otel",
+      "emoji": "🏨",
+      "brand": "KATIKIES / CANAVES OIA SANTORINI",
+      "name": "Oia Caldera Manzaralı Özel Sonsuzluk Havuzlu & Teraslı Lüks Süit",
+      "price": "Gecelik Özel Süit",
+      "price_val": 48500.0,
+      "sku": "LUX-SNT-101",
+      "color": "Santorini Beyazı & Ege Mavisi",
+      "store_url": "https://www.booking.com/city/gr/oia.tr.html",
+      "crop_box": [
+        0.0,
+        0.0,
+        1.0,
+        0.72
+      ],
+      "en_packshot": "luxury whitewashed Santorini Oia cliffside hotel terrace overlooking blue caldera sea at twilight",
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot1.png"
+    },
+    "slot2": {
+      "category_label": "Deri & Altın Bileklik",
+      "emoji": "✨",
+      "brand": "HERMÈS STİLİ / BEYMEN",
+      "name": "Python Dokulu Deri & Altın Tokalı Kelepçe Bileklik (Fotoğraftaki Sol Bilek)",
+      "price": "16.950₺",
+      "price_val": 16950.0,
+      "sku": "LUX-SNT-102",
+      "color": "Piton Kahve & Gold",
+      "store_url": "https://www.beymen.com/tr/kadin-aksesuar-taki-10108",
+      "crop_box": [
+        0.14,
+        0.66,
+        0.5,
+        0.94
+      ],
+      "en_packshot": "luxury python-embossed leather cuff bracelet with 18k gold hardware clasp on pure white background #FFFFFF",
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot2.png"
+    },
+    "slot3": {
+      "category_label": "Altın Kelepçe",
+      "emoji": "💛",
+      "brand": "CARTIER LOVE STİLİ / ATASAY",
+      "name": "14K Sarı Altın İnce İtalyan Bangle Kelepçe Bileklik",
+      "price": "19.450₺",
+      "price_val": 19450.0,
+      "sku": "LUX-SNT-103",
+      "color": "14K Sarı Altın",
+      "store_url": "https://www.atasay.com/altin-bileklik",
+      "crop_box": [
+        0.18,
+        0.72,
+        0.46,
+        0.92
+      ],
+      "en_packshot": "sleek 18k yellow gold oval bangle bracelet on pure solid white studio background #FFFFFF",
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot3.png"
+    },
+    "slot4": {
+      "category_label": "Şans Bilekliği",
+      "emoji": "❤️",
+      "brand": "REDLINE PARİS STİLİ / ZEN PIRLANTA",
+      "name": "Kırmızı İpli Altın & Tektaş Pırlanta Şans Bilekliği (Fotoğraftaki Sağ Bilek)",
+      "price": "7.890₺",
+      "price_val": 7890.0,
+      "sku": "LUX-SNT-104",
+      "color": "Kırmızı İp & Pırlanta",
+      "store_url": "https://www.zenpirlanta.com/pirlanta-bileklikler",
+      "crop_box": [
+        0.72,
+        0.36,
+        0.98,
+        0.66
+      ],
+      "en_packshot": "delicate red silk cord bracelet with solitaire diamond in 18k gold bezel on pure white background #FFFFFF",
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot4.png"
+    },
+    "slot5": {
+      "category_label": "Kristal Kadeh Seti",
+      "emoji": "🥂",
+      "brand": "NUDE GLASS / BEYMEN HOME",
+      "name": "El Yapımı Kurşunsuz Kristal Beyaz Şarap & Şampanya Kadehi Seti",
+      "price": "4.250₺",
+      "price_val": 4250.0,
+      "sku": "LUX-SNT-105",
+      "color": "Saf Kristal",
+      "store_url": "https://www.beymen.com/tr/ev-yasam-sofra-10302",
+      "crop_box": [
+        0.3,
+        0.24,
+        0.72,
+        0.8
+      ],
+      "en_packshot": "two crystal stemmed white wine glasses clinking on pure solid white background #FFFFFF",
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot5.png"
+    },
+    "slot6": {
+      "category_label": "Resort Keten Gömlek",
+      "emoji": "🤍",
+      "brand": "VAKKO MARE / MASSIMO DUTTI",
+      "name": "Santorini Beyazı %100 Saf İtalyan Keten Oversize Resort Gömlek",
+      "price": "5.490₺",
+      "price_val": 5490.0,
+      "sku": "LUX-SNT-106",
+      "color": "Kırık Beyaz Keten",
+      "store_url": "https://www.massimodutti.com/tr/kadin/gomlekler-ve-bluzlar-n1395",
+      "crop_box": [
+        0.0,
+        0.65,
+        0.55,
+        1.0
+      ],
+      "en_packshot": "crisp white pure Italian linen resort shirt isolated on pure solid white background #FFFFFF",
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot6.png"
+    }
+  },
+  "hashtags": "#santorini #oiasantorini #luxuryhotels #oldmoneytravel #quietluxury #luxurylife #tatilrotaları #reklam #işbirliğiyoktur",
+  "requester_chat_id": "8874878004",
+  "user_photo_path": "assets/tg_raw_photo_562020112.jpg",
+  "user_photos": [
+    "assets/tg_raw_photo_562020112.jpg"
+  ],
+  "user_video_path": "",
+  "viral_analysis": {
+    "category_tr": "Ultra Lüks Oteller, Kraliyet Süitleri & Tatil Rotaları (5-Star Palace & Cliffside Hotels)",
+    "save_rate_benchmark": "%12.0 - %16.4 Kaydetme Oranı (Bucket-List & Seyahat Rehberi Etkisi)",
+    "hook_formula": "0.0s-1.2s Panoramik Teras POV Açılışı + 'Hayatında En Az Bir Kez Yaşaman Gereken Alacakaranlık Terası & Stil Detayları'",
+    "camera_angle": "24mm f/1.4 Mimari Geniş Açı (Caldera / Boğaz Terası) + 50mm f/1.2 POV Kadeh & Bileklik Detay Açısı",
+    "lighting_setup": "Mavi Saat (Blue Hour / Twilight) Deniz Ufku + Sıcak 2700K Teras & Villa Kandil Işıkları Kontrastı",
+    "location_direction": "Santorini Oia Caldera (Katikies / Canaves Oia) • Çırağan Palace • Mandarin Oriental • Villa d'Este Como",
+    "model_direction": "POV Lüks Çift & Süpermodel — Beyaz teras korkuluğunda kristal kadeh tokuşturma, ön planda Hermès deri/altın bileklik ve kırmızı ipli pırlanta bileklik detayı",
+    "why_saved": "Çiftler ve lüks seyahat tutkunları yıldönümü, balayı veya yaz/kış kaçamağı için oteli ve fotoğraftaki bileklik/kadeh/kombin linklerini kaydeder ve birbirine DM atar."
+  },
+  "model_frames": [
+    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\tg_lux_otel_6c84f1_step1.jpg",
+    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\tg_lux_otel_6c84f1_step2.jpg",
+    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\tg_lux_otel_6c84f1_step3.jpg"
+  ]
+}

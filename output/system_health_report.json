@@ -1,0 +1,45 @@
+{
+  "overall_health_score": 100,
+  "max_possible_score": 100,
+  "health_percentage": "%100",
+  "status": "EXCELLENT (TAM SAĞLIKLI)",
+  "timestamp_utc": "2026-11-04T16:09:54.764721Z",
+  "checks": {
+    "telegram_bot_api": {
+      "score": 20,
+      "max_score": 20,
+      "status": "HEALTHY",
+      "bot_username": "@Luxurylifeaibot"
+    },
+    "graphmotion_2k_engine": {
+      "score": 20,
+      "max_score": 20,
+      "status": "HEALTHY",
+      "resolution": "1440x2560 (2K QHD+ @ 30 FPS)",
+      "video_size_kb": 20220.0
+    },
+    "three_message_legal_compliance": {
+      "score": 20,
+      "max_score": 20,
+      "status": "HEALTHY",
+      "legal_tags_verified": true
+    },
+    "collaboration_links_resolver": {
+      "score": 15,
+      "max_score": 15,
+      "status": "HEALTHY",
+      "verified_links_count": 6
+    },
+    "github_actions_pipeline": {
+      "score": 15,
+      "max_score": 15,
+      "status": "HEALTHY",
+      "workflow_file": ".github/workflows/luxury_reels_pipeline.yml"
+    },
+    "skills_and_trigger_engine": {
+      "score": 10,
+      "max_score": 10,
+      "status": "HEALTHY"
+    }
+  }
+}
