@@ -179,8 +179,8 @@ def _draw_pill(
 
 def create_obsidian_gold_stage(watermark_text: str = "@luxurylifeaibot") -> Image.Image:
     """
-    2K (1440x2560) çözünürlükte Obsidian Kadife & Şampanya Altın Spot aydınlatmalı
-    GraphMotion Plus stüdyo sahnesi oluşturur.
+    2K (1440x2560) çözünürlükte Saf Beyaz Sonsuz Fon (Pure White Cyclorama #FFFFFF) &
+    Profoto Softbox + 18K Şampanya Altın Çerçeveli Fotoğraf Stüdyosu sahnesi oluşturur.
     """
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     nx = (xx - W * 0.5) / (W * 0.62)
@@ -188,10 +188,10 @@ def create_obsidian_gold_stage(watermark_text: str = "@luxurylifeaibot") -> Imag
     dist = np.clip(np.sqrt(nx * nx + ny * ny), 0.0, 1.35) / 1.35
     smooth = dist * dist * (3.0 - 2.0 * dist)
 
-    # Merkezde sıcak koyu espresso-obsidyen spot (34, 28, 24) -> Kenarlarda derin kadife siyah (12, 10, 14)
-    r_ch = (34.0 - 22.0 * smooth).astype(np.uint8)
-    g_ch = (28.0 - 18.0 * smooth).astype(np.uint8)
-    b_ch = (24.0 - 12.0 * smooth).astype(np.uint8)
+    # Merkezde saf beyaz stüdyo spotu (255, 255, 255) -> Kenarlarda yumuşak stüdyo sonsuz fon (244, 241, 235)
+    r_ch = (255.0 - 11.0 * smooth).astype(np.uint8)
+    g_ch = (255.0 - 14.0 * smooth).astype(np.uint8)
+    b_ch = (255.0 - 20.0 * smooth).astype(np.uint8)
     a_ch = np.full((H, W), 255, dtype=np.uint8)
     bg = Image.fromarray(np.dstack([r_ch, g_ch, b_ch, a_ch]), mode="RGBA")
 
@@ -203,20 +203,20 @@ def create_obsidian_gold_stage(watermark_text: str = "@luxurylifeaibot") -> Imag
     for y in range(S(40), H - S(40), step_y):
         offset_x = S(110) if (row_idx % 2 == 1) else 0
         for x in range(S(-20) + offset_x, W - S(20), step_x):
-            draw.text((x, y), watermark_text, fill=(62, 52, 42, 95), font=wm_font)
+            draw.text((x, y), watermark_text, fill=(214, 206, 194, 110), font=wm_font)
         row_idx += 1
 
-    # Çift katmanlı 18K Altın Lüks Çerçeve
+    # Çift katmanlı 18K Şampanya Altın Fotoğraf Stüdyosu Çerçevesi
     draw.rounded_rectangle(
         (S(16), S(16), W - S(16), H - S(16)),
         radius=S(28),
-        outline=(218, 182, 118, 225),
+        outline=(198, 160, 88, 240),
         width=S(3),
     )
     draw.rounded_rectangle(
         (S(26), S(26), W - S(26), H - S(26)),
         radius=S(22),
-        outline=(218, 182, 118, 115),
+        outline=(198, 160, 88, 130),
         width=S(1),
     )
     return bg
@@ -249,21 +249,21 @@ def generate_hook_cover_and_story_collage(
     out_dir: str,
 ) -> Image.Image:
     """
-    1) output/hook_cover.jpg (Reels Kapak Fotoğrafı)
-    2) output/luxury_story_collage.jpg (9:16 Story & Moodboard Lookbook Kolajı)
+    1) output/hook_cover.jpg (Saf Beyaz Stüdyo Estetikli Reels Kapak Fotoğrafı)
+    2) output/luxury_story_collage.jpg (Saf Beyaz Fotoğraf Stüdyosu 9:16 Story & Moodboard Lookbook Kolajı)
     üretir.
     """
     base = scene_frames[0].copy().convert("RGBA") if scene_frames else create_obsidian_gold_stage()
 
     grad = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     gdraw = ImageDraw.Draw(grad)
-    for y in range(S(400)):
-        alpha = int(195 * (1.0 - (y / float(S(400)))) ** 1.35)
-        gdraw.line([(0, y), (W, y)], fill=(8, 6, 10, alpha))
-    for y in range(H - S(880), H):
-        prog = (y - (H - S(880))) / float(S(880))
-        alpha = int(235 * (prog ** 1.2))
-        gdraw.line([(0, y), (W, y)], fill=(8, 6, 10, alpha))
+    for y in range(S(380)):
+        alpha = int(165 * (1.0 - (y / float(S(380)))) ** 1.35)
+        gdraw.line([(0, y), (W, y)], fill=(255, 255, 255, alpha))
+    for y in range(H - S(820), H):
+        prog = (y - (H - S(820))) / float(S(820))
+        alpha = int(215 * (prog ** 1.2))
+        gdraw.line([(0, y), (W, y)], fill=(252, 250, 246, alpha))
     base = Image.alpha_composite(base, grad)
     draw = ImageDraw.Draw(base)
 
@@ -275,19 +275,19 @@ def generate_hook_cover_and_story_collage(
 
     _draw_pill(
         draw, W // 2, S(178),
-        "LUXURY LIFE AI • HAUTE COUTURE & LIFESTYLE",
-        f_crest, (14, 12, 16, 230), (236, 204, 142, 255),
-        S(26), S(9), S(16), (218, 182, 118, 210), S(2),
+        "LUXURY LIFE AI • WHITE STUDIO EDITION",
+        f_crest, (255, 255, 255, 245), (22, 18, 24, 255),
+        S(26), S(9), S(16), (198, 160, 88, 240), S(2),
     )
-    kicker = _tr_upper(concept.get("cover_kicker", "» SESSİZ LÜKS & YÜKSEK KAYDETME REJİSİ «"))[:48]
+    kicker = _tr_upper(concept.get("cover_kicker", "» SAF BEYAZ FOTOĞRAF STÜDYOSU REJİSİ «"))[:48]
     _draw_pill(
         draw, W // 2, S(238),
         kicker,
-        f_kicker, (20, 14, 18, 242), (255, 222, 158, 255),
-        S(30), S(13), S(24), (218, 182, 118, 235), S(2),
+        f_kicker, (255, 255, 255, 248), (154, 114, 42, 255),
+        S(30), S(13), S(24), (198, 160, 88, 245), S(2),
     )
 
-    # Sağ dikey sütunda 4 Glassmorphism Önizleme Kartı
+    # Sağ dikey sütunda 4 Saf Beyaz Stüdyo Önizleme Kartı
     card_w, card_h = S(190), S(205)
     card_x = W - card_w - S(34)
     start_y = S(335)
@@ -297,8 +297,8 @@ def generate_hook_cover_and_story_collage(
         draw.rounded_rectangle(
             (card_x, cy, card_x + card_w, cy + card_h),
             radius=S(24),
-            fill=(22, 18, 20, 232),
-            outline=(218, 182, 118, 240),
+            fill=(255, 255, 255, 248),
+            outline=(198, 160, 88, 245),
             width=S(3),
         )
         thumb = p_card["cutout"].copy()
@@ -310,44 +310,46 @@ def generate_hook_cover_and_story_collage(
         draw.rounded_rectangle(
             (card_x + S(10), cy + S(10), card_x + S(52), cy + S(36)),
             radius=S(9),
-            fill=(218, 182, 118, 255),
+            fill=(198, 160, 88, 255),
         )
-        draw.text((card_x + S(31), cy + S(23)), f"#{idx_c + 1}", fill=(12, 10, 14, 255), font=f_crest, anchor="mm")
+        draw.text((card_x + S(31), cy + S(23)), f"#{idx_c + 1}", fill=(255, 255, 255, 255), font=f_crest, anchor="mm")
 
         price_txt = str(p_card["data"].get("price", ""))[:14]
         draw.rounded_rectangle(
             (card_x + S(10), cy + card_h - S(42), card_x + card_w - S(10), cy + card_h - S(8)),
             radius=S(10),
-            fill=(12, 10, 14, 245),
+            fill=(246, 242, 234, 255),
+            outline=(198, 160, 88, 180),
+            width=S(1),
         )
-        draw.text((card_x + card_w // 2, cy + card_h - S(25)), price_txt, fill=(242, 214, 158, 255), font=f_mini, anchor="mm")
+        draw.text((card_x + card_w // 2, cy + card_h - S(25)), price_txt, fill=(22, 18, 24, 255), font=f_mini, anchor="mm")
 
-    # Alt-Merkez Dergi Kapağı Hook Kutusu
+    # Alt-Merkez Saf Beyaz Dergi Kapağı Hook Kutusu
     box_top, box_bot = S(1305), S(1685)
     draw.rounded_rectangle(
         (S(46), box_top, W - S(46), box_bot),
         radius=S(36),
-        fill=(12, 10, 14, 236),
-        outline=(218, 182, 118, 245),
+        fill=(255, 255, 255, 246),
+        outline=(198, 160, 88, 250),
         width=S(3),
     )
-    loc_short = _tr_upper(concept.get("location_name", "PARİS • MİLANO • İSTANBUL BOĞAZI"))[:42]
+    loc_short = _tr_upper(concept.get("location_name", "SAF BEYAZ FOTOĞRAF STÜDYOSU (#FFFFFF)"))[:42]
     _draw_pill(
         draw, W // 2, box_top + S(46),
         f"» {loc_short} «",
-        f_kicker, (218, 182, 118, 255), (12, 10, 14, 255),
+        f_kicker, (198, 160, 88, 255), (255, 255, 255, 255),
         S(26), S(11), S(18),
     )
 
     h_lines = _wrap_headline_lines(concept.get("cover_headline", concept.get("title", "")), max_chars=22)
     line_start_y = box_top + S(122) if len(h_lines) == 3 else box_top + S(145)
     for i_ln, ln_txt in enumerate(h_lines):
-        draw.text((W // 2, line_start_y + i_ln * S(60)), ln_txt, fill=(255, 255, 255, 255), font=f_big, anchor="mm")
+        draw.text((W // 2, line_start_y + i_ln * S(60)), ln_txt, fill=(18, 16, 20, 255), font=f_big, anchor="mm")
 
     _draw_pill(
         draw, W // 2, box_bot - S(46),
         "» KAYDET & BİREBİR ÜRÜN LİNKLERİNİ İNCELE «",
-        f_sub, (186, 46, 74, 255), (255, 255, 255, 255),
+        f_sub, (18, 16, 20, 255), (242, 214, 158, 255),
         S(28), S(12), S(20),
     )
 
@@ -355,20 +357,20 @@ def generate_hook_cover_and_story_collage(
     cover_path = os.path.join(out_dir, "hook_cover.jpg")
     rgb_cover.save(cover_path, "JPEG", quality=97, subsampling=0)
 
-    # Ayrıca 9:16 Lüks Story Moodboard Kolajı (luxury_story_collage.jpg) üret
+    # Ayrıca 9:16 Saf Beyaz Stüdyo Story Moodboard Kolajı (luxury_story_collage.jpg) üret
     story = create_obsidian_gold_stage("@luxurylifeaibot")
     sdraw = ImageDraw.Draw(story)
     _draw_pill(
         sdraw, W // 2, S(95),
-        "LUXURY LIFE AI • 6 PARÇA DOĞRULANMIŞ LÜKS SEÇKİ",
-        f_kicker, (218, 182, 118, 255), (12, 10, 14, 255),
+        "LUXURY LIFE AI • SAF BEYAZ STÜDYO 6'LI LÜKS SEÇKİ",
+        f_kicker, (198, 160, 88, 255), (255, 255, 255, 255),
         S(30), S(12), S(20),
     )
     _draw_pill(
         sdraw, W // 2, S(162),
         _tr_upper(concept.get("title", ""))[:46],
-        f_sub, (22, 18, 24, 240), (245, 222, 172, 255),
-        S(26), S(10), S(18), (218, 182, 118, 200), S(2),
+        f_sub, (255, 255, 255, 248), (22, 18, 24, 255),
+        S(26), S(10), S(18), (198, 160, 88, 220), S(2),
     )
     grid_coords = [
         (S(55), S(230)), (S(555), S(230)),
@@ -381,8 +383,8 @@ def generate_hook_cover_and_story_collage(
         sdraw.rounded_rectangle(
             (gx, gy, gx + cw_box, gy + ch_box),
             radius=S(28),
-            fill=(24, 20, 22, 242),
-            outline=(218, 182, 118, 225),
+            fill=(255, 255, 255, 252),
+            outline=(198, 160, 88, 235),
             width=S(3),
         )
         im_c = p_card["cutout"].copy()
@@ -395,15 +397,17 @@ def generate_hook_cover_and_story_collage(
         sdraw.rounded_rectangle(
             (gx + S(16), gy + ch_box - S(86), gx + cw_box - S(16), gy + ch_box - S(14)),
             radius=S(16),
-            fill=(12, 10, 14, 248),
+            fill=(248, 244, 236, 255),
+            outline=(198, 160, 88, 190),
+            width=S(1),
         )
-        sdraw.text((gx + cw_box // 2, gy + ch_box - S(62)), f"#{idx_g + 1} {b_txt}", fill=(255, 255, 255, 255), font=f_mini, anchor="mm")
-        sdraw.text((gx + cw_box // 2, gy + ch_box - S(32)), p_txt, fill=(238, 204, 142, 255), font=f_crest, anchor="mm")
+        sdraw.text((gx + cw_box // 2, gy + ch_box - S(62)), f"#{idx_g + 1} {b_txt}", fill=(18, 16, 20, 255), font=f_mini, anchor="mm")
+        sdraw.text((gx + cw_box // 2, gy + ch_box - S(32)), p_txt, fill=(154, 114, 42, 255), font=f_crest, anchor="mm")
 
     _draw_pill(
         sdraw, W // 2, S(1815),
         "» TÜM ÜRÜN LİNKLERİ AÇIKLAMADA & İLK YORUMDA «",
-        f_sub, (218, 182, 118, 255), (12, 10, 14, 255),
+        f_sub, (18, 16, 20, 255), (242, 214, 158, 255),
         S(32), S(14), S(22),
     )
     story_path = os.path.join(out_dir, "luxury_story_collage.jpg")
@@ -448,25 +452,25 @@ def render_luxury_graphmotion_reel(
         if c_path and os.path.exists(c_path):
             cut_im = Image.open(c_path).convert("RGBA")
         else:
-            cut_im = Image.new("RGBA", (400, 400), (218, 182, 118, 255))
+            cut_im = Image.new("RGBA", (400, 400), (255, 255, 255, 255))
         cut_im = enhance_luxury_micro_contrast(cut_im, is_cutout=True)
 
-        # Önceden hazır Glassmorphism Bento Kart görüntüsü oluştur
+        # Önceden hazır Saf Beyaz Stüdyo Bento Kart görüntüsü oluştur (#FFFFFF + 18K Gold)
         _, _, bw, bh = scfg["box"]
         card_im = Image.new("RGBA", (bw, bh), (0, 0, 0, 0))
         cdraw = ImageDraw.Draw(card_im)
         cdraw.rounded_rectangle(
             (0, 0, bw - 1, bh - 1),
             radius=S(28),
-            fill=(24, 20, 24, 238),
-            outline=(218, 182, 118, 235),
+            fill=(255, 255, 255, 252),
+            outline=(198, 160, 88, 240),
             width=S(3),
         )
         # İç altın çerçeve
         cdraw.rounded_rectangle(
             (S(8), S(8), bw - S(9), bh - S(9)),
             radius=S(22),
-            outline=(218, 182, 118, 90),
+            outline=(198, 160, 88, 110),
             width=S(1),
         )
         thumb = cut_im.copy()
@@ -480,33 +484,33 @@ def render_luxury_graphmotion_reel(
         cdraw.rounded_rectangle(
             (S(14), S(14), S(68), S(46)),
             radius=S(10),
-            fill=(218, 182, 118, 255),
+            fill=(198, 160, 88, 255),
         )
-        cdraw.text((S(41), S(30)), f"#{idx}", fill=(12, 10, 14, 255), font=f_crest, anchor="mm")
+        cdraw.text((S(41), S(30)), f"#{idx}", fill=(255, 255, 255, 255), font=f_crest, anchor="mm")
 
         # Sağ üst kategori etiketi
         cat_lbl = _tr_upper(str(it_data.get("category_label", "LÜKS")))[:16]
         cdraw.rounded_rectangle(
             (bw - S(185), S(14), bw - S(14), S(46)),
             radius=S(10),
-            fill=(14, 12, 16, 220),
-            outline=(218, 182, 118, 160),
+            fill=(248, 244, 236, 255),
+            outline=(198, 160, 88, 190),
             width=S(1),
         )
-        cdraw.text((bw - S(100), S(30)), cat_lbl, fill=(238, 206, 148, 255), font=f_crest, anchor="mm")
+        cdraw.text((bw - S(100), S(30)), cat_lbl, fill=(142, 104, 36, 255), font=f_crest, anchor="mm")
 
-        # Alt marka + fiyat + kod şeridi
+        # Alt marka + fiyat + kod şeridi (Saf Beyaz / Krem Editoryal Şerit)
         cdraw.rounded_rectangle(
             (S(14), bh - S(86), bw - S(14), bh - S(14)),
             radius=S(16),
-            fill=(12, 10, 14, 248),
-            outline=(218, 182, 118, 140),
+            fill=(248, 244, 236, 255),
+            outline=(198, 160, 88, 185),
             width=S(1),
         )
         b_name = _tr_upper(str(it_data.get("brand", "LUXURY")))[:22]
         p_info = f"{it_data.get('price', '')}  |  {it_data.get('sku', '-')}"
-        cdraw.text((bw // 2, bh - S(62)), b_name, fill=(255, 255, 255, 255), font=f_brand, anchor="mm")
-        cdraw.text((bw // 2, bh - S(32)), p_info, fill=(238, 204, 142, 255), font=f_price, anchor="mm")
+        cdraw.text((bw // 2, bh - S(62)), b_name, fill=(18, 16, 20, 255), font=f_brand, anchor="mm")
+        cdraw.text((bw // 2, bh - S(32)), p_info, fill=(154, 114, 42, 255), font=f_price, anchor="mm")
 
         prepared_cards.append({
             **scfg,
@@ -515,7 +519,7 @@ def render_luxury_graphmotion_reel(
             "card_im": card_im,
         })
 
-    # Sahne karelerini 2K OLED kalitesinde yükle
+    # Sahne karelerini 2K kalitesinde yükle
     scene_frames: List[Image.Image] = []
     for fp in concept.get("model_frames", []):
         if os.path.exists(fp):
@@ -532,8 +536,8 @@ def render_luxury_graphmotion_reel(
     bento_end_sec = 5.20
 
     va = concept.get("viral_analysis", {})
-    cam_hud = _tr_upper(concept.get("camera_spec", "HASSELBLAD 85MM F/1.4 • GOLDEN HOUR"))[:48]
-    loc_hud = _tr_upper(concept.get("location_name", "PARİS • MİLANO • İSTANBUL"))[:46]
+    cam_hud = _tr_upper(concept.get("camera_spec", "HASSELBLAD 85MM F/1.4 • WHITE STUDIO"))[:48]
+    loc_hud = _tr_upper(concept.get("location_name", "SAF BEYAZ FOTOĞRAF STÜDYOSU (#FFFFFF)"))[:46]
 
     for f_idx in range(total_frames):
         t = f_idx / float(FPS)
@@ -541,22 +545,22 @@ def render_luxury_graphmotion_reel(
         # ACT I (0.00s - 0.40s): Scroll-Stopper Dergi Kapağı Kancası
         if t < 0.40:
             frame_rgb = hook_cover_rgb.copy()
-        # ACT II (0.40s - 5.20s): GraphMotion Plus 6'lı Bento & Remotion Yay Fiziği + Specular Işık Akışı
+        # ACT II (0.40s - 5.20s): Saf Beyaz Fotoğraf Stüdyosu 6'lı Bento & Remotion Yay Fiziği
         elif t < bento_end_sec:
             canvas = bg_stage.copy()
             draw = ImageDraw.Draw(canvas)
 
-            # Üst Kamera Açısı & Mekan Rejisi HUD
+            # Üst Kamera Açısı & Stüdyo Rejisi HUD (Saf Beyaz & Altın)
             _draw_pill(
                 draw, W // 2, S(78),
                 f"🎥 REJİ & AÇI: {cam_hud}",
-                f_crest, (16, 14, 18, 240), (238, 204, 142, 255),
-                S(26), S(10), S(18), (218, 182, 118, 210), S(2),
+                f_crest, (255, 255, 255, 248), (22, 18, 24, 255),
+                S(26), S(10), S(18), (198, 160, 88, 230), S(2),
             )
             _draw_pill(
                 draw, W // 2, S(142),
-                f"📍 MEKAN: {loc_hud}",
-                f_kicker, (218, 182, 118, 255), (12, 10, 14, 255),
+                f"📍 STÜDYO: {loc_hud}",
+                f_kicker, (198, 160, 88, 255), (255, 255, 255, 255),
                 S(28), S(11), S(20),
             )
 
@@ -581,18 +585,18 @@ def render_luxury_graphmotion_reel(
                 card_visual = _apply_180deg_shutter_blur(p_card["card_im"], speed_px)
                 canvas.paste(card_visual, (cur_x, cur_y), card_visual)
 
-            # Alt Kaydetme Kancası (High-Save-Rate) Kutusu + Altın İlerleme Çubuğu
+            # Alt Kaydetme Kancası (Saf Beyaz Stüdyo Kutusu) + Altın İlerleme Çubuğu
             draw.rounded_rectangle(
                 (S(50), S(1765), W - S(50), S(1885)),
                 radius=S(24),
-                fill=(14, 12, 16, 242),
-                outline=(218, 182, 118, 225),
+                fill=(255, 255, 255, 248),
+                outline=(198, 160, 88, 240),
                 width=S(2),
             )
             draw.text(
                 (W // 2, S(1805)),
                 _tr_upper(concept.get("act1_beat", "SAHNE 1: 6 PARÇA LÜKS REÇETEYİ KAYDET"))[:46],
-                fill=(255, 255, 255, 255),
+                fill=(18, 16, 20, 255),
                 font=f_brand,
                 anchor="mm",
             )
@@ -600,16 +604,16 @@ def render_luxury_graphmotion_reel(
             draw.rounded_rectangle(
                 (S(80), S(1842), S(80) + max(S(24), bar_w), S(1862)),
                 radius=S(10),
-                fill=(218, 182, 118, 255),
+                fill=(198, 160, 88, 255),
             )
             frame_rgb = canvas.convert("RGB")
 
             # Bento tamamlandığında (3.45s - 4.95s) Specular Champagne Gold Işık Dalgası
             if 3.45 <= t <= 4.95:
                 shimmer_p = (t - 3.45) / 1.50
-                frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.22 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
+                frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.18 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
 
-        # ACT III (5.20s - 11.00s): 3-Adımlı Gimbal Parallax %100 Fotogerçekçi Model & Mekan Sineması
+        # ACT III (5.20s - 11.00s): 3-Adımlı Gimbal Parallax %100 Fotogerçekçi Stüdyo Manken & Sahne Sineması
         else:
             walk_t = (t - bento_end_sec) / max(0.01, (total_duration - bento_end_sec))
             n_sc = len(scene_frames)
@@ -631,35 +635,35 @@ def render_luxury_graphmotion_reel(
             top = (zh - H) // 2
             cropped = zoomed.crop((left, top, left + W, top + H)).convert("RGBA")
 
-            # Üst ve alt sinematik vinyet
+            # Üst ve alt Saf Beyaz Fotoğraf Stüdyosu HUD Kartları
             ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
             odraw = ImageDraw.Draw(ov)
-            odraw.rounded_rectangle((S(36), S(54), W - S(36), S(185)), radius=S(26), fill=(12, 10, 14, 220), outline=(218, 182, 118, 220), width=S(2))
-            odraw.text((W // 2, S(96)), f"📍 {loc_hud}", fill=(238, 204, 142, 255), font=f_kicker, anchor="mm")
-            odraw.text((W // 2, S(144)), f"🎥 {cam_hud}", fill=(255, 255, 255, 255), font=f_crest, anchor="mm")
+            odraw.rounded_rectangle((S(36), S(54), W - S(36), S(185)), radius=S(26), fill=(255, 255, 255, 242), outline=(198, 160, 88, 240), width=S(2))
+            odraw.text((W // 2, S(96)), f"📍 {loc_hud}", fill=(154, 114, 42, 255), font=f_kicker, anchor="mm")
+            odraw.text((W // 2, S(144)), f"🎥 {cam_hud}", fill=(18, 16, 20, 255), font=f_crest, anchor="mm")
 
-            # Alt 3 Perdeli Viral Senaryo & Kaydetme Çağrısı Kutusu (Remotion Spring ile giriş)
+            # Alt 3 Perdeli Viral Senaryo & Kaydetme Çağrısı Kutusu (Saf Beyaz + Remotion Spring)
             hud_spring = min(1.0, _remotion_spring(t - bento_end_sec, damping=14.0, stiffness=120.0, mass=0.8))
             y_offset_hud = int(round((1.0 - hud_spring) * S(120)))
             beat_txt = concept.get("act2_beat", "") if walk_t < 0.55 else concept.get("act3_twist", "")
             odraw.rounded_rectangle(
                 (S(42), H - S(320) + y_offset_hud, W - S(42), H - S(120) + y_offset_hud),
                 radius=S(30),
-                fill=(12, 10, 14, 232),
-                outline=(218, 182, 118, 240),
+                fill=(255, 255, 255, 246),
+                outline=(198, 160, 88, 248),
                 width=S(3),
             )
             odraw.text(
                 (W // 2, H - S(252) + y_offset_hud),
                 _tr_upper(beat_txt)[:44],
-                fill=(255, 255, 255, 255),
+                fill=(18, 16, 20, 255),
                 font=f_title,
                 anchor="mm",
             )
             odraw.text(
                 (W // 2, H - S(178) + y_offset_hud),
                 "📌 VİDEOYU KAYDET • BİREBİR ÜRÜN LİNKLERİ AÇIKLAMADA!",
-                fill=(238, 204, 142, 255),
+                fill=(154, 114, 42, 255),
                 font=f_brand,
                 anchor="mm",
             )

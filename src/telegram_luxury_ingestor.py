@@ -355,6 +355,8 @@ def poll_and_enqueue_telegram_requests(acknowledge: bool = True) -> List[Dict[st
 
             if urls or photo_rel or video_rel or clean_txt:
                 cat = detect_luxury_category(clean_txt, urls)
+                if cat == "otomatik" and photo_rel:
+                    cat = analyze_photo_visual_category(photo_rel)
                 req_id = f"tg_lux_{uid}"
                 if req_id not in existing_ids:
                     item_obj = {
@@ -462,20 +464,68 @@ def _make_rounded_gold_photo_card(src_img: Image.Image, crop_box: Optional[ tupl
     return out
 
 
+def analyze_photo_visual_category(photo_path: str) -> str:
+    """
+    Kullanıcı yazı yazmadan SADECE fotoğraf gönderdiğinde, fotoğrafın görsel özelliklerini
+    (parlaklık, altın/pırlanta yansıması, cilt/kozmetik tonu, deniz/teras mavisi, kadraj oranı)
+    analiz ederek hangi lüks kategoride ('taki', 'makyaj', 'kombin', 'otel', 'araba') olduğunu otomatik anlar.
+    """
+    try:
+        abs_p = BASE_DIR / photo_path if not os.path.isabs(photo_path) else Path(photo_path)
+        if not abs_p.exists():
+            return "taki"
+        im = Image.open(abs_p).convert("RGB")
+        w, h = im.size
+        small = im.resize((160, 160), Image.Resampling.BILINEAR)
+        arr = np.array(small, dtype=np.float32)
+        r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
+
+        # Merkez bölge analizi
+        c_arr = arr[35:125, 35:125]
+        cr, cg, cb = c_arr[:, :, 0], c_arr[:, :, 1], c_arr[:, :, 2]
+        lum = 0.299 * cr + 0.587 * cg + 0.114 * cb
+
+        # 1) Mavi saat / deniz / havuz / teras baskınlığı -> Otel
+        blue_ratio = np.mean((b > r + 22) & (b > g + 8))
+        if blue_ratio > 0.28:
+            return "otel"
+
+        # 2) Altın / gümüş / pırlanta mikro-parıltı (yüksek kontrastlı specular noktalar + sıcak altın/beyaz fon) -> Takı
+        gold_pixels = np.mean((cr > 165) & (cg > 125) & (cb < 135) & ((cr - cb) > 40))
+        sparkle_pixels = np.mean(lum > 242)
+        if (gold_pixels > 0.08 and sparkle_pixels > 0.03) or ( abs(w - h) / float(max(w, h)) < 0.18 and sparkle_pixels > 0.12 ):
+            return "taki"
+
+        # 3) Pembe / şeftali / gül kurusu / ten & kozmetik tonları -> Makyaj
+        rose_pixels = np.mean((cr > 175) & (cg > 110) & (cg < 185) & (cb > 110) & ((cr - cg) > 22))
+        if rose_pixels > 0.22:
+            return "makyaj"
+
+        # 4) Geniş yatay kadraj + metalik koyu/gri/yeşil kontrast -> Araba
+        if w > h * 1.22:
+            return "araba"
+
+        # 5) Dikey tam boy (3:4 / 9:16) -> Kombin veya Takı
+        if h > w * 1.18:
+            return "kombin"
+    except Exception:
+        pass
+    return "taki"
+
+
 def _format_user_photo_to_9_16_cinema(user_img: Image.Image, zoom_mode: str = "full") -> Image.Image:
     """
-    Kullanıcının gönderdiği fotoğrafı (örn. 1052x1280 4:5 Santorini fotoğrafı) 1080x1920 (9:16) sinema
+    Kullanıcının gönderdiği fotoğrafı 1080x1920 (9:16) Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)
     karesine dönüştürür:
-    - 'full': Arka planda buğulu alacakaranlık/altın atmosfer uzantısı + merkezde tam boy keskin kullanıcı fotoğrafı ve altın çerçeve.
+    - 'full': Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF) + merkezde tam boy keskin kullanıcı fotoğrafı ve 18K altın çerçeve.
     - 'hero_fill': Tam ekran 9:16 merkez odak.
-    - 'detail_focus': Fotoğraftaki kadeh ve bileklik detayına sinematik yakınlaşma.
+    - 'detail_focus': Fotoğraftaki takı/ürün detayına sinematik yakınlaşma.
     """
     target_w, target_h = 1080, 1920
     src = user_img.convert("RGB")
     sw, sh = src.size
 
     if zoom_mode == "hero_fill":
-        # 9:16 tam ekran doldurma
         scale = max(target_w / sw, target_h / sh)
         nw, nh = int(sw * scale), int(sh * scale)
         resized = src.resize((nw, nh), Image.Resampling.LANCZOS)
@@ -485,7 +535,6 @@ def _format_user_photo_to_9_16_cinema(user_img: Image.Image, zoom_mode: str = "f
         return ImageEnhance.Contrast(out).enhance(1.07)
 
     if zoom_mode == "detail_focus":
-        # Alt-merkez (kadehler + bileklik + teras ışıkları) yakın plan
         sub = src.crop((int(sw * 0.06), int(sh * 0.14), int(sw * 0.94), int(sh * 0.96)))
         scale = max(target_w / sub.width, target_h / sub.height)
         nw, nh = int(sub.width * scale), int(sub.height * scale)
@@ -495,20 +544,20 @@ def _format_user_photo_to_9_16_cinema(user_img: Image.Image, zoom_mode: str = "f
         out = resized.crop((left, top, left + target_w, top + target_h))
         return ImageEnhance.Contrast(out).enhance(1.09)
 
-    # 'full': Arka plan bulanıklaştırılmış 9:16 + merkezde kullanıcının fotoğrafının %100 tamamı!
-    bg_scale = max(target_w / sw, target_h / sh)
-    bg_w, bg_h = int(sw * bg_scale), int(sh * bg_scale)
-    bg = src.resize((bg_w, bg_h), Image.Resampling.BICUBIC)
-    bg_left = (bg_w - target_w) // 2
-    bg_top = (bg_h - target_h) // 2
-    bg = bg.crop((bg_left, bg_top, bg_left + target_w, bg_top + target_h))
-    bg = bg.filter(ImageFilter.GaussianBlur(radius=28))
-    bg = ImageEnhance.Brightness(bg).enhance(0.62)
+    # 'full': Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF) + merkezde kullanıcının fotoğrafının %100 tamamı!
+    yy, xx = np.mgrid[0:target_h, 0:target_w].astype(np.float32)
+    nx = (xx - target_w * 0.5) / (target_w * 0.65)
+    ny = (yy - target_h * 0.45) / (target_h * 0.65)
+    dist = np.clip(np.sqrt(nx * nx + ny * ny), 0.0, 1.3) / 1.3
+    r_bg = (255.0 - 9.0 * dist).astype(np.uint8)
+    g_bg = (255.0 - 11.0 * dist).astype(np.uint8)
+    b_bg = (255.0 - 15.0 * dist).astype(np.uint8)
+    bg = Image.fromarray(np.dstack([r_bg, g_bg, b_bg]), mode="RGB")
 
-    fg_w = target_w - 48
+    fg_w = target_w - 56
     fg_h = int(sh * (fg_w / float(sw)))
-    if fg_h > target_h - 320:
-        fg_h = target_h - 320
+    if fg_h > target_h - 360:
+        fg_h = target_h - 360
         fg_w = int(sw * (fg_h / float(sh)))
     fg = src.resize((fg_w, fg_h), Image.Resampling.LANCZOS)
     fg = ImageEnhance.Contrast(fg).enhance(1.08)
@@ -521,14 +570,15 @@ def _format_user_photo_to_9_16_cinema(user_img: Image.Image, zoom_mode: str = "f
     draw.rounded_rectangle(
         (fx - 4, fy - 4, fx + fg_w + 4, fy + fg_h + 4),
         radius=18,
-        outline=(218, 182, 118),
-        width=4,
+        outline=(198, 160, 88),
+        width=5,
     )
     return bg
 
 
 def fetch_ai_luxury_image(prompt: str, width: int = 768, height: int = 1024, seed: int = 42) -> Optional[Image.Image]:
-    encoded = quote(prompt)
+    studio_prompt = f"{prompt}, shot inside a bright pure solid white seamless cyclorama photography studio #FFFFFF with professional Profoto softbox lighting"
+    encoded = quote(studio_prompt)
     url = f"https://image.pollinations.ai/prompt/{encoded}?width={width}&height={height}&seed={seed}&model=flux-realism&nologo=true"
     try:
         r = requests.get(url, timeout=18)
@@ -543,17 +593,10 @@ def _render_procedural_luxury_packshot(item: Dict[str, Any], slot_idx: int) -> I
     size = 640
     canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
-    palettes = [
-        ((24, 20, 18, 250), (218, 182, 118, 255)),
-        ((42, 18, 26, 250), (235, 198, 138, 255)),
-        ((16, 28, 24, 250), (212, 175, 108, 255)),
-        ((28, 24, 34, 250), (225, 192, 132, 255)),
-        ((38, 26, 18, 250), (228, 188, 120, 255)),
-        ((18, 22, 32, 250), (216, 180, 114, 255)),
-    ]
-    bg_col, gold_col = palettes[(slot_idx - 1) % len(palettes)]
+    bg_col = (255, 255, 255, 255)
+    gold_col = (198, 160, 88, 255)
     draw.rounded_rectangle((48, 48, size - 48, size - 48), radius=96, fill=bg_col, outline=gold_col, width=6)
-    draw.rounded_rectangle((68, 68, size - 68, size - 68), radius=80, outline=(gold_col[0], gold_col[1], gold_col[2], 130), width=2)
+    draw.rounded_rectangle((68, 68, size - 68, size - 68), radius=80, outline=(198, 160, 88, 130), width=2)
 
     try:
         f_big = ImageFont.truetype("C:/Windows/Fonts/georgia.ttf", 38)
@@ -568,55 +611,39 @@ def _render_procedural_luxury_packshot(item: Dict[str, Any], slot_idx: int) -> I
     line1 = " ".join(name_words[:3])[:22]
     line2 = " ".join(name_words[3:6])[:22]
 
-    draw.rounded_rectangle((110, 110, size - 110, 166), radius=24, fill=(gold_col[0], gold_col[1], gold_col[2], 45), outline=gold_col, width=2)
-    draw.text((size // 2, 138), lbl, fill=gold_col, font=f_sub, anchor="mm")
+    draw.rounded_rectangle((110, 110, size - 110, 166), radius=24, fill=(248, 244, 236, 255), outline=gold_col, width=2)
+    draw.text((size // 2, 138), lbl, fill=(142, 104, 36, 255), font=f_sub, anchor="mm")
 
     cx, cy = size // 2, 285
     pts = [(cx, cy - 64), (cx + 64, cy), (cx, cy + 64), (cx - 64, cy)]
-    draw.polygon(pts, fill=(gold_col[0], gold_col[1], gold_col[2], 65), outline=gold_col)
+    draw.polygon(pts, fill=(248, 242, 228, 255), outline=gold_col)
     draw.ellipse((cx - 28, cy - 28, cx + 28, cy + 28), fill=gold_col)
 
-    draw.text((size // 2, 405), brand, fill=(255, 255, 255, 255), font=f_big, anchor="mm")
-    draw.text((size // 2, 460), line1, fill=(235, 222, 198, 255), font=f_sub, anchor="mm")
+    draw.text((size // 2, 405), brand, fill=(18, 16, 20, 255), font=f_big, anchor="mm")
+    draw.text((size // 2, 460), line1, fill=(58, 52, 46, 255), font=f_sub, anchor="mm")
     if line2:
-        draw.text((size // 2, 498), line2, fill=(210, 196, 172, 255), font=f_sub, anchor="mm")
+        draw.text((size // 2, 498), line2, fill=(112, 98, 82, 255), font=f_sub, anchor="mm")
     return canvas
 
 
 def _render_procedural_luxury_scene(concept: Dict[str, Any], step_idx: int) -> Image.Image:
+    """Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio) sahnesi üretir."""
     w, h = 1080, 1920
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    shift = (step_idx - 1) * 0.08
+    shift = (step_idx - 1) * 0.06
     nx = (xx - w * (0.5 + shift)) / (w * 0.65)
     ny = (yy - h * 0.42) / (h * 0.65)
     dist = np.clip(np.sqrt(nx * nx + ny * ny), 0.0, 1.4) / 1.4
 
-    cat = concept.get("category", "otel")
-    tone_map = {
-        "taki": ((36, 26, 18), (10, 8, 12)),
-        "makyaj": ((52, 34, 38), (16, 10, 14)),
-        "kombin": ((44, 34, 26), (12, 10, 10)),
-        "otel": ((22, 42, 68), (8, 14, 28)),
-        "araba": ((18, 34, 26), (8, 12, 10)),
-    }
-    c_inner, c_outer = tone_map.get(cat, tone_map["otel"])
-    r = (c_inner[0] * (1.0 - dist) + c_outer[0] * dist).astype(np.uint8)
-    g = (c_inner[1] * (1.0 - dist) + c_outer[1] * dist).astype(np.uint8)
-    b = (c_inner[2] * (1.0 - dist) + c_outer[2] * dist).astype(np.uint8)
+    r = (255.0 - 12.0 * dist).astype(np.uint8)
+    g = (255.0 - 15.0 * dist).astype(np.uint8)
+    b = (255.0 - 20.0 * dist).astype(np.uint8)
     img = Image.fromarray(np.dstack([r, g, b]), mode="RGB")
     draw = ImageDraw.Draw(img, "RGBA")
 
-    rng = np.random.default_rng(100 + step_idx * 17)
-    for _ in range(28):
-        bx = int(rng.integers(60, w - 60))
-        by = int(rng.integers(120, h - 220))
-        br = int(rng.integers(18, 95))
-        ba = int(rng.integers(18, 58))
-        draw.ellipse((bx - br, by - br, bx + br, by + br), fill=(238, 202, 135, ba))
-
-    img = img.filter(ImageFilter.GaussianBlur(radius=4))
-    draw = ImageDraw.Draw(img, "RGBA")
-    draw.rounded_rectangle((70, 140, w - 70, h - 140), radius=420, outline=(218, 182, 118, 165), width=4)
+    # Stüdyo zemin ufuk çizgisi ve altın kemer çerçevesi
+    draw.line([(0, int(h * 0.78)), (w, int(h * 0.78))], fill=(228, 220, 206, 180), width=3)
+    draw.rounded_rectangle((70, 140, w - 70, h - 140), radius=420, outline=(198, 160, 88, 185), width=4)
     return img
 
 
@@ -779,7 +806,7 @@ def pop_next_telegram_custom_concept() -> Optional[Dict[str, Any]]:
     combined_raw_txt = " ".join(all_texts) + " " + normalized.get("clean_subject", "")
     cat = detect_luxury_category(combined_raw_txt, all_urls)
     if cat == "otomatik":
-        cat = "otel" if all_photos else "kombin"
+        cat = analyze_photo_visual_category(all_photos[0]) if all_photos else "taki"
 
     # Eğer Santorini algılandıysa doğrudan SANTORINI_OIA_CUSTOM_TEMPLATE şablonunu kullan
     if "santorini" in combined_raw_txt.lower():

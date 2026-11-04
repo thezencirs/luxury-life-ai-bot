@@ -135,54 +135,54 @@ def normalize_and_correct_user_text(raw_messages: List[str]) -> Dict[str, str]:
 # ============================================================================
 VIRAL_RETENTION_FRAMEWORKS: Dict[str, Dict[str, str]] = {
     "taki": {
-        "category_tr": "Mücevher & Yüksek Saatçilik (Haute Joaillerie & Horlogerie)",
+        "category_tr": "Mücevher & Yüksek Saatçilik (Haute Joaillerie & Horlogerie — Saf Beyaz Fotoğraf Stüdyosu)",
         "save_rate_benchmark": "%9.4 - %13.8 Kaydetme Oranı (Referans Katalog Etkisi)",
-        "hook_formula": "0.0s-1.2s Mikro-Parıltı Kancası + 'Bilekte/Boyunda Servet Gösteren 3 Altın Oran Kuralı'",
-        "camera_angle": "100mm f/2.8 Macro Lens (Kadife & Mermer Üzeri Elmas Kırılması) + 85mm f/1.4 Golden-Hour Dekolte/Bilek Portresi",
-        "lighting_setup": "3200K Sıcak Şampanya Nokta Spot (Specular Highlight) + Yumuşak Altın Rim Işığı",
-        "location_direction": "Place Vendôme Paris VIP Salon / Monaco Casino Terası / Boğaz Yalısı Calacatta Mermer Balkon",
-        "model_direction": "%100 Fotogerçekçi Süpermodel — Obsidyen siyah ipek gece elbisesi veya kaşmir boğazlı triko üzerinde zarif bilek/boyun hareketi",
-        "why_saved": "İzleyiciler mücevher/saat kombinasyonundaki 'Saat + Tek Bileklik + Yüzük' altın oranını ve ulaşılabilir/lüks alternatif linklerini alışverişte kullanmak için kaydeder.",
+        "hook_formula": "0.0s-1.2s Saf Beyaz Stüdyo Mikro-Parıltı Kancası + 'Bilekte/Boyunda Servet Gösteren 3 Altın Oran Kuralı'",
+        "camera_angle": "100mm f/2.8 Macro Lens (Saf Beyaz #FFFFFF Stüdyoda Elmas Kırılması) + 85mm f/1.4 Fotoğraf Stüdyosu Manken Portresi",
+        "lighting_setup": "Profoto Beauty Dish 5500K Saf Beyaz Sonsuz Fon (White Cyclorama #FFFFFF) + Mücevher Specular Nokta Spotu",
+        "location_direction": "Haute Joaillerie Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Photography Studio)",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Profesyonel saf beyaz fotoğraf stüdyosunda (#FFFFFF), zarif bilek ve boyun duruşuyla mücevher/saat odaklı çekim",
+        "why_saved": "Saf beyaz fotoğraf stüdyosu fonu mücevher ve saatin altın/pırlanta işçiliğini %100 net gösterdiği için izleyiciler alışveriş referansı olarak kaydeder.",
     },
     "makyaj": {
-        "category_tr": "Lüks Makyaj, Cilt Bakımı & Niş Parfüm (Luxury Beauty & Parfumerie)",
+        "category_tr": "Lüks Makyaj, Cilt Bakımı & Niş Parfüm (Luxury Beauty — Saf Beyaz Fotoğraf Stüdyosu)",
         "save_rate_benchmark": "%11.2 - %15.6 Kaydetme Oranı (Rutin & Ürün Kodu Listesi Etkisi)",
-        "hook_formula": "0.0s-1.2s Mermer Vanity Kurulumu + 'Filtresiz Old Money Cam Cilt (Glass Skin) ve Kadife Dudak Formülü'",
-        "camera_angle": "90mm f/2.8 Macro Overhead Flat-Lay (Mermer Makyaj Masası) + 85mm f/1.4 Ayna Karşısı Uygulama Açısı",
-        "lighting_setup": "4800K Doğal Gün Işığı Tül Perde Difüzyonu + Ayna Kenarı Sıcak Kristal Aplik Yansıması",
-        "location_direction": "Hôtel Plaza Athénée Paris Mermer Banyo Süiti / Milano Penthouse Vanity Odası",
-        "model_direction": "%100 Fotogerçekçi Süpermodel — Şampanya ipek bornoz, arkaya toplanmış parlak saçlar, porselen cilt dokusu ve ruj/parfüm dokunuşu",
-        "why_saved": "Kadın takipçiler ton numarası, baz-fondöten-ruj-parfüm sıralaması ve Sephora/Beymen ürün linklerini mağazada bulmak için doğrudan kaydeder.",
+        "hook_formula": "0.0s-1.2s Saf Beyaz Beauty Stüdyo Kancası + 'Filtresiz Old Money Cam Cilt (Glass Skin) ve Kadife Dudak Formülü'",
+        "camera_angle": "90mm f/2.8 Macro Saf Beyaz Stüdyo Flat-Lay + 85mm f/1.4 Fotoğraf Stüdyosu Manken Beauty Portre Açısı",
+        "lighting_setup": "5600K Profoto Ring & Softbox Saf Beyaz Fotoğraf Stüdyosu Işığı (#FFFFFF Fon)",
+        "location_direction": "Vogue Beauty Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Beauty Studio)",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Profesyonel saf beyaz fotoğraf stüdyosunda (#FFFFFF), porselen cam cilt dokusu ve ruj/parfüm uygulama çekimi",
+        "why_saved": "Saf beyaz fotoğraf stüdyosu ışığında fondöten, allık ve rujun gerçek renk tonu sıfır renk sapmasıyla göründüğü için anında kaydedilir.",
     },
     "kombin": {
-        "category_tr": "Old Money & Quiet Luxury Kombinler (Haute Couture & Sartorial)",
+        "category_tr": "Old Money & Quiet Luxury Kombinler (High-Fashion Saf Beyaz Fotoğraf Stüdyosu)",
         "save_rate_benchmark": "%10.5 - %14.9 Kaydetme Oranı (6 Parça Kapsül Gardırop Etkisi)",
-        "hook_formula": "0.0s-1.2s Dergi Kapağı Kancası + 'Logoya İhtiyaç Duymadan 250.000₺ Aurası Veren 6 Parça Renk Matematiği'",
-        "camera_angle": "85mm f/1.4 Prime Tam Boy (Head-to-Toe) Alçak Podyum Yürüyüş Açısı + GraphMotion 6'lı Stüdyo Dekupe",
-        "lighting_setup": "Altın Saat (Golden Hour) Arka Kontur Işığı + Yumuşak Ön Portre Dolgu Işığı",
-        "location_direction": "Via Monte Napoleone Milano / Nişantaşı Abdi İpekçi Caddesi / St. Moritz & Lake Como Taş Bulvarı",
-        "model_direction": "%100 Fotogerçekçi Süpermodel — Kaşmir kabanın yürürken doğal dalgalanması, ayakkabıdan gözlüğe 6 parçanın 1:1 net görünümü",
-        "why_saved": "60-30-10 renk kuralı ve 6 parçanın doğrudan mağaza linkleri 'Yarın ne giysem?' sorusuna hazır reçete sunduğu için en yüksek kaydetme ve paylaşım oranını yakalar.",
+        "hook_formula": "0.0s-1.2s Beyaz Stüdyo Dergi Kapağı Kancası + 'Logoya İhtiyaç Duymadan 250.000₺ Aurası Veren 6 Parça Renk Matematiği'",
+        "camera_angle": "85mm f/1.4 Prime Tam Boy (Head-to-Toe) Saf Beyaz Fotoğraf Stüdyosu Manken Çekimi + 6'lı Beyaz Stüdyo Dekupe",
+        "lighting_setup": "Profoto Giant Parabolic Softbox + Saf Beyaz Sonsuz Fon (#FFFFFF White Cyclorama) Stüdyo Aydınlatması",
+        "location_direction": "Milano & Paris High-Fashion Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF Editorial Lookbook Studio)",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Profesyonel beyaz fotoğraf stüdyosunda (#FFFFFF) tam boy podyum duruşu ve yürüyüşü, 6 parçanın 1:1 net görünümü",
+        "why_saved": "Beyaz fotoğraf stüdyosu fonunda 6 parçanın kesimi, kumaş dokusu ve renk uyumu katalog netliğinde göründüğü için en yüksek kaydetme oranını yakalar.",
     },
     "otel": {
-        "category_tr": "Ultra Lüks Oteller, Kraliyet Süitleri & Tatil Rotaları (5-Star Palace & Cliffside Hotels)",
+        "category_tr": "Ultra Lüks Oteller, Kraliyet Süitleri & Tatil Rotaları (Beyaz Stüdyo Galeri & Teras)",
         "save_rate_benchmark": "%12.0 - %16.4 Kaydetme Oranı (Bucket-List & Seyahat Rehberi Etkisi)",
-        "hook_formula": "0.0s-1.2s Panoramik Teras POV Açılışı + 'Hayatında En Az Bir Kez Yaşaman Gereken Alacakaranlık Terası & Stil Detayları'",
-        "camera_angle": "24mm f/1.4 Mimari Geniş Açı (Caldera / Boğaz Terası) + 50mm f/1.2 POV Kadeh & Bileklik Detay Açısı",
-        "lighting_setup": "Mavi Saat (Blue Hour / Twilight) Deniz Ufku + Sıcak 2700K Teras & Villa Kandil Işıkları Kontrastı",
-        "location_direction": "Santorini Oia Caldera (Katikies / Canaves Oia) • Çırağan Palace • Mandarin Oriental • Villa d'Este Como",
-        "model_direction": "POV Lüks Çift & Süpermodel — Beyaz teras korkuluğunda kristal kadeh tokuşturma, ön planda Hermès deri/altın bileklik ve kırmızı ipli pırlanta bileklik detayı",
+        "hook_formula": "0.0s-1.2s Panoramik Teras & Saf Beyaz Stüdyo Kancası + 'Hayatında En Az Bir Kez Yaşaman Gereken Lüks Rota & Stil Detayları'",
+        "camera_angle": "24mm f/1.4 Mimari Geniş Açı + 85mm f/1.4 Saf Beyaz Fotoğraf Stüdyosu Detay & Manken Açısı",
+        "lighting_setup": "Profoto 5500K Saf Beyaz Stüdyo & Doğal Teras Işığı",
+        "location_direction": "Santorini Oia Beyaz Teras Süitleri & Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF White Studio Lookbook)",
+        "model_direction": "%100 Fotogerçekçi Süpermodel & POV — Saf beyaz fotoğraf stüdyosu (#FFFFFF) ve beyaz teras estetiğinde lüks tatil & mücevher detayları",
         "why_saved": "Çiftler ve lüks seyahat tutkunları yıldönümü, balayı veya yaz/kış kaçamağı için oteli ve fotoğraftaki bileklik/kadeh/kombin linklerini kaydeder ve birbirine DM atar.",
     },
     "araba": {
-        "category_tr": "Süper Spor & Ultra Lüks Otomobiller (Exotic Supercars & Bespoke Luxury)",
+        "category_tr": "Süper Spor & Ultra Lüks Otomobiller (Saf Beyaz Otomotiv Fotoğraf Stüdyosu)",
         "save_rate_benchmark": "%9.8 - %14.2 Kaydetme Oranı (Aspirational Lifestyle & Sürüş Stili Etkisi)",
-        "hook_formula": "0.0s-1.2s Alçak Açı Rolling Shot + 'Sadece Motor Sesiyle Değil, İçinden İnen Duruşla Konuşan Lüks'",
-        "camera_angle": "35mm f/1.4 Low-Angle Dinamik Rampa/Rolling Açısı + Kokpit Deri Direksiyon/Saat POV + Araç Yanı Tam Boy",
-        "lighting_setup": "Gece Islak Asfalt Şehir/Kulüp Yansımaları + Gün Batımı Metalik Gövde Kontur Işığı",
-        "location_direction": "Place du Casino Monte-Carlo Monaco / İsviçre Alpleri Virajı / Bebek & Zorlu Center VIP Vale Meydanı",
-        "model_direction": "%100 Fotogerçekçi Süpermodel — Aracın dış rengiyle (British Racing Green / GT Silver / Obsidian Black) uyumlu süet/kaşmir sürüş kombini",
-        "why_saved": "Otomobil, lüks saat ve sürüş stilini tek karede birleştiren 'Old Money Driver' konsepti hem erkek hem kadın kitlede yüksek kaydetme ve hikaye paylaşımı üretir.",
+        "hook_formula": "0.0s-1.2s Beyaz Otomotiv Stüdyosu Kancası + 'Sadece Motor Sesiyle Değil, Yanındaki Duruşla Konuşan Lüks'",
+        "camera_angle": "35mm f/1.4 Low-Angle Saf Beyaz Otomotiv Fotoğraf Stüdyosu (White Cyclorama Car Studio) + Manken Tam Boy",
+        "lighting_setup": "Tavan Boyu LED Softbox Şerit Yansıması + Saf Beyaz Sonsuz Fon (#FFFFFF Automotive Photography Studio)",
+        "location_direction": "Porsche / Ferrari VIP Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Automotive Studio)",
+        "model_direction": "%100 Fotogerçekçi Süpermodel — Profesyonel saf beyaz fotoğraf stüdyosunda (#FFFFFF) süper spor otomobilin yanında süet/kaşmir sürüş kombiniyle tam boy duruş",
+        "why_saved": "Saf beyaz otomotiv fotoğraf stüdyosunda aracın gövde rengi, saat ve sürüş kombini kusursuz kontrastla öne çıktığı için yüksek kaydetme üretir.",
     },
 }
 
@@ -306,17 +306,17 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
         "cover_headline": "BİLEKTE SERVET GÖSTEREN 6 PARÇA ALTIN ORAN KURALI",
         "spoken_hook_text": "Mücevherde sessiz lüks bağırarak değil, altın ve pırlantanın doğru katmanlanmasıyla konuşur!",
         "viral_hook": "💎 Bilekte ve boyunda 'Old Money' zarafeti yaratan 6 parçalık mücevher & saat formülü! Kaydetmeyi unutma 👇✨",
-        "location_name": "Place Vendôme Paris & Boğaz Yalısı Mermer Teras",
-        "camera_spec": "Hasselblad H6D-100c • 100mm f/2.8 Macro + 85mm f/1.4 Golden Rim",
-        "act1_beat": "SAHNE 1: Çok takı takmak değil, doğru 3 odak noktasını seçmek lüksü yaratır.",
+        "location_name": "Haute Joaillerie Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)",
+        "camera_spec": "Hasselblad H6D-100c • 100mm f/2.8 Macro + 85mm f/1.4 White Studio",
+        "act1_beat": "SAHNE 1: Saf beyaz stüdyo ışığında doğru 3 odak noktasını seçmek lüksü yaratır.",
         "act2_beat": "SAHNE 2: Şampanya kadranlı saat ve çivi/kelepçe altın bileklik uyumu %100 imza duruşu verir.",
         "act3_twist": "FİNAL: Takı alışverişinden önce bu 6'lı reçeteyi KAYDET • Birebir linkler aşağıda!",
         "model_prompt_en": (
-            "Ultra-photorealistic editorial luxury jewelry campaign photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens, "
+            "Ultra-photorealistic editorial luxury jewelry campaign photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens "
+            "inside a bright minimalist pure white cyclorama photography studio (#FFFFFF seamless white studio background, professional Profoto softbox and beauty dish studio lighting), "
             "stunning adult female high-fashion supermodel with sleek dark espresso hair in a low chignon, natural skin pores, "
-            "wearing a sleek black silk evening gown on a candlelit marble balcony overlooking Place Vendome Paris at golden hour, "
-            "clearly showcasing a 18k yellow gold clover pendant necklace, diamond drop earrings, luxury gold wristwatch and stacked gold bracelets, "
-            "zero 3D, zero cartoon, 8k magazine photography"
+            "wearing a sleek black silk evening gown, clearly showcasing a 18k yellow gold clover pendant necklace, diamond drop earrings, luxury gold wristwatch and stacked gold bracelets, "
+            "zero 3D, zero cartoon, 8k Cartier & Vogue studio photography"
         ),
         "items": {
             "slot1": {
@@ -403,17 +403,17 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
         "cover_headline": "FİLTRESİZ 'OLD MONEY' CAM CİLT YARATAN 6 İKONİK ÜRÜN",
         "spoken_hook_text": "Pahalı ve dinlenmiş görünen bir cildin sırrı kapatıcıda değil, doğru ışıltı bazında ve kadife dudak tonundadır!",
         "viral_hook": "💄 Paris'in en lüks makyaj masalarından çıkan 6 parçalık 'Glass Skin & Velvet Lip' rutini! Kodları ve linkleri kaydet 👇✨",
-        "location_name": "Hôtel Plaza Athénée Paris Calacatta Mermer Banyo Süiti",
-        "camera_spec": "Hasselblad H6D-100c • 90mm f/2.8 Macro Vanity + 85mm f/1.4 Golden Mirror",
+        "location_name": "Vogue Beauty Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Beauty Studio)",
+        "camera_spec": "Hasselblad H6D-100c • 90mm f/2.8 Macro + 85mm f/1.4 White Beauty Studio",
         "act1_beat": "SAHNE 1: Ağır mat fondöten yerine cildi içeriden aydınlatan ipek bazla başla.",
         "act2_beat": "SAHNE 2: Sıcak bronz kontur ve gül kurusu-bordo dudak tonu yüz hatlarını anında yukarı taşır.",
         "act3_twist": "FİNAL: Sephora & Beymen alışverişinde aramamak için hemen KAYDET • Linkler aşağıda!",
         "model_prompt_en": (
-            "Ultra-photorealistic luxury beauty campaign photograph shot on 85mm f/1.4 prime lens, "
-            "gorgeous adult female supermodel with glowing glass skin, natural skin micro-texture, wearing a champagne silk robe "
-            "in a sunlit Calacatta marble bathroom suite at Hotel Plaza Athenee Paris, holding a gold designer lipstick tube "
-            "in front of a gilded mirror with luxury perfume bottles and gold compact powder on the marble vanity, "
-            "zero 3D, zero cartoon, Vogue Beauty editorial photography"
+            "Ultra-photorealistic luxury beauty campaign photograph shot on Hasselblad H6D-100c 85mm f/1.4 prime lens "
+            "inside a bright pure white cyclorama photography studio (#FFFFFF seamless white studio backdrop, professional Profoto beauty dish and ring light), "
+            "gorgeous adult female supermodel with glowing glass skin, natural skin micro-texture, wearing a champagne silk robe, "
+            "holding a gold designer lipstick tube with luxury perfume bottles and gold compact powder on a white studio pedestal, "
+            "zero 3D, zero cartoon, Vogue Beauty studio editorial photography"
         ),
         "items": {
             "slot1": {
@@ -500,17 +500,18 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
         "cover_headline": "LOGOSUZ 250.000₺ AURASI YARATAN 6 PARÇA KAŞMİR FORMÜLÜ",
         "spoken_hook_text": "Gerçek lüks üzerinde dev logolar taşımaz; kaşmirin dokusu ve altmış-otuz-on renk dengesiyle ilk saniyede anlaşılır!",
         "viral_hook": "🧥 Milano Via Monte Napoleone'den fırlamış 6 parçalık 'Quiet Luxury' kombin reçetesi! Kaydet ve linkleri incele 👇✨",
-        "location_name": "Via Monte Napoleone Milano & Nişantaşı Abdi İpekçi Bulvarı",
-        "camera_spec": "Hasselblad H6D-100c • 85mm f/1.4 Prime Tam Boy Podyum Yürüyüşü",
+        "location_name": "Milano & Paris Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)",
+        "camera_spec": "Hasselblad H6D-100c • 85mm f/1.4 Prime Tam Boy Fotoğraf Stüdyosu Çekimi",
         "act1_beat": "SAHNE 1: %60 Devetüyü kaşmir dış katman, %30 fildişi merinos iç katmanla birleşir.",
         "act2_beat": "SAHNE 2: %10 Espresso süet çanta ve loafer dokunuşu kombini podyum seviyesine çıkarır.",
         "act3_twist": "FİNAL: Dolabının imza kombinini kaybetmemek için hemen KAYDET • Doğrulanmış linkler aşağıda!",
         "model_prompt_en": (
-            "Ultra-photorealistic full-body street style fashion photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens, "
-            "stunning adult female supermodel walking mid-stride head-to-toe on Via Monte Napoleone Milan at golden hour, "
+            "Ultra-photorealistic full-body high-fashion lookbook photograph shot on Hasselblad H6D-100c with 85mm f/1.4 lens "
+            "inside a professional pure white cyclorama photography studio (#FFFFFF seamless white studio background, soft studio floor shadow, Profoto parabolic softbox lighting), "
+            "stunning adult female supermodel posing head-to-toe mid-stride, "
             "wearing a tailored camel double-breasted cashmere coat over an ivory ribbed turtleneck sweater, warm taupe pleated wide-leg wool palazzo trousers, "
             "tortoiseshell designer sunglasses, structured espresso-brown leather gold-clasp handbag, and suede loafers, "
-            "natural skin texture, zero 3D, zero cartoon, 8k Vogue Italia lookbook"
+            "natural skin texture, zero 3D, zero cartoon, 8k Vogue Italia studio lookbook"
         ),
         "items": {
             "slot1": {
@@ -597,17 +598,18 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
         "cover_headline": "SADECE MOTOR SESİYLE DEĞİL DURUŞUYLA KONUŞAN 6 PARÇA",
         "spoken_hook_text": "Gerçek bir süper spor otomobilin direksiyonundan indiğinde, üzerindeki süet ceket ve bileğindeki kronograf aynı dili konuşmalıdır!",
         "viral_hook": "🏎️ Porsche 911 GT3 Touring (British Racing Green) ve 'Old Money Gentleman Driver' 6 parçalık sürüş stili! Kaydet 👇✨",
-        "location_name": "Place du Casino Monte-Carlo Monaco & Zorlu VIP Meydan",
-        "camera_spec": "Hasselblad H6D-100c • 35mm f/1.4 Low-Angle Rolling + Kokpit POV",
-        "act1_beat": "SAHNE 1: British Racing Green gövde rengi ile taba deri kokpitin zamansız uyumu.",
+        "location_name": "VIP Saf Beyaz Otomotiv Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Car Studio)",
+        "camera_spec": "Hasselblad H6D-100c • 35mm f/1.4 Saf Beyaz Otomotiv Fotoğraf Stüdyosu",
+        "act1_beat": "SAHNE 1: British Racing Green gövde rengi ile taba deri kokpitin beyaz stüdyoda kusursuz uyumu.",
         "act2_beat": "SAHNE 2: İtalyan süet sürüş ceketi, kronograf saat ve deri loafer kusursuz bütünlük kurar.",
         "act3_twist": "FİNAL: Otomobil ve lüks stil tutkunları için hemen KAYDET • Ürün linkleri aşağıda!",
         "model_prompt_en": (
-            "Ultra-photorealistic luxury automotive & menswear editorial photograph shot on 35mm f/1.4 lens at low angle, "
-            "charismatic adult male fashion model with sharp jawline standing beside a sleek British Racing Green Porsche 911 GT3 Touring sports car "
-            "in front of Place du Casino Monte Carlo Monaco at golden sunset, wearing a cognac suede bomber jacket over a fine cream merino turtleneck, "
+            "Ultra-photorealistic luxury automotive & menswear editorial photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens "
+            "inside a massive pure white cyclorama automotive photography studio (#FFFFFF seamless white studio background with overhead softbox reflection strip), "
+            "charismatic adult male fashion model with sharp jawline standing full-body beside a sleek British Racing Green Porsche 911 GT3 Touring sports car, "
+            "wearing a cognac suede bomber jacket over a fine cream merino turtleneck, "
             "charcoal tailored trousers, aviator sunglasses, luxury chronograph watch, and leather driving loafers, "
-            "natural skin texture, zero 3D, zero cartoon, 8k GQ automotive photography"
+            "natural skin texture, zero 3D, zero cartoon, 8k GQ automotive studio photography"
         ),
         "items": {
             "slot1": {
@@ -888,72 +890,72 @@ def mark_concept_used(concept: Dict[str, Any], sync_github: bool = True) -> Dict
 PROCEDURAL_LUXURY_THEMES: Dict[str, List[Dict[str, str]]] = {
     "taki": [
         {
-            "loc": "Geneva Rue du Rhône Horology Salon & Lake Léman Terrace",
-            "title": "Cenevre Rue du Rhône: 18K Pembe Altın & Zümrüt Kesim Pırlanta Bilek Kurgusu ✨",
-            "headline": "CENEVRE SAAT & MÜCEVHER SALONLARININ 6 ALTIN ORANI",
-            "prompt": "Ultra-photorealistic luxury jewelry campaign photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel with natural skin pores wearing emerald-green silk evening gown on Lake Geneva terrace at golden hour, showcasing 18k rose gold diamond watch, tennis bracelet and emerald-cut ring, zero 3D, zero cartoon",
+            "loc": "Haute Joaillerie Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)",
+            "title": "Haute Joaillerie Beyaz Stüdyo: 18K Pembe Altın & Zümrüt Kesim Pırlanta Bilek Kurgusu ✨",
+            "headline": "SAF BEYAZ STÜDYODA SAAT & MÜCEVHERİN 6 ALTIN ORANI",
+            "prompt": "Ultra-photorealistic luxury jewelry campaign photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens inside a pure white seamless cyclorama photography studio (#FFFFFF background, Profoto beauty dish studio lighting), real adult female supermodel with natural skin pores wearing emerald-green silk evening gown, showcasing 18k rose gold diamond watch, tennis bracelet and emerald-cut ring, zero 3D, zero cartoon",
         },
         {
-            "loc": "Çırağan Palace Kempinski Bosphorus VIP Marble Suite",
-            "title": "Çırağan Sarayı Boğaz Terası: 18K Sarı Altın & İnci/Pırlanta Gece Işıltısı 💎",
-            "headline": "BOĞAZ YALISINDA KUSURSUZ 6 PARÇA MÜCEVHER REÇETESİ",
-            "prompt": "Ultra-photorealistic luxury jewelry editorial photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel in ivory silk satin dress on Bosphorus marble balcony at twilight, wearing 18k gold diamond necklace, drop earrings and stacked gold bangles, zero 3D, zero cartoon",
+            "loc": "Place Vendôme & İstanbul VIP Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF Studio)",
+            "title": "Saf Beyaz Mücevher Stüdyosu: 18K Sarı Altın & İnci/Pırlanta Işıltısı 💎",
+            "headline": "BEYAZ FOTOĞRAF STÜDYOSUNDA 6 PARÇA MÜCEVHER REÇETESİ",
+            "prompt": "Ultra-photorealistic luxury jewelry editorial photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens inside a pure solid white cyclorama photography studio (#FFFFFF background, soft studio lighting), real adult female supermodel in ivory silk satin dress, wearing 18k gold diamond necklace, drop earrings and stacked gold bangles, zero 3D, zero cartoon",
         },
     ],
     "makyaj": [
         {
-            "loc": "Four Seasons George V Paris Marble Vanity Suite",
-            "title": "Four Seasons Paris: 'Espresso Glow & Champagne Skin' 6 Adımlı Lüks Makyaj Ritüeli 💄",
-            "headline": "PARİS SÜİTLERİNDEN ÇIKAN 6 PARÇA IŞILTILI CİLT FORMÜLÜ",
-            "prompt": "Ultra-photorealistic luxury beauty editorial shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel with luminous glass skin and natural pores in silk robe at Four Seasons Paris marble vanity, gold lipstick and niche crystal perfume bottle, zero 3D, zero cartoon",
+            "loc": "Vogue Beauty Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF Beauty Studio)",
+            "title": "Vogue Beauty Beyaz Stüdyo: 'Espresso Glow & Champagne Skin' 6 Adımlı Makyaj Ritüeli 💄",
+            "headline": "SAF BEYAZ STÜDYODAN ÇIKAN 6 PARÇA IŞILTILI CİLT FORMÜLÜ",
+            "prompt": "Ultra-photorealistic luxury beauty editorial shot on Hasselblad H6D-100c 85mm f/1.4 lens inside a pure white cyclorama photography studio (#FFFFFF background, Profoto ring and softbox lighting), real adult female supermodel with luminous glass skin and natural pores in silk robe holding gold lipstick and niche crystal perfume bottle, zero 3D, zero cartoon",
         },
         {
-            "loc": "Via Brera Milano Private Penthouse Beauty Atelier",
-            "title": "Milano Brera Penthouse: Kadife Bordo Dudak & İpek Aydınlatıcı 6'lı Seçki ✨",
-            "headline": "MİLANO MODA HAFTASI KULİSİNİN 6 İKONİK GÜZELLİK SIRRI",
-            "prompt": "Ultra-photorealistic Vogue Beauty portrait shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel with flawless glowing skin applying velvet rosewood lipstick in sunlit Milan penthouse marble mirror, zero 3D, zero cartoon",
+            "loc": "Milano & Paris Saf Beyaz Kozmetik Fotoğraf Stüdyosu (#FFFFFF Studio)",
+            "title": "Milano Beauty Stüdyo: Kadife Bordo Dudak & İpek Aydınlatıcı 6'lı Seçki ✨",
+            "headline": "BEYAZ FOTOĞRAF STÜDYOSUNDA 6 İKONİK GÜZELLİK SIRRI",
+            "prompt": "Ultra-photorealistic Vogue Beauty portrait shot on Hasselblad H6D-100c 85mm f/1.4 lens inside a pure solid white photography studio (#FFFFFF background), real adult female supermodel with flawless glowing skin applying velvet rosewood lipstick, zero 3D, zero cartoon",
         },
     ],
     "kombin": [
         {
-            "loc": "St. Moritz Badrutt's Palace Promenade & Alpine Boulevard",
-            "title": "St. Moritz Old Money: Fildişi Kaşmir, Vizon Yün & Taba Deri 6 Parça Kapsül 🧥",
-            "headline": "ST. MORITZ JET-SET STİLİNİN 6 PARÇALIK SESSİZ LÜKS FORMÜLÜ",
-            "prompt": "Ultra-photorealistic full-body street style fashion photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel walking head-to-toe in St. Moritz Switzerland at golden hour wearing ivory cashmere coat, taupe wool palazzo trousers, cognac leather handbag and suede loafers, zero 3D, zero cartoon",
+            "loc": "High-Fashion Saf Beyaz Sonsuz Fon Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Studio)",
+            "title": "Old Money Beyaz Stüdyo: Fildişi Kaşmir, Vizon Yün & Taba Deri 6 Parça Kapsül 🧥",
+            "headline": "SAF BEYAZ STÜDYODA 6 PARÇALIK SESSİZ LÜKS FORMÜLÜ",
+            "prompt": "Ultra-photorealistic full-body fashion lookbook photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens inside a pure white seamless cyclorama photography studio (#FFFFFF background, Profoto parabolic studio lighting), real adult female supermodel posing head-to-toe wearing ivory cashmere coat, taupe wool palazzo trousers, cognac leather handbag and suede loafers, zero 3D, zero cartoon",
         },
         {
-            "loc": "Avenue Montaigne Paris Haute Couture Boulevard",
-            "title": "Avenue Montaigne Paris: Obsidyen Kruvaze Blazer, İpek Bluz & Gold Aksesuar Kurgusu ✨",
-            "headline": "PARİS AVENUE MONTAIGNE'DE 6 PARÇA ZAMANSIZ ZARAFET",
-            "prompt": "Ultra-photorealistic full-body fashion editorial shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel walking head-to-toe on Avenue Montaigne Paris wearing tailored black double-breasted blazer, champagne silk blouse, cream tailored trousers and gold-clasp leather bag, zero 3D, zero cartoon",
+            "loc": "Paris Haute Couture Saf Beyaz Fotoğraf Stüdyosu (#FFFFFF Editorial Studio)",
+            "title": "Paris Beyaz Stüdyo: Obsidyen Kruvaze Blazer, İpek Bluz & Gold Aksesuar Kurgusu ✨",
+            "headline": "BEYAZ FOTOĞRAF STÜDYOSUNDA 6 PARÇA ZAMANSIZ ZARAFET",
+            "prompt": "Ultra-photorealistic full-body fashion editorial shot on Hasselblad H6D-100c 85mm f/1.4 lens inside a pure solid white cyclorama photography studio (#FFFFFF background), real adult female supermodel posing head-to-toe wearing tailored black double-breasted blazer, champagne silk blouse, cream tailored trousers and gold-clasp leather bag, zero 3D, zero cartoon",
         },
     ],
     "otel": [
         {
-            "loc": "Villa d'Este Lake Como Private Riva Terrace, Italy",
-            "title": "Lake Como Villa d'Este: Göl Kenarı Alacakaranlık Terası & 6 Lüks Tatil Detayı 🌅",
-            "headline": "COMO GÖLÜ KRALİYET TERASINDA UNUTULMAZ AKŞAM RİTÜELİ",
-            "prompt": "Ultra-photorealistic luxury travel & lifestyle photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens at blue hour twilight at Villa d'Este Lake Como Italy, candlelit marble terrace overlooking wooden Riva boat and glowing lakeside villas, crystal champagne glasses and gold bracelet on wrist, zero 3D, zero cartoon",
+            "loc": "Villa d'Este Lake Como Teras & Saf Beyaz Stüdyo Lookbook (#FFFFFF)",
+            "title": "Lake Como & Beyaz Stüdyo: Alacakaranlık Terası & 6 Lüks Tatil Detayı 🌅",
+            "headline": "LÜKS TATİL VE STİLDE UNUTULMAZ 6 DETAY REÇETESİ",
+            "prompt": "Ultra-photorealistic luxury resort fashion & travel photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens in a bright pure white cyclorama photography studio (#FFFFFF) with luxury resort accessories, crystal champagne glasses and gold bracelet on wrist, zero 3D, zero cartoon",
         },
         {
-            "loc": "Mandarin Oriental Bodrum Cennet Koyu Infinity Villa",
-            "title": "Mandarin Oriental Bodrum: Sonsuzluk Havuzu Terası & 6 Parça Resort Lüksü 🏨",
-            "headline": "EGE KIYISINDA KUSURSUZ 6 DETAYLI YAZ & RESORT SEÇKİSİ",
-            "prompt": "Ultra-photorealistic luxury resort lifestyle photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens at golden sunset at Mandarin Oriental Bodrum infinity terrace overlooking turquoise Aegean bay, crystal glasses, linen resort shirt and gold cuff bracelet, zero 3D, zero cartoon",
+            "loc": "Mandarin Oriental Bodrum & Saf Beyaz Resort Fotoğraf Stüdyosu (#FFFFFF)",
+            "title": "Resort Beyaz Stüdyo: 6 Parça Yaz & Tatil Lüksü 🏨",
+            "headline": "SAF BEYAZ STÜDYODA 6 DETAYLI YAZ & RESORT SEÇKİSİ",
+            "prompt": "Ultra-photorealistic luxury resort lifestyle photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens inside a bright pure white photography studio (#FFFFFF), real adult female supermodel wearing white Italian linen resort shirt and gold cuff bracelet with crystal glasses, zero 3D, zero cartoon",
         },
     ],
     "araba": [
         {
-            "loc": "Villa d'Este Concorso d'Eleganza & Lake Como Drive",
-            "title": "Lake Como Sürüşü: Ferrari Roma Spider & 6 Parça İtalyan 'Gran Turismo' Stili 🏎️",
-            "headline": "İTALYAN GRAN TURISMO RUHUNU YANSITAN 6 PARÇA LÜKS SEÇKİ",
-            "prompt": "Ultra-photorealistic luxury automotive & menswear editorial shot on Hasselblad H6D-100c 35mm f/1.4 lens, charismatic real adult male model standing beside Grigio Ingrid Ferrari Roma Spider at Lake Como sunset wearing navy suede bomber jacket, cream cashmere knit, chronograph watch and driving loafers, zero 3D, zero cartoon",
+            "loc": "VIP Saf Beyaz Otomotiv Fotoğraf Stüdyosu (#FFFFFF White Cyclorama Car Studio)",
+            "title": "Beyaz Otomotiv Stüdyosu: Ferrari Roma Spider & 6 Parça İtalyan 'Gran Turismo' Stili 🏎️",
+            "headline": "SAF BEYAZ STÜDYODA İTALYAN GRAN TURISMO 6 PARÇA SEÇKİ",
+            "prompt": "Ultra-photorealistic luxury automotive & menswear editorial shot on Hasselblad H6D-100c 35mm f/1.4 lens inside a pure white cyclorama automotive photography studio (#FFFFFF seamless white studio background), charismatic real adult male model standing beside Grigio Ingrid Ferrari Roma Spider wearing navy suede bomber jacket, cream cashmere knit, chronograph watch and driving loafers, zero 3D, zero cartoon",
         },
         {
-            "loc": "Mayfair London Mount Street & Connaught VIP Valet",
-            "title": "Londra Mayfair: Aston Martin DB12 & 6 Parça 'British Bespoke Gentleman' Kurgusu 🎩",
-            "headline": "MAYFAIR SOKAKLARINDA 6 PARÇA İNGİLİZ CENTİLMEN STİLİ",
-            "prompt": "Ultra-photorealistic automotive fashion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens, real adult male model beside metallic racing green Aston Martin DB12 on Mount Street Mayfair London at dusk wearing tailored camel cashmere coat, silk scarf, luxury chronograph and suede loafers, zero 3D, zero cartoon",
+            "loc": "Mayfair Bespoke Saf Beyaz Otomotiv Fotoğraf Stüdyosu (#FFFFFF Car Studio)",
+            "title": "Beyaz Stüdyo: Aston Martin DB12 & 6 Parça 'British Bespoke Gentleman' Kurgusu 🎩",
+            "headline": "SAF BEYAZ STÜDYODA 6 PARÇA İNGİLİZ CENTİLMEN STİLİ",
+            "prompt": "Ultra-photorealistic automotive fashion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens inside a pure solid white cyclorama photography studio (#FFFFFF background), real adult male model beside metallic racing green Aston Martin DB12 wearing tailored camel cashmere coat, silk scarf, luxury chronograph and suede loafers, zero 3D, zero cartoon",
         },
     ],
 }
