@@ -15,6 +15,7 @@ from luxury_viral_concepts import (
     build_explanatory_director_message,
     build_pure_copy_paste_caption,
     build_pure_copy_paste_links,
+    mark_concept_used,
 )
 from telegram_luxury_ingestor import (
     DEFAULT_ADMIN_CHAT_ID,
@@ -255,5 +256,8 @@ def deliver_luxury_package_to_telegram(
 
         delivery_report[cid] = res_chat
         print(f"✅ [@Luxurylifeaibot Teslimatı Tamamlandı -> {cid}]: {res_chat}")
+
+    # Sıfır-Tekrar Çift Kilidini (output/zero_repeat_ledger.json Yerel + GitHub API) atomik olarak kilitle
+    mark_concept_used(concept, sync_github=True)
 
     return delivery_report

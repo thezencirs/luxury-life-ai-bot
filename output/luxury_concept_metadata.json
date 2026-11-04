@@ -1,13 +1,13 @@
 {
-  "id": "tg_lux_otel_6c84f1",
+  "id": "lux_otel_santorini_oia_caldera_twilight",
   "category": "otel",
   "gender_segment": "kadin",
   "title": "Santorini Oia Caldera: Alacakaranlık Terası, Kristal Kadeh & Hermès Bileklik Zarafeti ✨",
-  "cover_kicker": "» ULTRA LÜKS OTEL & MÜCEVHER • SANTORİNİ OİA REJİSİ «",
+  "cover_kicker": "» ULTRA LÜKS OTEL & STİL • SANTORİNİ OİA REJİSİ «",
   "cover_headline": "SANTORİNİ CALDERA TERASINDA UNUTULMAZ AKŞAM RİTÜELİ",
   "spoken_hook_text": "Santorini'de gün batıp mavi saat başladığında, terastaki kadehin ışıltısı ve bilekteki zarafet tüm hikayeyi anlatır!",
-  "viral_hook": "🌅 Santorini Oia'nın beyaz teraslarında alacakaranlık büyüsü, bilekteki Hermès & altın kelepçe uyumu ve lüks tatil detayları! Kaydetmeyi unutma 👇✨",
-  "location_name": "Katikies & Canaves Oia Luxury Suites • Santorini, Yunanistan",
+  "viral_hook": "🌅 Santorini Oia'nın ikonik beyaz teraslarında mavi saat (Blue Hour) büyüsü ve fotoğraftaki 6 lüks detayın birebir linkleri! Kaydet ve gitmek istediğin kişiye gönder 👇✨",
+  "location_name": "Katikies & Canaves Oia Luxury Suites • Santorini Caldera, Yunanistan",
   "camera_spec": "Hasselblad H6D-100c • 24mm f/1.4 Blue-Hour Terrace + 50mm f/1.2 POV",
   "act1_beat": "SAHNE 1: Ege Kalderası üzerinde mavi saat ve yamaçtaki sıcak altın villa ışıkları.",
   "act2_beat": "SAHNE 2: Kristal kadehler, Hermès deri-altın kelepçe ve şans bilekliğiyle kusursuz POV.",
@@ -31,7 +31,7 @@
         0.72
       ],
       "en_packshot": "luxury whitewashed Santorini Oia cliffside hotel terrace overlooking blue caldera sea at twilight",
-      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot1.png"
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_otel_santorini_oia_caldera_twilight_slot1.png"
     },
     "slot2": {
       "category_label": "Deri & Altın Bileklik",
@@ -50,7 +50,7 @@
         0.94
       ],
       "en_packshot": "luxury python-embossed leather cuff bracelet with 18k gold hardware clasp on pure white background #FFFFFF",
-      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot2.png"
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_otel_santorini_oia_caldera_twilight_slot2.png"
     },
     "slot3": {
       "category_label": "Altın Kelepçe",
@@ -69,7 +69,7 @@
         0.92
       ],
       "en_packshot": "sleek 18k yellow gold oval bangle bracelet on pure solid white studio background #FFFFFF",
-      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot3.png"
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_otel_santorini_oia_caldera_twilight_slot3.png"
     },
     "slot4": {
       "category_label": "Şans Bilekliği",
@@ -88,7 +88,7 @@
         0.66
       ],
       "en_packshot": "delicate red silk cord bracelet with solitaire diamond in 18k gold bezel on pure white background #FFFFFF",
-      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot4.png"
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_otel_santorini_oia_caldera_twilight_slot4.png"
     },
     "slot5": {
       "category_label": "Kristal Kadeh Seti",
@@ -107,7 +107,7 @@
         0.8
       ],
       "en_packshot": "two crystal stemmed white wine glasses clinking on pure solid white background #FFFFFF",
-      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot5.png"
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_otel_santorini_oia_caldera_twilight_slot5.png"
     },
     "slot6": {
       "category_label": "Resort Keten Gömlek",
@@ -126,16 +126,11 @@
         1.0
       ],
       "en_packshot": "crisp white pure Italian linen resort shirt isolated on pure solid white background #FFFFFF",
-      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\tg_lux_otel_6c84f1_slot6.png"
+      "cutout_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\items\\lux_otel_santorini_oia_caldera_twilight_slot6.png"
     }
   },
   "hashtags": "#santorini #oiasantorini #luxuryhotels #oldmoneytravel #quietluxury #luxurylife #tatilrotaları #reklam #işbirliğiyoktur",
-  "requester_chat_id": "8874878004",
-  "user_photo_path": "assets/tg_raw_photo_562020112.jpg",
-  "user_photos": [
-    "assets/tg_raw_photo_562020112.jpg"
-  ],
-  "user_video_path": "",
+  "is_3d_avatar": false,
   "viral_analysis": {
     "category_tr": "Ultra Lüks Oteller, Kraliyet Süitleri & Tatil Rotaları (5-Star Palace & Cliffside Hotels)",
     "save_rate_benchmark": "%12.0 - %16.4 Kaydetme Oranı (Bucket-List & Seyahat Rehberi Etkisi)",
@@ -147,8 +142,8 @@
     "why_saved": "Çiftler ve lüks seyahat tutkunları yıldönümü, balayı veya yaz/kış kaçamağı için oteli ve fotoğraftaki bileklik/kadeh/kombin linklerini kaydeder ve birbirine DM atar."
   },
   "model_frames": [
-    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\tg_lux_otel_6c84f1_step1.jpg",
-    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\tg_lux_otel_6c84f1_step2.jpg",
-    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\tg_lux_otel_6c84f1_step3.jpg"
+    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\lux_otel_santorini_oia_caldera_twilight_step1.jpg",
+    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\lux_otel_santorini_oia_caldera_twilight_step2.jpg",
+    "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\assets\\lux_otel_santorini_oia_caldera_twilight_step3.jpg"
   ]
 }

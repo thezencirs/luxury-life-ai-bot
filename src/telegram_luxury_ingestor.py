@@ -34,6 +34,7 @@ DEFAULT_ADMIN_CHAT_ID = "8874878004"
 GITHUB_REPO_SLUG = os.environ.get("LUXURY_GITHUB_REPO", "thezencirs/luxury-life-ai-bot")
 
 TG_QUEUE_PATH = BASE_DIR / "output" / "telegram_luxury_queue.json"
+TG_PENDING_QUEUE_PATH = BASE_DIR / "output" / "telegram_pending_queue.json"
 SUBSCRIBERS_FILE = BASE_DIR / "assets" / "telegram_subscribers.json"
 
 
@@ -74,32 +75,40 @@ def _download_tg_file(file_id: str, dest: Path) -> bool:
 def load_tg_queue() -> List[Dict[str, Any]]:
     os.makedirs(TG_QUEUE_PATH.parent, exist_ok=True)
     local_q: List[Dict[str, Any]] = []
-    if TG_QUEUE_PATH.exists():
-        try:
-            data = json.loads(TG_QUEUE_PATH.read_text(encoding="utf-8"))
-            if isinstance(data, list):
-                local_q = data
-        except Exception:
-            pass
+    seen_ids = set()
+    for q_path in (TG_PENDING_QUEUE_PATH, TG_QUEUE_PATH):
+        if q_path.exists():
+            try:
+                data = json.loads(q_path.read_text(encoding="utf-8"))
+                if isinstance(data, list):
+                    for item in data:
+                        rid = item.get("request_id")
+                        if rid and rid not in seen_ids:
+                            local_q.append(item)
+                            seen_ids.add(rid)
+            except Exception:
+                pass
 
     gh_token = os.environ.get("GH_TOKEN", "").strip()
     if gh_token:
-        try:
-            r = requests.get(
-                f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/output/telegram_luxury_queue.json",
-                headers={"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"},
-                timeout=10,
-            )
-            if r.status_code == 200:
-                content_b64 = r.json().get("content", "")
-                remote_q = json.loads(base64.b64decode(content_b64).decode("utf-8"))
-                if isinstance(remote_q, list):
-                    existing_ids = {item.get("request_id") for item in local_q}
-                    for rq in remote_q:
-                        if rq.get("request_id") and rq.get("request_id") not in existing_ids:
-                            local_q.append(rq)
-        except Exception:
-            pass
+        for rel_q in ("output/telegram_pending_queue.json", "output/telegram_luxury_queue.json"):
+            try:
+                r = requests.get(
+                    f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/{rel_q}",
+                    headers={"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"},
+                    timeout=10,
+                )
+                if r.status_code == 200:
+                    content_b64 = r.json().get("content", "")
+                    remote_q = json.loads(base64.b64decode(content_b64).decode("utf-8"))
+                    if isinstance(remote_q, list):
+                        for rq in remote_q:
+                            rid = rq.get("request_id")
+                            if rid and rid not in seen_ids:
+                                local_q.append(rq)
+                                seen_ids.add(rid)
+            except Exception:
+                pass
     return local_q
 
 
@@ -107,22 +116,24 @@ def save_tg_queue(queue: List[Dict[str, Any]], sync_github: bool = True) -> None
     os.makedirs(TG_QUEUE_PATH.parent, exist_ok=True)
     raw_json = json.dumps(queue, ensure_ascii=False, indent=2)
     TG_QUEUE_PATH.write_text(raw_json, encoding="utf-8")
+    TG_PENDING_QUEUE_PATH.write_text(raw_json, encoding="utf-8")
 
     gh_token = os.environ.get("GH_TOKEN", "").strip()
     if sync_github and gh_token:
-        try:
-            api_url = f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/output/telegram_luxury_queue.json"
-            headers = {"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"}
-            get_r = requests.get(api_url, headers=headers, timeout=10)
-            payload: Dict[str, Any] = {
-                "message": "chore(telegram-queue): sync pending luxury telegram requests [skip ci]",
-                "content": base64.b64encode(raw_json.encode("utf-8")).decode("ascii"),
-            }
-            if get_r.status_code == 200 and get_r.json().get("sha"):
-                payload["sha"] = get_r.json()["sha"]
-            requests.put(api_url, headers=headers, json=payload, timeout=12)
-        except Exception:
-            pass
+        for rel_q in ("output/telegram_pending_queue.json", "output/telegram_luxury_queue.json"):
+            try:
+                api_url = f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/{rel_q}"
+                headers = {"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"}
+                get_r = requests.get(api_url, headers=headers, timeout=10)
+                payload: Dict[str, Any] = {
+                    "message": f"chore(telegram-queue): sync pending luxury telegram requests in {rel_q} [skip ci]",
+                    "content": base64.b64encode(raw_json.encode("utf-8")).decode("ascii"),
+                }
+                if get_r.status_code == 200 and get_r.json().get("sha"):
+                    payload["sha"] = get_r.json()["sha"]
+                requests.put(api_url, headers=headers, json=payload, timeout=12)
+            except Exception:
+                pass
 
 
 def trigger_github_workflow_dispatch(category: str = "otomatik") -> bool:

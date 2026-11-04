@@ -3,16 +3,22 @@ Luxury Life AI (@Luxurylifeaibot) — Viral Hook, High-Save-Rate (Kaydetme Oran�
 ve 5 Lüks Dikey Kategori (Takı/Saat, Makyaj/Kozmetik, Old Money Kombin, Ultra Lüks Otel, Süper Spor Araba)
 Reji, Kamera Açısı, Mekan, Model, Yazım Düzeltici ve Doğrulanmış İş Birliği Link Motoru
 """
+import base64
 import hashlib
 import json
 import os
 import re
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+import requests
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 LEDGER_PATH = BASE_DIR / "output" / "luxury_zero_repeat_ledger.json"
+ZERO_REPEAT_LEDGER_PATH = BASE_DIR / "output" / "zero_repeat_ledger.json"
+GITHUB_REPO_SLUG = os.environ.get("LUXURY_GITHUB_REPO", "thezencirs/luxury-life-ai-bot")
 
 # ============================================================================
 # YASAL UYARI SABİTLERİ (T.C. Ticaret Bakanlığı Reklam Kurulu Tam Uyumlu)
@@ -727,28 +733,268 @@ def resolve_smart_collaboration_url(item_name: str, brand: str, category: str, e
     return f"https://www.beymen.com/tr/search?q={query}"
 
 
-def load_luxury_ledger() -> Dict[str, Any]:
-    os.makedirs(LEDGER_PATH.parent, exist_ok=True)
-    if LEDGER_PATH.exists():
+def _default_ledger_state() -> Dict[str, Any]:
+    return {
+        "used_outfit_ids": [],
+        "used_concept_ids": [],
+        "used_model_frames": [],
+        "published_ids": [],
+        "history": [],
+        "last_category_index": -1,
+        "last_dispatch_ts": 0.0,
+    }
+
+
+def _merge_ledgers(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
+    merged = _default_ledger_state()
+    for key in ("used_outfit_ids", "used_concept_ids", "used_model_frames", "published_ids"):
+        combined: List[str] = []
+        for src in (a.get(key) or [], b.get(key) or []):
+            for val in src:
+                if val and val not in combined:
+                    combined.append(str(val))
+        merged[key] = combined
+
+    # Sync used_outfit_ids and used_concept_ids and published_ids so all three stay unified
+    all_ids: List[str] = []
+    for k in ("used_outfit_ids", "used_concept_ids", "published_ids"):
+        for v in merged[k]:
+            if v not in all_ids:
+                all_ids.append(v)
+    merged["used_outfit_ids"] = list(all_ids)
+    merged["used_concept_ids"] = list(all_ids)
+    merged["published_ids"] = list(all_ids)
+
+    hist_map: Dict[str, Any] = {}
+    for h in (a.get("history") or []) + (b.get("history") or []):
+        if isinstance(h, dict) and h.get("id"):
+            hist_map[str(h["id"])] = h
+    merged["history"] = list(hist_map.values())[-200:]
+    merged["last_category_index"] = max(
+        int(a.get("last_category_index", -1)),
+        int(b.get("last_category_index", -1)),
+    )
+    merged["last_dispatch_ts"] = max(
+        float(a.get("last_dispatch_ts", 0.0)),
+        float(b.get("last_dispatch_ts", 0.0)),
+    )
+    return merged
+
+
+def load_zero_repeat_ledger() -> Dict[str, Any]:
+    """
+    Sıfır-Tekrar Çift Kilidi (Zero-Repeat Double-Lock):
+    1) Yerel `output/zero_repeat_ledger.json` (ve `output/luxury_zero_repeat_ledger.json`) dosyasını okur.
+    2) GitHub Contents API (`GET /repos/{GITHUB_REPO_SLUG}/contents/output/zero_repeat_ledger.json`) üzerinden
+       uzak defteri çeker ve iki defteri atomik olarak birleştirir (union).
+    """
+    os.makedirs(ZERO_REPEAT_LEDGER_PATH.parent, exist_ok=True)
+    state = _default_ledger_state()
+
+    for p in (ZERO_REPEAT_LEDGER_PATH, LEDGER_PATH):
+        if p.exists():
+            try:
+                local_data = json.loads(p.read_text(encoding="utf-8"))
+                if isinstance(local_data, dict):
+                    state = _merge_ledgers(state, local_data)
+            except Exception:
+                pass
+
+    gh_token = os.environ.get("GH_TOKEN", "").strip()
+    if gh_token:
         try:
-            return json.loads(LEDGER_PATH.read_text(encoding="utf-8"))
+            r = requests.get(
+                f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/output/zero_repeat_ledger.json",
+                headers={"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"},
+                timeout=10,
+            )
+            if r.status_code == 200:
+                content_b64 = r.json().get("content", "")
+                remote_data = json.loads(base64.b64decode(content_b64).decode("utf-8"))
+                if isinstance(remote_data, dict):
+                    state = _merge_ledgers(state, remote_data)
         except Exception:
             pass
-    return {"published_ids": [], "last_category_index": -1, "last_dispatch_ts": 0.0}
+
+    return state
+
+
+def save_zero_repeat_ledger(data: Dict[str, Any], sync_github: bool = True) -> None:
+    """
+    Sıfır-Tekrar Çift Kilidini hem yerel (`output/zero_repeat_ledger.json` + `output/luxury_zero_repeat_ledger.json`)
+    hem de GitHub Contents API (`PUT /repos/{GITHUB_REPO_SLUG}/contents/output/zero_repeat_ledger.json`) üzerine yazar.
+    """
+    os.makedirs(ZERO_REPEAT_LEDGER_PATH.parent, exist_ok=True)
+    raw_json = json.dumps(data, ensure_ascii=False, indent=2)
+    ZERO_REPEAT_LEDGER_PATH.write_text(raw_json, encoding="utf-8")
+    LEDGER_PATH.write_text(raw_json, encoding="utf-8")
+
+    gh_token = os.environ.get("GH_TOKEN", "").strip()
+    if sync_github and gh_token:
+        for rel_path in ("output/zero_repeat_ledger.json", "output/luxury_zero_repeat_ledger.json"):
+            try:
+                api_url = f"https://api.github.com/repos/{GITHUB_REPO_SLUG}/contents/{rel_path}"
+                headers = {"Authorization": f"Bearer {gh_token}", "Accept": "application/vnd.github+json"}
+                get_r = requests.get(api_url, headers=headers, timeout=10)
+                payload: Dict[str, Any] = {
+                    "message": f"chore(zero-repeat): lock used concept in {rel_path} [skip ci]",
+                    "content": base64.b64encode(raw_json.encode("utf-8")).decode("ascii"),
+                }
+                if get_r.status_code == 200 and get_r.json().get("sha"):
+                    payload["sha"] = get_r.json()["sha"]
+                requests.put(api_url, headers=headers, json=payload, timeout=12)
+            except Exception:
+                pass
+
+
+def load_luxury_ledger() -> Dict[str, Any]:
+    return load_zero_repeat_ledger()
 
 
 def save_luxury_ledger(data: Dict[str, Any]) -> None:
-    os.makedirs(LEDGER_PATH.parent, exist_ok=True)
-    LEDGER_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    save_zero_repeat_ledger(data, sync_github=True)
+
+
+def mark_concept_used(concept: Dict[str, Any], sync_github: bool = True) -> Dict[str, Any]:
+    """
+    Üretilen ve yayınlanan konseptin `id` ve `model_frames[0]` değerlerini
+    Sıfır-Tekrar Çift Kilidine (Yerel + GitHub API) kaydeder.
+    """
+    ledger = load_zero_repeat_ledger()
+    cid = str(concept.get("id", "")).strip()
+    if cid:
+        for k in ("used_outfit_ids", "used_concept_ids", "published_ids"):
+            if cid not in ledger[k]:
+                ledger[k].append(cid)
+
+    m_frames = concept.get("model_frames") or []
+    if m_frames:
+        mf0 = os.path.basename(str(m_frames[0]))
+        if mf0 and mf0 not in ledger["used_model_frames"]:
+            ledger["used_model_frames"].append(mf0)
+
+    ledger["last_dispatch_ts"] = time.time()
+    ledger.setdefault("history", []).append({
+        "id": cid,
+        "category": concept.get("category", "kombin"),
+        "title": concept.get("title", ""),
+        "published_at_utc": datetime.utcnow().isoformat() + "Z",
+    })
+    ledger["history"] = ledger["history"][-200:]
+    save_zero_repeat_ledger(ledger, sync_github=sync_github)
+    return ledger
+
+
+PROCEDURAL_LUXURY_THEMES: Dict[str, List[Dict[str, str]]] = {
+    "taki": [
+        {
+            "loc": "Geneva Rue du Rhône Horology Salon & Lake Léman Terrace",
+            "title": "Cenevre Rue du Rhône: 18K Pembe Altın & Zümrüt Kesim Pırlanta Bilek Kurgusu ✨",
+            "headline": "CENEVRE SAAT & MÜCEVHER SALONLARININ 6 ALTIN ORANI",
+            "prompt": "Ultra-photorealistic luxury jewelry campaign photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel with natural skin pores wearing emerald-green silk evening gown on Lake Geneva terrace at golden hour, showcasing 18k rose gold diamond watch, tennis bracelet and emerald-cut ring, zero 3D, zero cartoon",
+        },
+        {
+            "loc": "Çırağan Palace Kempinski Bosphorus VIP Marble Suite",
+            "title": "Çırağan Sarayı Boğaz Terası: 18K Sarı Altın & İnci/Pırlanta Gece Işıltısı 💎",
+            "headline": "BOĞAZ YALISINDA KUSURSUZ 6 PARÇA MÜCEVHER REÇETESİ",
+            "prompt": "Ultra-photorealistic luxury jewelry editorial photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel in ivory silk satin dress on Bosphorus marble balcony at twilight, wearing 18k gold diamond necklace, drop earrings and stacked gold bangles, zero 3D, zero cartoon",
+        },
+    ],
+    "makyaj": [
+        {
+            "loc": "Four Seasons George V Paris Marble Vanity Suite",
+            "title": "Four Seasons Paris: 'Espresso Glow & Champagne Skin' 6 Adımlı Lüks Makyaj Ritüeli 💄",
+            "headline": "PARİS SÜİTLERİNDEN ÇIKAN 6 PARÇA IŞILTILI CİLT FORMÜLÜ",
+            "prompt": "Ultra-photorealistic luxury beauty editorial shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel with luminous glass skin and natural pores in silk robe at Four Seasons Paris marble vanity, gold lipstick and niche crystal perfume bottle, zero 3D, zero cartoon",
+        },
+        {
+            "loc": "Via Brera Milano Private Penthouse Beauty Atelier",
+            "title": "Milano Brera Penthouse: Kadife Bordo Dudak & İpek Aydınlatıcı 6'lı Seçki ✨",
+            "headline": "MİLANO MODA HAFTASI KULİSİNİN 6 İKONİK GÜZELLİK SIRRI",
+            "prompt": "Ultra-photorealistic Vogue Beauty portrait shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel with flawless glowing skin applying velvet rosewood lipstick in sunlit Milan penthouse marble mirror, zero 3D, zero cartoon",
+        },
+    ],
+    "kombin": [
+        {
+            "loc": "St. Moritz Badrutt's Palace Promenade & Alpine Boulevard",
+            "title": "St. Moritz Old Money: Fildişi Kaşmir, Vizon Yün & Taba Deri 6 Parça Kapsül 🧥",
+            "headline": "ST. MORITZ JET-SET STİLİNİN 6 PARÇALIK SESSİZ LÜKS FORMÜLÜ",
+            "prompt": "Ultra-photorealistic full-body street style fashion photograph shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel walking head-to-toe in St. Moritz Switzerland at golden hour wearing ivory cashmere coat, taupe wool palazzo trousers, cognac leather handbag and suede loafers, zero 3D, zero cartoon",
+        },
+        {
+            "loc": "Avenue Montaigne Paris Haute Couture Boulevard",
+            "title": "Avenue Montaigne Paris: Obsidyen Kruvaze Blazer, İpek Bluz & Gold Aksesuar Kurgusu ✨",
+            "headline": "PARİS AVENUE MONTAIGNE'DE 6 PARÇA ZAMANSIZ ZARAFET",
+            "prompt": "Ultra-photorealistic full-body fashion editorial shot on Hasselblad H6D-100c 85mm f/1.4 lens, real adult female supermodel walking head-to-toe on Avenue Montaigne Paris wearing tailored black double-breasted blazer, champagne silk blouse, cream tailored trousers and gold-clasp leather bag, zero 3D, zero cartoon",
+        },
+    ],
+    "otel": [
+        {
+            "loc": "Villa d'Este Lake Como Private Riva Terrace, Italy",
+            "title": "Lake Como Villa d'Este: Göl Kenarı Alacakaranlık Terası & 6 Lüks Tatil Detayı 🌅",
+            "headline": "COMO GÖLÜ KRALİYET TERASINDA UNUTULMAZ AKŞAM RİTÜELİ",
+            "prompt": "Ultra-photorealistic luxury travel & lifestyle photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens at blue hour twilight at Villa d'Este Lake Como Italy, candlelit marble terrace overlooking wooden Riva boat and glowing lakeside villas, crystal champagne glasses and gold bracelet on wrist, zero 3D, zero cartoon",
+        },
+        {
+            "loc": "Mandarin Oriental Bodrum Cennet Koyu Infinity Villa",
+            "title": "Mandarin Oriental Bodrum: Sonsuzluk Havuzu Terası & 6 Parça Resort Lüksü 🏨",
+            "headline": "EGE KIYISINDA KUSURSUZ 6 DETAYLI YAZ & RESORT SEÇKİSİ",
+            "prompt": "Ultra-photorealistic luxury resort lifestyle photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens at golden sunset at Mandarin Oriental Bodrum infinity terrace overlooking turquoise Aegean bay, crystal glasses, linen resort shirt and gold cuff bracelet, zero 3D, zero cartoon",
+        },
+    ],
+    "araba": [
+        {
+            "loc": "Villa d'Este Concorso d'Eleganza & Lake Como Drive",
+            "title": "Lake Como Sürüşü: Ferrari Roma Spider & 6 Parça İtalyan 'Gran Turismo' Stili 🏎️",
+            "headline": "İTALYAN GRAN TURISMO RUHUNU YANSITAN 6 PARÇA LÜKS SEÇKİ",
+            "prompt": "Ultra-photorealistic luxury automotive & menswear editorial shot on Hasselblad H6D-100c 35mm f/1.4 lens, charismatic real adult male model standing beside Grigio Ingrid Ferrari Roma Spider at Lake Como sunset wearing navy suede bomber jacket, cream cashmere knit, chronograph watch and driving loafers, zero 3D, zero cartoon",
+        },
+        {
+            "loc": "Mayfair London Mount Street & Connaught VIP Valet",
+            "title": "Londra Mayfair: Aston Martin DB12 & 6 Parça 'British Bespoke Gentleman' Kurgusu 🎩",
+            "headline": "MAYFAIR SOKAKLARINDA 6 PARÇA İNGİLİZ CENTİLMEN STİLİ",
+            "prompt": "Ultra-photorealistic automotive fashion photograph shot on Hasselblad H6D-100c 35mm f/1.4 lens, real adult male model beside metallic racing green Aston Martin DB12 on Mount Street Mayfair London at dusk wearing tailored camel cashmere coat, silk scarf, luxury chronograph and suede loafers, zero 3D, zero cartoon",
+        },
+    ],
+}
+
+
+def _generate_procedural_luxury_concept(category: str, seq_idx: int) -> Dict[str, Any]:
+    """
+    Statik şablonlar kullanıldığında Sıfır-Tekrar Çift Kilidine takılmayan,
+    %100 fotogerçekçi (`is_3d_avatar: False`) yeni bir lüks konsept sentezler.
+    """
+    base_matches = [a for a in LUXURY_MASTER_ARCHETYPES if a["category"] == category]
+    template = json.loads(json.dumps(base_matches[0] if base_matches else LUXURY_MASTER_ARCHETYPES[0]))
+    themes = PROCEDURAL_LUXURY_THEMES.get(category, PROCEDURAL_LUXURY_THEMES["kombin"])
+    theme = themes[seq_idx % len(themes)]
+
+    uid_suffix = f"ed{seq_idx + 2:03d}"
+    template["id"] = f"lux_{category}_ bespoke_{uid_suffix}".replace(" ", "")
+    template["is_3d_avatar"] = False
+    template["title"] = theme["title"]
+    template["cover_headline"] = theme["headline"]
+    template["location_name"] = theme["loc"]
+    template["model_prompt_en"] = theme["prompt"]
+    template["cover_kicker"] = f"» LUXURY LIFE AI • {category.upper()} ÖZEL KOLEKSİYON #{seq_idx + 2} «"
+    for sk, it in template.get("items", {}).items():
+        it["sku"] = f"{it.get('sku', 'LUX')}-{seq_idx + 2}"
+    return template
 
 
 def select_luxury_concept(force_category: str = "otomatik", custom_concept: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    ledger = load_zero_repeat_ledger()
+    used_ids = set(ledger.get("used_outfit_ids") or []) | set(ledger.get("used_concept_ids") or []) | set(ledger.get("published_ids") or [])
+
     if custom_concept:
         cat = custom_concept.get("category", "otel")
+        custom_concept["is_3d_avatar"] = False
+        if custom_concept.get("id") in used_ids:
+            req_hash = hashlib.md5(f"{custom_concept.get('id')}_{time.time()}".encode("utf-8")).hexdigest()[:6]
+            custom_concept["id"] = f"{custom_concept.get('id')}_{req_hash}"
         custom_concept["viral_analysis"] = VIRAL_RETENTION_FRAMEWORKS.get(cat, VIRAL_RETENTION_FRAMEWORKS["otel"])
         return custom_concept
 
-    ledger = load_luxury_ledger()
     cat_order = ["otel", "taki", "makyaj", "kombin", "araba"]
     if force_category in cat_order:
         target_cat = force_category
@@ -756,10 +1002,19 @@ def select_luxury_concept(force_category: str = "otomatik", custom_concept: Opti
         next_idx = (int(ledger.get("last_category_index", -1)) + 1) % len(cat_order)
         target_cat = cat_order[next_idx]
         ledger["last_category_index"] = next_idx
-        save_luxury_ledger(ledger)
+        save_zero_repeat_ledger(ledger, sync_github=False)
 
-    candidates = [a for a in LUXURY_MASTER_ARCHETYPES if a["category"] == target_cat]
-    chosen = dict(candidates[0] if candidates else LUXURY_MASTER_ARCHETYPES[0])
+    candidates = [a for a in LUXURY_MASTER_ARCHETYPES if a["category"] == target_cat and a["id"] not in used_ids]
+    if candidates:
+        chosen = json.loads(json.dumps(candidates[0]))
+    else:
+        seq_idx = len(used_ids)
+        chosen = _generate_procedural_luxury_concept(target_cat, seq_idx)
+        while chosen["id"] in used_ids:
+            seq_idx += 1
+            chosen = _generate_procedural_luxury_concept(target_cat, seq_idx)
+
+    chosen["is_3d_avatar"] = False
     chosen["viral_analysis"] = VIRAL_RETENTION_FRAMEWORKS.get(chosen["category"], VIRAL_RETENTION_FRAMEWORKS["otel"])
     return chosen
 
@@ -768,12 +1023,12 @@ def build_explanatory_director_message(concept: Dict[str, Any]) -> str:
     va = concept.get("viral_analysis") or VIRAL_RETENTION_FRAMEWORKS.get(concept.get("category", "otel"))
     title = concept.get("title", "Lüks Yaşam Konsepti")
     loc = concept.get("location_name", "Santorini / Paris / Milano / İstanbul Boğazı")
-    cam = concept.get("camera_spec", "Hasselblad H6D-100c • 35mm f/1.4")
+    cam = concept.get("camera_spec", "Hasselblad H6D-100c • 85mm f/1.4")
     has_user_media = bool(concept.get("user_photo_path") or concept.get("user_photos") or concept.get("user_video_path"))
     media_note = (
         "✅ Telegram'dan gönderdiğiniz ham fotoğraf/görüntü ve metin doğrudan ana sahne, kapak ve 6'lı GraphMotion detay kartları olarak işlendi (yazım düzeltmesi otomatik uygulandı)."
         if has_user_media
-        else "✅ Kategoriye özel yüksek kaydetme oranlı (High-Save-Rate) lüks şablon ve sahne kurgusu uygulandı."
+        else "✅ Kategoriye özel yüksek kaydetme oranlı (High-Save-Rate) %100 fotogerçekçi lüks şablon, Remotion yay fiziği ve film light-leak sahne kurgusu uygulandı."
     )
 
     lines = [
@@ -788,20 +1043,24 @@ def build_explanatory_director_message(concept: Dict[str, Any]) -> str:
         f"• Kanca (0.0s - 1.2s): {va['hook_formula']}",
         f"• Kaydetme Psikolojisi: {va['why_saved']}",
         "",
-        "🎥 DOĞRU AÇI, MEKAN & MODEL REJİSİ:",
+        "🎥 DOĞRU AÇI, MEKAN & %100 FOTOGERÇEKÇİ MODEL REJİSİ:",
         f"• Kamera & Lens Açısı: {cam} ({va['camera_angle']})",
-        f"• Işık Kurulumu: {va['lighting_setup']}",
+        f"• Işık & Geçiş Kurulumu: {va['lighting_setup']} + Anamorfik Film Light-Leak + Remotion Spring (damping=14, stiffness=120, mass=0.8)",
         f"• Seçilen Lüks Mekan: {loc}",
-        f"• Model & Sahne Duruşu: {va['model_direction']}",
+        f"• Model & Sahne Duruşu: {va['model_direction']} (is_3d_avatar=False)",
         "",
-        "📋 KULLANIM REHBERİ (AŞAĞIDAKİ 2 AYRI COPY-PASTE MESAJI):",
-        "1️⃣ Hemen alttaki 1. metin mesajı: SADECE Instagram Reels Açıklama (Caption) kısmına tek dokunuşla kopyalayıp yapıştırmanız içindir (Yasal '#reklam #işbirliğiyoktur' notu dahildir).",
+        "📋 KULLANIM REHBERİ (AŞAĞIDAKİ 2 AYRI SAF COPY-PASTE MESAJI):",
+        "1️⃣ Hemen alttaki 1. metin mesajı: SADECE Instagram Reels Açıklama (Caption) kısmına tek dokunuşla kopyalayıp yapıştırmanız içindir (Hiçbir ekstra başlık içermez, yasal '#reklam #işbirliğiyoktur' notu dahildir).",
         "2️⃣ Onun altındaki 2. metin mesajı: SADECE görseldeki ürünlerin/mekanın birebir doğrulanmış mağaza ve iş birliği linkleridir; İlk Yoruma, Story Link etiketine veya takipçi DM'lerine doğrudan kopyalayıp yapıştırabilirsiniz.",
     ]
     return "\n".join(lines)
 
 
 def build_pure_copy_paste_caption(concept: Dict[str, Any]) -> str:
+    """
+    SADECE doğrudan Instagram açıklamasına (caption) kopyalanıp yapıştırılacak SAF METNİ döndürür.
+    Kesinlikle 'Kopyalanacak metin:', '[KOPYALA-YAPIŞTIR]' gibi ekstra sarmalayıcı başlık içermez!
+    """
     va = concept.get("viral_analysis") or VIRAL_RETENTION_FRAMEWORKS.get(concept.get("category", "otel"))
     title = concept.get("title", "")
     viral_hook = concept.get("viral_hook", "")
@@ -839,10 +1098,14 @@ def build_pure_copy_paste_caption(concept: Dict[str, Any]) -> str:
         "",
         hashtags,
     ]
-    return "\n".join(lines)
+    return "\n".join(lines).strip()
 
 
 def build_pure_copy_paste_links(concept: Dict[str, Any]) -> str:
+    """
+    SADECE doğrudan Instagram ilk yorumuna, DM'ye veya Story linklerine kopyalanıp yapıştırılacak
+    SAF ÜRÜN LİNKLERİ METNİNİ döndürür. Ekstra sarmalayıcı başlık içermez.
+    """
     title = concept.get("title", "Lüks Yaşam Seçkisi")
     items = concept.get("items", {})
     num_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"]
@@ -865,4 +1128,4 @@ def build_pure_copy_paste_links(concept: Dict[str, Any]) -> str:
 
     lines.append("✨ Favori parçanızın numarasını yoruma yazabilirsiniz!")
     lines.append(TR_LEGAL_LINKS_NOTICE)
-    return "\n".join(lines)
+    return "\n".join(lines).strip()

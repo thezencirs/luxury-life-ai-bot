@@ -94,6 +94,7 @@ jobs:
             output/2_instagram_caption_copypaste.txt
             output/3_product_links_copypaste.txt
             output/luxury_concept_metadata.json
+            output/zero_repeat_ledger.json
             output/system_health_report.json
             output/system_health_report.md
           retention-days: 7
@@ -106,7 +107,9 @@ jobs:
           git config user.email "bot@luxurylifeai.com"
           for f in \
             assets/telegram_subscribers.json \
+            output/zero_repeat_ledger.json \
             output/luxury_zero_repeat_ledger.json \
+            output/telegram_pending_queue.json \
             output/telegram_luxury_queue.json \
             output/system_health_report.json \
             output/system_health_report.md; do

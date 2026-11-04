@@ -27,11 +27,71 @@ def S(val: float) -> int:
     return int(round(val * SCALE))
 
 
+def _remotion_spring(
+    t: float,
+    damping: float = 14.0,
+    stiffness: float = 120.0,
+    mass: float = 0.8,
+) -> float:
+    """
+    Remotion `spring({ frame, fps, config: { damping: 14, stiffness: 120, mass: 0.8 } })`
+    fizik motorunun birebir harmonik salınım denklemi.
+    """
+    if t <= 0.0:
+        return 0.0
+    omega0 = math.sqrt(stiffness / max(0.001, mass))
+    zeta = damping / (2.0 * math.sqrt(stiffness * max(0.001, mass)))
+    if zeta < 1.0:
+        omega_d = omega0 * math.sqrt(1.0 - zeta * zeta)
+        env = math.exp(-zeta * omega0 * t)
+        val = 1.0 - env * (
+            math.cos(omega_d * t) + (zeta / math.sqrt(1.0 - zeta * zeta)) * math.sin(omega_d * t)
+        )
+    else:
+        val = 1.0 - (1.0 + omega0 * t) * math.exp(-omega0 * t)
+    return float(max(0.0, min(1.12, val)))
+
+
+def _apply_180deg_shutter_blur(card_im: Image.Image, speed_px: float) -> Image.Image:
+    """
+    180° Shutter Angle sinematik hareket bulanıklığı (Motion Blur):
+    Kart yüksek hızla sahneye girerken hız vektörüne orantılı yumuşak bulanıklık uygular.
+    """
+    if speed_px < 18.0:
+        return card_im
+    radius = min(4.5, speed_px / 65.0)
+    return card_im.filter(ImageFilter.GaussianBlur(radius=radius))
+
+
+def _apply_film_light_leak(
+    frame_rgb: Image.Image,
+    intensity: float,
+    sweep_pos: float = 0.5,
+) -> Image.Image:
+    """
+    Sahne geçişlerinde (Act II -> Act III ve 3 adımlı Gimbal kesmelerinde)
+    sıcak kehribar/şampanya altın Anamorfik Film Light-Leak (Işık Sızıntısı) uygular.
+    """
+    if intensity <= 0.01:
+        return frame_rgb
+    arr = np.array(frame_rgb, dtype=np.float32)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    nx = xx / float(W)
+    ny = yy / float(H)
+
+    diag = nx * 0.78 + ny * 0.22
+    band = np.exp(-((diag - sweep_pos) ** 2) / 0.032)
+    corner_glow = np.exp(-(((nx - 0.12) ** 2 + (ny - 0.18) ** 2) / 0.11))
+
+    leak = np.clip(band * 0.85 + corner_glow * 0.45, 0.0, 1.0) * float(intensity)
+    arr[:, :, 0] = np.clip(arr[:, :, 0] + leak * 245.0, 0.0, 255.0)
+    arr[:, :, 1] = np.clip(arr[:, :, 1] + leak * 182.0, 0.0, 255.0)
+    arr[:, :, 2] = np.clip(arr[:, :, 2] + leak * 92.0, 0.0, 255.0)
+    return Image.fromarray(arr.astype(np.uint8), mode="RGB")
+
+
 def ease_out_back(t: float) -> float:
-    t = max(0.0, min(1.0, t))
-    c1 = 1.70158
-    c3 = c1 + 1.0
-    return 1.0 + c3 * pow(t - 1.0, 3) + c1 * pow(t - 1.0, 2)
+    return _remotion_spring(t * 0.55, damping=14.0, stiffness=120.0, mass=0.8)
 
 
 def ease_in_out_cubic(t: float) -> float:
@@ -480,8 +540,8 @@ def render_luxury_graphmotion_reel(
 
         # ACT I (0.00s - 0.40s): Scroll-Stopper Dergi Kapağı Kancası
         if t < 0.40:
-            frame_rgb = hook_cover_rgb
-        # ACT II (0.40s - 5.20s): GraphMotion Plus 6'lı Bento & Specular Işık Akışı
+            frame_rgb = hook_cover_rgb.copy()
+        # ACT II (0.40s - 5.20s): GraphMotion Plus 6'lı Bento & Remotion Yay Fiziği + Specular Işık Akışı
         elif t < bento_end_sec:
             canvas = bg_stage.copy()
             draw = ImageDraw.Draw(canvas)
@@ -500,18 +560,26 @@ def render_luxury_graphmotion_reel(
                 S(28), S(11), S(20),
             )
 
-            # 6 Bento Kartının Yaylanarak (ease_out_back) Yerleşimi
+            # 6 Bento Kartının Remotion Yay Fiziği (_remotion_spring) + 180° Shutter Motion Blur ile Yerleşimi
             for p_card in prepared_cards:
                 t_in = p_card["t_in"]
                 if t < t_in:
                     continue
-                prog = min(1.0, (t - t_in) / 0.52)
-                eased = ease_out_back(prog)
+                dt = t - t_in
+                dt_prev = max(0.0, dt - (1.0 / float(FPS)))
+                sp_now = _remotion_spring(dt, damping=14.0, stiffness=120.0, mass=0.8)
+                sp_prev = _remotion_spring(dt_prev, damping=14.0, stiffness=120.0, mass=0.8)
+
                 tx, ty, bw, bh = p_card["box"]
                 sx, sy = p_card["start_xy"]
-                cur_x = int(round(sx + (tx - sx) * eased))
-                cur_y = int(round(sy + (ty - sy) * eased))
-                canvas.paste(p_card["card_im"], (cur_x, cur_y), p_card["card_im"])
+                cur_x = int(round(sx + (tx - sx) * sp_now))
+                cur_y = int(round(sy + (ty - sy) * sp_now))
+                prev_x = int(round(sx + (tx - sx) * sp_prev))
+                prev_y = int(round(sy + (ty - sy) * sp_prev))
+
+                speed_px = math.hypot(cur_x - prev_x, cur_y - prev_y)
+                card_visual = _apply_180deg_shutter_blur(p_card["card_im"], speed_px)
+                canvas.paste(card_visual, (cur_x, cur_y), card_visual)
 
             # Alt Kaydetme Kancası (High-Save-Rate) Kutusu + Altın İlerleme Çubuğu
             draw.rounded_rectangle(
@@ -536,7 +604,12 @@ def render_luxury_graphmotion_reel(
             )
             frame_rgb = canvas.convert("RGB")
 
-        # ACT III (5.20s - 11.00s): 3-Adımlı Gimbal Parallax Fotogerçekçi Model & Mekan Sineması
+            # Bento tamamlandığında (3.45s - 4.95s) Specular Champagne Gold Işık Dalgası
+            if 3.45 <= t <= 4.95:
+                shimmer_p = (t - 3.45) / 1.50
+                frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.22 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
+
+        # ACT III (5.20s - 11.00s): 3-Adımlı Gimbal Parallax %100 Fotogerçekçi Model & Mekan Sineması
         else:
             walk_t = (t - bento_end_sec) / max(0.01, (total_duration - bento_end_sec))
             n_sc = len(scene_frames)
@@ -565,24 +638,26 @@ def render_luxury_graphmotion_reel(
             odraw.text((W // 2, S(96)), f"📍 {loc_hud}", fill=(238, 204, 142, 255), font=f_kicker, anchor="mm")
             odraw.text((W // 2, S(144)), f"🎥 {cam_hud}", fill=(255, 255, 255, 255), font=f_crest, anchor="mm")
 
-            # Alt 3 Perdeli Viral Senaryo & Kaydetme Çağrısı Kutusu
+            # Alt 3 Perdeli Viral Senaryo & Kaydetme Çağrısı Kutusu (Remotion Spring ile giriş)
+            hud_spring = min(1.0, _remotion_spring(t - bento_end_sec, damping=14.0, stiffness=120.0, mass=0.8))
+            y_offset_hud = int(round((1.0 - hud_spring) * S(120)))
             beat_txt = concept.get("act2_beat", "") if walk_t < 0.55 else concept.get("act3_twist", "")
             odraw.rounded_rectangle(
-                (S(42), H - S(320), W - S(42), H - S(120)),
+                (S(42), H - S(320) + y_offset_hud, W - S(42), H - S(120) + y_offset_hud),
                 radius=S(30),
                 fill=(12, 10, 14, 232),
                 outline=(218, 182, 118, 240),
                 width=S(3),
             )
             odraw.text(
-                (W // 2, H - S(252)),
+                (W // 2, H - S(252) + y_offset_hud),
                 _tr_upper(beat_txt)[:44],
                 fill=(255, 255, 255, 255),
                 font=f_title,
                 anchor="mm",
             )
             odraw.text(
-                (W // 2, H - S(178)),
+                (W // 2, H - S(178) + y_offset_hud),
                 "📌 VİDEOYU KAYDET • BİREBİR ÜRÜN LİNKLERİ AÇIKLAMADA!",
                 fill=(238, 204, 142, 255),
                 font=f_brand,
@@ -591,8 +666,30 @@ def render_luxury_graphmotion_reel(
 
             frame_rgb = Image.alpha_composite(cropped, ov).convert("RGB")
 
+        # Sahne Geçişlerinde Anamorfik Film Light-Leak (Işık Sızıntısı) Geçiş Efekti
+        # 1) Act I -> Act II geçişi (0.34s - 0.50s)
+        if 0.34 <= t <= 0.50:
+            lp = (t - 0.34) / 0.16
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.58 * math.sin(lp * math.pi), sweep_pos=lp)
+        # 2) Act II -> Act III ana sahne geçişi (5.00s - 5.42s)
+        elif 5.00 <= t <= 5.42:
+            lp = (t - 5.00) / 0.42
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.78 * math.sin(lp * math.pi), sweep_pos=lp)
+        # 3) Act III Gimbal kare geçişleri (7.05s - 7.35s ve 8.95s - 9.25s)
+        elif 7.05 <= t <= 7.35:
+            lp = (t - 7.05) / 0.30
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.42 * math.sin(lp * math.pi), sweep_pos=lp)
+        elif 8.95 <= t <= 9.25:
+            lp = (t - 8.95) / 0.30
+            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.42 * math.sin(lp * math.pi), sweep_pos=1.0 - lp)
+
+        # Üst Kenar 6px Şampanya Altın İzlenme Tutma (Retention) İlerleme Çubuğu
+        top_draw = ImageDraw.Draw(frame_rgb)
+        prog_w = max(S(12), int(W * (t / total_duration)))
+        top_draw.rectangle((0, 0, prog_w, S(6)), fill=(238, 204, 142))
+
         frame_path = os.path.join(frames_dir, f"frame_{f_idx:04d}.jpg")
-        frame_rgb.save(frame_path, "JPEG", quality=94)
+        frame_rgb.save(frame_path, "JPEG", quality=95)
 
     wav_path = os.path.join(out_dir, "luxury_soundtrack.wav")
     generate_luxury_soundtrack(wav_path, duration=total_duration, category=concept.get("category", "kombin"))
@@ -606,16 +703,21 @@ def render_luxury_graphmotion_reel(
         "-i", wav_path,
         "-vf", "unsharp=5:5:0.75:3:3:0.0,format=yuv420p",
         "-c:v", "libx264",
+        "-preset", "slow",
         "-profile:v", "high",
         "-level:v", "5.1",
-        "-preset", "medium",
-        "-crf", "14",
-        "-b:v", "18M",
-        "-maxrate", "24M",
-        "-bufsize", "36M",
+        "-crf", "12",
+        "-b:v", "22M",
+        "-maxrate", "30M",
+        "-bufsize", "45M",
+        "-pix_fmt", "yuv420p",
+        "-color_primaries", "bt709",
+        "-color_trc", "bt709",
+        "-colorspace", "bt709",
         "-c:a", "aac",
         "-b:a", "320k",
         "-ar", "44100",
+        "-ac", "2",
         "-shortest",
         "-movflags", "+faststart",
         output_mp4,
@@ -629,4 +731,7 @@ def render_luxury_graphmotion_reel(
         "story_collage_path": os.path.join(out_dir, "luxury_story_collage.jpg"),
         "duration_sec": total_duration,
         "resolution": f"{W}x{H}",
+        "fps": FPS,
+        "video_codec": "libx264 (CRF 12, 22 Mbps, BT.709)",
+        "physics": "Remotion Spring (damping=14, stiffness=120, mass=0.8) + 180deg Shutter Blur + Film Light-Leak",
     }
