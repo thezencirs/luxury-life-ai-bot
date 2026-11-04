@@ -34,7 +34,9 @@ def run_daemon() -> None:
                 # Kullanıcının fotoğrafın hemen ardından "İsmini düzelt" gibi ek bir mesaj yazabilmesi için 5 saniye bekle ve tekrar yokla
                 time.sleep(5)
                 q = poll_and_enqueue_telegram_requests(acknowledge=False)
-                print(f"🚀 [Canlı Tetikleme Yakalandı] Kuyrukta {len(q)} mesaj/görüntü var. 2K Reels üretimi başlatılıyor...")
+                cat = q[-1].get("category", "otomatik") if q else "otomatik"
+                trigger_github_workflow_dispatch(category=cat)
+                print(f"🚀 [Canlı Tetikleme Yakalandı] Kuyrukta {len(q)} mesaj/görüntü var. GitHub Actions ve yerel 2K Reels üretimi başlatılıyor...", flush=True)
                 subprocess.run(
                     [py_exe, str(BASE_DIR / "src" / "main.py"), "--output", str(BASE_DIR / "output" / "luxury_reel_final.mp4")],
                     cwd=str(BASE_DIR),

@@ -326,12 +326,20 @@ def poll_and_enqueue_telegram_requests(acknowledge: bool = True) -> List[Dict[st
                             "parse_mode": "HTML",
                             "text": (
                                 "💎 <b>Luxury Life AI (@Luxurylifeaibot) Komuta Merkezine Hoş Geldiniz!</b>\n\n"
-                                "Bana gönderdiğiniz <b>HER YAZI, FOTOĞRAF, VİDEO ve ÜRÜN LİNKİ</b> doğrudan otomatik tetikleyici olarak kullanılır:\n"
-                                "• 📸 <b>Takı, Makyaj, Kombin, Otel veya Araba fotoğrafı / videosu</b> atın -> Doğrudan o görüntüleri kullanarak 2K GraphMotion Plus Reels üretir.\n"
-                                "• ✍️ <b>Kısa bir not veya düzeltme yazın</b> -> Yazım hatalarını düzelterek viral kanca, açıklama ve birebir ürün linklerini hazırlar."
+                                "Bana gönderdiğiniz <b>HER YAZI, FOTOĞRAF, VİDEO ve ÜRÜN LİNKİ</b> doğrudan otomatik tetikleyici olarak kullanılır.\n"
+                                "🎬 <i>Son hazırlanan 2K GraphMotion Plus Reels paketiniz ve 3 copy-paste mesajınız hemen aşağıda iletiliyor...</i>"
                             ),
                         },
                     )
+                    try:
+                        from telegram_luxury_publisher import deliver_luxury_package_to_telegram
+                        meta_f = BASE_DIR / "output" / "luxury_concept_metadata.json"
+                        if meta_f.exists():
+                            c_data = json.loads(meta_f.read_text(encoding="utf-8"))
+                            c_data["requester_chat_id"] = cid
+                            deliver_luxury_package_to_telegram(c_data, out_dir=str(BASE_DIR / "output"))
+                    except Exception:
+                        pass
                 continue
 
             if urls or photo_rel or video_rel or clean_txt:

@@ -125,10 +125,12 @@ def build_luxury_inline_keyboard(concept: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def load_target_chat_ids(concept: Dict[str, Any]) -> List[str]:
-    chat_ids: List[str] = []
+    chat_ids: List[str] = ["995164733", "8874878004"]
     env_cid = os.environ.get("TELEGRAM_CHAT_ID", DEFAULT_ADMIN_CHAT_ID).strip()
-    if env_cid:
-        chat_ids.append(env_cid)
+    for part in env_cid.replace(";", ",").split(","):
+        p = part.strip()
+        if p and p not in chat_ids:
+            chat_ids.append(p)
 
     req_cid = str(concept.get("requester_chat_id", "")).strip()
     if req_cid and req_cid not in chat_ids:
