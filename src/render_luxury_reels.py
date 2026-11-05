@@ -201,17 +201,7 @@ def create_obsidian_gold_stage(watermark_text: str = "@luxurylifeaibot") -> Imag
     bg = Image.fromarray(np.dstack([r_ch, g_ch, b_ch, a_ch]), mode="RGBA")
 
     draw = ImageDraw.Draw(bg)
-    wm_font = get_font(18, bold=False)
-    step_x = S(240)
-    step_y = S(64)
-    row_idx = 0
-    for y in range(S(40), H - S(40), step_y):
-        offset_x = S(110) if (row_idx % 2 == 1) else 0
-        for x in range(S(-20) + offset_x, W - S(20), step_x):
-            draw.text((x, y), watermark_text, fill=(214, 206, 194, 110), font=wm_font)
-        row_idx += 1
-
-    # Çift katmanlı 18K Şampanya Altın Fotoğraf Stüdyosu Çerçevesi
+    # Çift katmanlı 18K Şampanya Altın Fotoğraf Stüdyosu Çerçevesi (Filigransız tertemiz beyaz stüdyo)
     draw.rounded_rectangle(
         (S(16), S(16), W - S(16), H - S(16)),
         radius=S(28),
@@ -542,40 +532,15 @@ def render_luxury_graphmotion_reel(
     total_frames = int(total_duration * FPS)
     bento_end_sec = 3.60
 
-    va = concept.get("viral_analysis", {})
-    cam_hud = _tr_upper(concept.get("camera_spec", "HASSELBLAD 85MM F/1.4 • WHITE STUDIO"))[:48]
-    loc_hud = _tr_upper(concept.get("location_name", "SAF BEYAZ FOTOĞRAF STÜDYOSU (#FFFFFF)"))[:46]
-
-    stage_headers = [
-        "✨ SAHNE 1/3 • KOLDA, BİLEKTE & YÜZDE MİKRO-SERGİ",
-        "👑 SAHNE 2/3 • MANKEN ÜZERİNDE BÜTÜNSEL LÜKS DURUŞ",
-        "🚶‍♀️ SAHNE 3/3 • YÜRÜRKEN FARK EDİLEN SESSİZ ZENGİNLİK",
-    ]
-
     for f_idx in range(total_frames):
         t = f_idx / float(FPS)
 
         # ACT I (0.00s - 0.35s): Scroll-Stopper Dergi Kapağı Kancası
         if t < 0.35:
             frame_rgb = hook_cover_rgb.copy()
-        # ACT II (0.35s - 3.60s): Saf Beyaz Fotoğraf Stüdyosu 6'lı Bento & Remotion Yay Fiziği
+        # ACT II (0.35s - 3.60s): Saf Beyaz Fotoğraf Stüdyosu 6'lı Bento & Remotion Yay Fiziği (Sadece Ön Plana Çıkan 6 Ürün Kartı)
         elif t < bento_end_sec:
             canvas = bg_stage.copy()
-            draw = ImageDraw.Draw(canvas)
-
-            # Üst Kamera Açısı & Stüdyo Rejisi HUD (Saf Beyaz & Altın)
-            _draw_pill(
-                draw, W // 2, S(78),
-                f"🎥 REJİ & AÇI: {cam_hud}",
-                f_crest, (255, 255, 255, 248), (22, 18, 24, 255),
-                S(26), S(10), S(18), (198, 160, 88, 230), S(2),
-            )
-            _draw_pill(
-                draw, W // 2, S(142),
-                f"📍 STÜDYO: {loc_hud}",
-                f_kicker, (198, 160, 88, 255), (255, 255, 255, 255),
-                S(28), S(11), S(20),
-            )
 
             # 6 Bento Kartının Remotion Yay Fiziği (_remotion_spring) + 180° Shutter Motion Blur ile Yerleşimi
             for p_card in prepared_cards:
@@ -598,27 +563,6 @@ def render_luxury_graphmotion_reel(
                 card_visual = _apply_180deg_shutter_blur(p_card["card_im"], speed_px)
                 canvas.paste(card_visual, (cur_x, cur_y), card_visual)
 
-            # Alt Kaydetme Kancası (Saf Beyaz Stüdyo Kutusu) + Altın İlerleme Çubuğu
-            draw.rounded_rectangle(
-                (S(50), S(1765), W - S(50), S(1885)),
-                radius=S(24),
-                fill=(255, 255, 255, 248),
-                outline=(198, 160, 88, 240),
-                width=S(2),
-            )
-            draw.text(
-                (W // 2, S(1805)),
-                "KOLDA • YÜZDE • MANKENDE VE YÜRÜRKEN 6 LÜKS DETAY",
-                fill=(18, 16, 20, 255),
-                font=f_brand,
-                anchor="mm",
-            )
-            bar_w = int((W - S(160)) * min(1.0, (t - 0.35) / (bento_end_sec - 0.35)))
-            draw.rounded_rectangle(
-                (S(80), S(1842), S(80) + max(S(24), bar_w), S(1862)),
-                radius=S(10),
-                fill=(198, 160, 88, 255),
-            )
             frame_rgb = canvas.convert("RGB")
 
             # Bento tamamlandığında (2.30s - 3.45s) Specular Champagne Gold Işık Dalgası
@@ -626,16 +570,12 @@ def render_luxury_graphmotion_reel(
                 shimmer_p = (t - 2.30) / 1.15
                 frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.22 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
 
-        # ACT III (3.60s - 13.50s): 3 Aşamalı İzletme Odaklı Stüdyo Sineması
-        # Sahne 1 (3.60s-6.90s): Kolda, Bilekte ve Yüzde Mikro-Sergi (#1 & #2 Canlı Ürün Kartı)
-        # Sahne 2 (6.90s-10.20s): Manken Üzerinde Bütünsel Lüks Duruş (#3 & #4 Canlı Ürün Kartı)
-        # Sahne 3 (10.20s-13.50s): Yürürken Fark Edilen Zengin Lüks Hareket (#5 & #6 Canlı Ürün Kartı)
+        # ACT III (3.60s - 13.50s): Manken Çıktığı Anda Ekstra Yazı/Sahne Başlığı Olmadan Sadece Altta Ön Plana Çıkan 2 Ürün Kartı!
         else:
             scene_dur = (total_duration - bento_end_sec) / 3.0
             rel_t = t - bento_end_sec
             stage_idx = min(2, int(rel_t // scene_dur))
             stage_local_t = rel_t - (stage_idx * scene_dur)
-            stage_p = min(1.0, max(0.0, stage_local_t / scene_dur))
 
             cur_frame_im = scene_frames[min(stage_idx, len(scene_frames) - 1)]
             if stage_idx < len(scene_frames) - 1 and stage_local_t > (scene_dur - 0.38):
@@ -660,32 +600,13 @@ def render_luxury_graphmotion_reel(
             )
             cropped = optical_sc.convert("RGBA")
 
-            # Üst Stüdyo Reji Kartı + Alt Canlı Ürün Eşleştirme Vitrini (Live On-Body Product HUD)
+            # Manken Sahnelerinde Üst Yazı/Sahne Başlığı YOK — Sadece Altta Ön Plana Çıkarılan 2 Ürün Kartı (Örn. Zen Pırlanta & Vakko Couture)
             ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
             odraw = ImageDraw.Draw(ov)
-            odraw.rounded_rectangle(
-                (S(36), S(48), W - S(36), S(162)),
-                radius=S(24),
-                fill=(255, 255, 255, 242),
-                outline=(198, 160, 88, 240),
-                width=S(2),
-            )
-            odraw.text((W // 2, S(84)), stage_headers[stage_idx], fill=(154, 114, 42, 255), font=f_kicker, anchor="mm")
-            odraw.text((W // 2, S(130)), f"📍 {loc_hud}", fill=(18, 16, 20, 255), font=f_crest, anchor="mm")
 
-            # Alt Canlı Ürün Eşleşmesi Kutusu (Her sahnede o sahnede sergilenen 2 ürünü canlı küçük görseliyle gösterir!)
             hud_spring = min(1.0, _remotion_spring(stage_local_t, damping=14.0, stiffness=120.0, mass=0.8))
-            y_offset_hud = int(round((1.0 - hud_spring) * S(140)))
-            hud_top = H - S(395) + y_offset_hud
-            hud_bot = H - S(95) + y_offset_hud
-
-            odraw.rounded_rectangle(
-                (S(32), hud_top, W - S(32), hud_bot),
-                radius=S(28),
-                fill=(255, 255, 255, 246),
-                outline=(198, 160, 88, 250),
-                width=S(3),
-            )
+            y_offset_hud = int(round((1.0 - hud_spring) * S(130)))
+            hud_top = H - S(285) + y_offset_hud
 
             pair_start = stage_idx * 2
             pair_cards = prepared_cards[pair_start:pair_start + 2]
@@ -694,14 +615,14 @@ def render_luxury_graphmotion_reel(
                 box_w = S(486)
                 box_h = S(182)
                 bx = S(48) + p_i * (box_w + S(12))
-                by = hud_top + S(20)
+                by = hud_top
 
                 odraw.rounded_rectangle(
                     (bx, by, bx + box_w, by + box_h),
-                    radius=S(20),
-                    fill=(248, 244, 236, 255),
-                    outline=(198, 160, 88, 210),
-                    width=S(2),
+                    radius=S(22),
+                    fill=(255, 255, 255, 246),
+                    outline=(198, 160, 88, 240),
+                    width=S(3),
                 )
                 mini_im = p_item["cutout"].copy()
                 mini_im.thumbnail((S(142), S(142)), Image.Resampling.LANCZOS)
@@ -722,21 +643,6 @@ def render_luxury_graphmotion_reel(
                 odraw.text((tx_left, by + S(74)), br_t, fill=(18, 16, 20, 255), font=f_brand, anchor="lm")
                 odraw.text((tx_left, by + S(112)), nm_t, fill=(62, 56, 50, 255), font=f_mini, anchor="lm")
                 odraw.text((tx_left, by + S(148)), pr_t, fill=(142, 104, 36, 255), font=f_crest, anchor="lm")
-
-            odraw.rounded_rectangle(
-                (S(48), hud_bot - S(76), W - S(48), hud_bot - S(16)),
-                radius=S(16),
-                fill=(18, 16, 20, 255),
-                outline=(198, 160, 88, 240),
-                width=S(2),
-            )
-            odraw.text(
-                (W // 2, hud_bot - S(46)),
-                "📌 6 LÜKS ÜRÜNÜN BİREBİR MAĞAZA LİNKLERİ AÇIKLAMADA • KAYDET!",
-                fill=(242, 214, 158, 255),
-                font=f_crest,
-                anchor="mm",
-            )
 
             frame_rgb = Image.alpha_composite(cropped, ov).convert("RGB")
 

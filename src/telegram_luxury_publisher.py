@@ -166,6 +166,15 @@ def deliver_luxury_package_to_telegram(
     out_p = Path(out_dir)
     os.makedirs(out_p, exist_ok=True)
 
+    # 1) Önce videoyu, görselleri ve 6 ürünün tüm detay/mağaza linklerini guzelai.com'a işle
+    guzelai_sync_res: Dict[str, Any] = {}
+    try:
+        from guzelai_web_sync import publish_luxury_to_guzelai
+        guzelai_sync_res = publish_luxury_to_guzelai(concept, out_dir=out_dir)
+        print(f"🌐 [guzelai.com Vitrin & Link Senkronizasyonu]: {guzelai_sync_res}")
+    except Exception as gz_err:
+        print(f"[guzelai.com Senkronizasyon Uyarısı]: {gz_err}")
+
     explanatory_msg = build_explanatory_director_message(concept)
     caption_copy_paste = build_pure_copy_paste_caption(concept)
     links_copy_paste = build_pure_copy_paste_links(concept)
@@ -178,8 +187,6 @@ def deliver_luxury_package_to_telegram(
         encoding="utf-8",
     )
 
-    cover_path = out_p / "hook_cover.jpg"
-    story_path = out_p / "luxury_story_collage.jpg"
     video_path = out_p / "luxury_reel_final.mp4"
     reply_markup_json = json.dumps(build_luxury_inline_keyboard(concept))
 
@@ -187,21 +194,9 @@ def deliver_luxury_package_to_telegram(
     delivery_report: Dict[str, Any] = {}
 
     for cid in chat_ids:
-        res_chat: Dict[str, Any] = {}
+        res_chat: Dict[str, Any] = {"guzelai_published": guzelai_sync_res.get("guzelai_published", False)}
 
-        # 1) 2K Hook Kapak Görseli
-        if cover_path.exists():
-            with open(cover_path, "rb") as cf:
-                r_cov = tg_api("sendPhoto", data={"chat_id": cid}, files={"photo": cf}, token=tok)
-                res_chat["hook_cover"] = r_cov.get("ok", False)
-
-        # 2) 9:16 Story Moodboard Kolajı
-        if story_path.exists():
-            with open(story_path, "rb") as sf:
-                r_st = tg_api("sendPhoto", data={"chat_id": cid}, files={"photo": sf}, token=tok)
-                res_chat["story_collage"] = r_st.get("ok", False)
-
-        # 3) 2K GraphMotion Plus Reels Videosu
+        # Telegram için SADECE 2K Video + Kısa Instagram-SEO Copy-Paste Açıklama gönder (yazıya boğma!)
         if video_path.exists():
             with open(video_path, "rb") as vf:
                 r_vid = tg_api(
@@ -218,19 +213,6 @@ def deliver_luxury_package_to_telegram(
                 )
                 res_chat["video"] = r_vid.get("ok", False)
 
-        # 4) MESAJ 1 — Copy-Paste Harici Açıklayıcı Reji & Kaydetme Oranı Analizi
-        r_exp = tg_api(
-            "sendMessage",
-            data={
-                "chat_id": cid,
-                "text": explanatory_msg[:4000],
-                "disable_web_page_preview": True,
-            },
-            token=tok,
-        )
-        res_chat["msg1_explanatory"] = r_exp.get("ok", False)
-
-        # 5) MESAJ 2 — Saf Instagram Açıklama (Caption) Copy-Paste (Yasal #reklam #işbirliğiyoktur dahil)
         r_cap = tg_api(
             "sendMessage",
             data={
@@ -240,22 +222,10 @@ def deliver_luxury_package_to_telegram(
             },
             token=tok,
         )
-        res_chat["msg2_caption_copypaste"] = r_cap.get("ok", False)
-
-        # 6) MESAJ 3 — Saf Birebir Ürün & İş Birliği Linkleri Copy-Paste (Yasal #reklam #işbirliğiyoktur dahil)
-        r_lnk = tg_api(
-            "sendMessage",
-            data={
-                "chat_id": cid,
-                "text": links_copy_paste[:4000],
-                "disable_web_page_preview": True,
-            },
-            token=tok,
-        )
-        res_chat["msg3_links_copypaste"] = r_lnk.get("ok", False)
+        res_chat["caption_copypaste"] = r_cap.get("ok", False)
 
         delivery_report[cid] = res_chat
-        print(f"✅ [@Luxurylifeaibot Teslimatı Tamamlandı -> {cid}]: {res_chat}")
+        print(f"✅ [@Luxurylifeaibot Sade Teslimat Tamamlandı -> {cid}]: {res_chat}")
 
     # Sıfır-Tekrar Çift Kilidini (output/zero_repeat_ledger.json Yerel + GitHub API) atomik olarak kilitle
     mark_concept_used(concept, sync_github=True)

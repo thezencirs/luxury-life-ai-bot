@@ -1169,44 +1169,30 @@ def build_explanatory_director_message(concept: Dict[str, Any]) -> str:
 
 def build_pure_copy_paste_caption(concept: Dict[str, Any]) -> str:
     """
-    SADECE doğrudan Instagram açıklamasına (caption) kopyalanıp yapıştırılacak SAF METNİ döndürür.
-    Kesinlikle 'Kopyalanacak metin:', '[KOPYALA-YAPIŞTIR]' gibi ekstra sarmalayıcı başlık içermez!
+    Kısa, alakasız dolgu cümlelerinden arındırılmış, Instagram Arama (SEO) uyumlu
+    ve tüm detay/linkleri guzelai.com vitrinine yönlendiren SAF COPY-PASTE açıklama metni.
+    Kesinlikle ekstra sarmalayıcı başlık içermez.
     """
-    va = concept.get("viral_analysis") or VIRAL_RETENTION_FRAMEWORKS.get(concept.get("category", "otel"))
-    title = concept.get("title", "")
-    viral_hook = concept.get("viral_hook", "")
-    loc = concept.get("location_name", "")
+    title = concept.get("title", "").strip()
     items = concept.get("items", {})
     hashtags = concept.get("hashtags", "#luxurylife #oldmoney #quietluxury #reklam #işbirliğiyoktur")
 
-    num_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"]
     item_lines = []
-    for idx, (slot_k, it) in enumerate(items.items()):
-        num_e = num_emojis[idx] if idx < len(num_emojis) else "•"
-        em = it.get("emoji", "✨")
+    for idx, (slot_k, it) in enumerate(items.items(), start=1):
         lbl = it.get("category_label", "Detay")
-        brand = it.get("brand", "Lüks Marka")
+        brand = str(it.get("brand", "Lüks Marka")).split("/")[0].strip()
         name = it.get("name", "Ürün")
-        price = it.get("price", "")
         sku = it.get("sku", "-")
-        item_lines.append(f"{num_e} {em} {lbl}: {brand} — {name} ({price} | Kod: {sku})")
+        item_lines.append(f"• {lbl}: {brand} – {name} (Kod: {sku})")
 
     lines = [
-        f"✨ {title}",
+        f"{title}",
         "",
-        f"{viral_hook}",
+        "Videodaki tüm ürünlerin detaylı incelemesi ve mağaza linkleri: guzelai.com/#kombinler",
         "",
-        f"📍 Mekan & Atmosfer: {loc}",
-        f"🎥 Estetik & Stil Notu: {va['why_saved']}",
-        "",
-        "💎 VİDEODAKİ 6 LÜKS DETAY & ÜRÜN REÇETESİ:",
         *item_lines,
         "",
-        "📌 Bu lüks kurguyu ve ürün kodlarını kaybetmemek için videoyu hemen KAYDET ve birlikte gitmek/denemek istediğin arkadaşına GÖNDER! 👇✨",
-        "💬 Senin favorin kaç numaralı detay oldu? (1-6 arası yoruma yaz, linkini sabitleyelim 👇)",
-        "",
-        TR_LEGAL_CAPTION_NOTICE,
-        "",
+        "İş birliği yoktur, lüks stil önerisidir #reklam #işbirliğiyoktur",
         hashtags,
     ]
     return "\n".join(lines).strip()
