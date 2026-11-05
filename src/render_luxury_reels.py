@@ -516,7 +516,7 @@ def render_luxury_graphmotion_reel(
             "card_im": card_im,
         })
 
-    # Sahne karelerini 2K kalitesinde yükle
+    # Sahne karelerini (Aynı İnsanın 4 Farklı Açıdan 2K Çekimi) yükle
     scene_frames: List[Image.Image] = []
     for fp in concept.get("model_frames", []):
         if os.path.exists(fp):
@@ -524,141 +524,97 @@ def render_luxury_graphmotion_reel(
             im = enhance_luxury_micro_contrast(im, is_cutout=False)
             scene_frames.append(im)
     if not scene_frames:
-        scene_frames = [bg_stage.convert("RGB")] * 3
+        scene_frames = [bg_stage.convert("RGB")] * 4
 
-    hook_cover_rgb = generate_hook_cover_and_story_collage(concept, scene_frames, prepared_cards, out_dir)
+    # Kapak görseli olarak da tablo/kutu karmaşası olmadan doğrudan 1. açıyı (veya en çarpıcı açıyı) kaydet
+    cover_path = os.path.join(out_dir, "hook_cover.jpg")
+    scene_frames[0].save(cover_path, "JPEG", quality=97, subsampling=0)
+    story_path = os.path.join(out_dir, "luxury_story_collage.jpg")
+    scene_frames[-1].save(story_path, "JPEG", quality=96)
 
     total_duration = 13.5
     total_frames = int(total_duration * FPS)
-    bento_end_sec = 3.60
+    num_angles = len(scene_frames)
+    angle_dur = total_duration / float(num_angles)
+
+    # Her açıda altta tek satırlık zarif kapsülde gösterilecek öne çıkan lüks detay
+    angle_highlights: List[str] = concept.get("angle_highlights") or []
+    if not angle_highlights:
+        for p_card in prepared_cards[:num_angles]:
+            it_d = p_card["data"]
+            br = _tr_upper(str(it_d.get("brand", "LUXURY")).split("/")[0].strip())
+            nm = str(it_d.get("name", ""))[:34]
+            angle_highlights.append(f"{br}  •  {nm}")
+
+    f_badge_brand = get_font(22, bold=True)
 
     for f_idx in range(total_frames):
         t = f_idx / float(FPS)
 
-        # ACT I (0.00s - 0.35s): Scroll-Stopper Dergi Kapağı Kancası
-        if t < 0.35:
-            frame_rgb = hook_cover_rgb.copy()
-        # ACT II (0.35s - 3.60s): Saf Beyaz Fotoğraf Stüdyosu 6'lı Bento & Remotion Yay Fiziği (Sadece Ön Plana Çıkan 6 Ürün Kartı)
-        elif t < bento_end_sec:
-            canvas = bg_stage.copy()
+        # 0.00s - 13.50s: SIFIR TABLO / SIFIR KUTU KARMAŞASI!
+        # Baştan sona aynı insanın 4 farklı açıdan (boynundaki pahalı kolye, bilekteki saat/direksiyon, lüks araba, lüks yat) tam ekran 2K sineması!
+        stage_idx = min(num_angles - 1, int(t // angle_dur))
+        stage_local_t = t - (stage_idx * angle_dur)
 
-            # 6 Bento Kartının Remotion Yay Fiziği (_remotion_spring) + 180° Shutter Motion Blur ile Yerleşimi
-            for p_card in prepared_cards:
-                t_in = p_card["t_in"]
-                if t < t_in:
-                    continue
-                dt = t - t_in
-                dt_prev = max(0.0, dt - (1.0 / float(FPS)))
-                sp_now = _remotion_spring(dt, damping=14.0, stiffness=120.0, mass=0.8)
-                sp_prev = _remotion_spring(dt_prev, damping=14.0, stiffness=120.0, mass=0.8)
-
-                tx, ty, bw, bh = p_card["box"]
-                sx, sy = p_card["start_xy"]
-                cur_x = int(round(sx + (tx - sx) * sp_now))
-                cur_y = int(round(sy + (ty - sy) * sp_now))
-                prev_x = int(round(sx + (tx - sx) * sp_prev))
-                prev_y = int(round(sy + (ty - sy) * sp_prev))
-
-                speed_px = math.hypot(cur_x - prev_x, cur_y - prev_y)
-                card_visual = _apply_180deg_shutter_blur(p_card["card_im"], speed_px)
-                canvas.paste(card_visual, (cur_x, cur_y), card_visual)
-
-            frame_rgb = canvas.convert("RGB")
-
-            # Bento tamamlandığında (2.30s - 3.45s) Specular Champagne Gold Işık Dalgası
-            if 2.30 <= t <= 3.45:
-                shimmer_p = (t - 2.30) / 1.15
-                frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.22 * math.sin(shimmer_p * math.pi), sweep_pos=shimmer_p)
-
-        # ACT III (3.60s - 13.50s): Manken Çıktığı Anda Ekstra Yazı/Sahne Başlığı Olmadan Sadece Altta Ön Plana Çıkan 2 Ürün Kartı!
+        cur_frame_im = scene_frames[stage_idx]
+        if stage_idx < num_angles - 1 and stage_local_t > (angle_dur - 0.36):
+            blend_p = ease_in_out_cubic((stage_local_t - (angle_dur - 0.36)) / 0.36)
+            base_sc = Image.blend(cur_frame_im, scene_frames[stage_idx + 1], blend_p)
         else:
-            scene_dur = (total_duration - bento_end_sec) / 3.0
-            rel_t = t - bento_end_sec
-            stage_idx = min(2, int(rel_t // scene_dur))
-            stage_local_t = rel_t - (stage_idx * scene_dur)
+            base_sc = cur_frame_im.copy()
 
-            cur_frame_im = scene_frames[min(stage_idx, len(scene_frames) - 1)]
-            if stage_idx < len(scene_frames) - 1 and stage_local_t > (scene_dur - 0.38):
-                blend_p = ease_in_out_cubic((stage_local_t - (scene_dur - 0.38)) / 0.38)
-                base_sc = Image.blend(cur_frame_im, scene_frames[stage_idx + 1], blend_p)
-            else:
-                base_sc = cur_frame_im.copy()
+        # Her açıda organik sinema kamerası hareketi + boyundaki pırlanta kolye/saat üzerinde gerçek optik yıldız parıltıları + Kodak Portra film dokusu
+        breathed_sc = apply_organic_camera_breathing(
+            base_sc,
+            t=stage_local_t,
+            stage_idx=stage_idx,
+            is_walking=(stage_idx == num_angles - 1),
+        )
+        optical_sc = enhance_frame_with_real_optics(
+            breathed_sc,
+            t=t,
+            frame_idx=f_idx,
+            stage_idx=stage_idx,
+            enable_glints=True,
+        )
+        cropped = optical_sc.convert("RGBA")
 
-            # Sahneye Özel Organik El Kamerası Nefes Alma Salınımı + Gerçek Elmas/Altın Optik Parıltıları + Kodak Portra 35mm Sensör Dokusu
-            breathed_sc = apply_organic_camera_breathing(
-                base_sc,
-                t=stage_local_t,
-                stage_idx=stage_idx,
-                is_walking=(stage_idx == 2),
-            )
-            optical_sc = enhance_frame_with_real_optics(
-                breathed_sc,
-                t=t,
-                frame_idx=f_idx,
-                stage_idx=stage_idx,
-                enable_glints=True,
-            )
-            cropped = optical_sc.convert("RGBA")
+        # Altta tablo/kutu karmaşası OLMADAN sadece o açıda öne çıkan detayı yazan tek, ince, zarif sinematik şerit
+        ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        odraw = ImageDraw.Draw(ov)
 
-            # Manken Sahnelerinde Üst Yazı/Sahne Başlığı YOK — Sadece Altta Ön Plana Çıkarılan 2 Ürün Kartı (Örn. Zen Pırlanta & Vakko Couture)
-            ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-            odraw = ImageDraw.Draw(ov)
+        hud_spring = min(1.0, _remotion_spring(stage_local_t, damping=14.0, stiffness=120.0, mass=0.8))
+        y_offset_hud = int(round((1.0 - hud_spring) * S(80)))
+        pill_y = H - S(128) + y_offset_hud
 
-            hud_spring = min(1.0, _remotion_spring(stage_local_t, damping=14.0, stiffness=120.0, mass=0.8))
-            y_offset_hud = int(round((1.0 - hud_spring) * S(130)))
-            hud_top = H - S(285) + y_offset_hud
+        hl_text = angle_highlights[min(stage_idx, len(angle_highlights) - 1)]
+        _draw_pill(
+            odraw,
+            W // 2,
+            pill_y,
+            hl_text,
+            f_badge_brand,
+            (14, 12, 16, 188),
+            (248, 236, 210, 255),
+            S(34),
+            S(14),
+            S(28),
+            (212, 175, 95, 220),
+            S(2),
+        )
 
-            pair_start = stage_idx * 2
-            pair_cards = prepared_cards[pair_start:pair_start + 2]
-            for p_i, p_item in enumerate(pair_cards):
-                item_num = pair_start + p_i + 1
-                box_w = S(486)
-                box_h = S(182)
-                bx = S(48) + p_i * (box_w + S(12))
-                by = hud_top
+        frame_rgb = Image.alpha_composite(cropped, ov).convert("RGB")
 
-                odraw.rounded_rectangle(
-                    (bx, by, bx + box_w, by + box_h),
-                    radius=S(22),
-                    fill=(255, 255, 255, 246),
-                    outline=(198, 160, 88, 240),
-                    width=S(3),
+        # Açı Değişimlerinde Anamorfik Film Light-Leak (Işık Sızıntısı) Geçiş Efekti
+        for cut_idx in range(1, num_angles):
+            cut_t = cut_idx * angle_dur
+            if (cut_t - 0.18) <= t <= (cut_t + 0.18):
+                lp = (t - (cut_t - 0.18)) / 0.36
+                frame_rgb = _apply_film_light_leak(
+                    frame_rgb,
+                    intensity=0.52 * math.sin(lp * math.pi),
+                    sweep_pos=lp if cut_idx % 2 == 1 else (1.0 - lp),
                 )
-                mini_im = p_item["cutout"].copy()
-                mini_im.thumbnail((S(142), S(142)), Image.Resampling.LANCZOS)
-                ov.paste(
-                    mini_im,
-                    (bx + S(14) + (S(142) - mini_im.width) // 2, by + (box_h - mini_im.height) // 2),
-                    mini_im,
-                )
-
-                it_d = p_item["data"]
-                lbl_t = _tr_upper(f"#{item_num} {it_d.get('category_label', 'LÜKS DETAY')}")[:20]
-                br_t = _tr_upper(str(it_d.get("brand", "LUXURY")).split("/")[0].strip())[:18]
-                nm_t = str(it_d.get("name", ""))[:22]
-                pr_t = f"{it_d.get('price', '')} • {it_d.get('sku', '')}"[:22]
-
-                tx_left = bx + S(168)
-                odraw.text((tx_left, by + S(34)), lbl_t, fill=(154, 114, 42, 255), font=f_mini, anchor="lm")
-                odraw.text((tx_left, by + S(74)), br_t, fill=(18, 16, 20, 255), font=f_brand, anchor="lm")
-                odraw.text((tx_left, by + S(112)), nm_t, fill=(62, 56, 50, 255), font=f_mini, anchor="lm")
-                odraw.text((tx_left, by + S(148)), pr_t, fill=(142, 104, 36, 255), font=f_crest, anchor="lm")
-
-            frame_rgb = Image.alpha_composite(cropped, ov).convert("RGB")
-
-        # Sahne Geçişlerinde Anamorfik Film Light-Leak (Işık Sızıntısı) Geçiş Efekti
-        if 0.28 <= t <= 0.44:
-            lp = (t - 0.28) / 0.16
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.55 * math.sin(lp * math.pi), sweep_pos=lp)
-        elif 3.42 <= t <= 3.82:
-            lp = (t - 3.42) / 0.40
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.72 * math.sin(lp * math.pi), sweep_pos=lp)
-        elif 6.72 <= t <= 7.08:
-            lp = (t - 6.72) / 0.36
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.46 * math.sin(lp * math.pi), sweep_pos=lp)
-        elif 10.02 <= t <= 10.38:
-            lp = (t - 10.02) / 0.36
-            frame_rgb = _apply_film_light_leak(frame_rgb, intensity=0.46 * math.sin(lp * math.pi), sweep_pos=1.0 - lp)
 
         # Üst Kenar 6px Şampanya Altın İzlenme Tutma (Retention) İlerleme Çubuğu
         top_draw = ImageDraw.Draw(frame_rgb)

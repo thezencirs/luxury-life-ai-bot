@@ -74,10 +74,10 @@ def generate_luxury_soundtrack(wav_path: str, duration: float = 13.5, category: 
     lounge_kick = np.sin(two_pi * lounge_kick_freq * base_mod) * lounge_kick_env * np.float32(0.24)
 
     # -------------------------------------------------------------------------
-    # 2. KATMAN: 6 Bento Kartı Girişinde Mekanik Hasselblad Deklanşör + Stüdyo Flaş Pop
-    #    Zamanlar: t = 0.35s, 0.65s, 0.95s, 1.25s, 1.55s, 1.85s
+    # 2. KATMAN: 4 Kamera Açısı Geçişinde Mekanik Hasselblad Deklanşör + Flaş Pop
+    #    Zamanlar: t = 0.08s, 3.38s, 6.75s, 10.12s
     # -------------------------------------------------------------------------
-    bento_card_times = [0.35, 0.65, 0.95, 1.25, 1.55, 1.85]
+    bento_card_times = [0.08, 3.38, 6.75, 10.12]
     shutter_l = np.zeros(n_samples, dtype=np.float32)
     shutter_r = np.zeros(n_samples, dtype=np.float32)
 
@@ -133,7 +133,7 @@ def generate_luxury_soundtrack(wav_path: str, duration: float = 13.5, category: 
     # 3. KATMAN: 3 Stüdyo Sahne Geçişinde (3.60s, 6.90s, 10.20s) Anamorfik Film Light-Leak
     #    & Kristal Parıltı Çanları (Crystal Shimmer Chimes)
     # -------------------------------------------------------------------------
-    scene_cut_times = [3.60, 6.90, 10.20]
+    scene_cut_times = [3.38, 6.75, 10.12]
     shimmer_l = np.zeros(n_samples, dtype=np.float32)
     shimmer_r = np.zeros(n_samples, dtype=np.float32)
 

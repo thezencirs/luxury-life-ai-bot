@@ -951,12 +951,29 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
         return str(abs_frame)
 
     from concurrent.futures import ThreadPoolExecutor
+    preset_frames = [
+        str(BASE_DIR / fp if not os.path.isabs(fp) else Path(fp))
+        for fp in (concept.get("model_frames") or [])
+        if (BASE_DIR / fp if not os.path.isabs(fp) else Path(fp)).exists()
+    ]
+    if preset_frames and not loaded_user_pils:
+        for p_fp in preset_frames:
+            try:
+                loaded_user_pils.append(Image.open(p_fp).convert("RGB"))
+            except Exception:
+                pass
+
     with ThreadPoolExecutor(max_workers=2) as pool:
         cut_futures = [pool.submit(_prepare_single_slot_cutout, (idx, pair)) for idx, pair in enumerate(slot_entries, start=1)]
-        scene_futures = [pool.submit(_prepare_single_scene_frame, s_idx) for s_idx in range(1, 4)]
-        for f in cut_futures:
-            f.result()
-        model_frames = [f.result() for f in scene_futures]
+        if preset_frames:
+            for f in cut_futures:
+                f.result()
+            model_frames = preset_frames
+        else:
+            scene_futures = [pool.submit(_prepare_single_scene_frame, s_idx) for s_idx in range(1, 4)]
+            for f in cut_futures:
+                f.result()
+            model_frames = [f.result() for f in scene_futures]
 
     concept["model_frames"] = model_frames
     return concept

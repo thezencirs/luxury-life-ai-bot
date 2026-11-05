@@ -1,5 +1,5 @@
 {
-  "updated_at": "05.11.2026 14:37",
+  "updated_at": "05.11.2026 17:46",
   "total_stock_videos": 3,
   "stock_videos": [
     {
@@ -23,7 +23,7 @@
           "caption_copypaste": true
         }
       },
-      "created_at": "05.11.2026 14:28"
+      "created_at": "05.11.2026 17:34"
     },
     {
       "id": "stock_araba_monaco_billionaire_garage_01",
@@ -46,7 +46,7 @@
           "caption_copypaste": true
         }
       },
-      "created_at": "05.11.2026 14:33"
+      "created_at": "05.11.2026 17:40"
     },
     {
       "id": "stock_malikane_beverly_hills_billionaire_life_01",
@@ -69,7 +69,7 @@
           "caption_copypaste": true
         }
       },
-      "created_at": "05.11.2026 14:37"
+      "created_at": "05.11.2026 17:46"
     }
   ]
 }
