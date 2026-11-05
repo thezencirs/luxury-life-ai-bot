@@ -699,6 +699,16 @@ try:
 except Exception:
     pass
 
+try:
+    from pinterest_luxury_harvester import get_billionaire_stock_archetypes
+    _existing_arch_ids = {a["id"] for a in LUXURY_MASTER_ARCHETYPES}
+    for _stk_arch in get_billionaire_stock_archetypes():
+        if _stk_arch.get("id") and _stk_arch["id"] not in _existing_arch_ids:
+            LUXURY_MASTER_ARCHETYPES.append(_stk_arch)
+            _existing_arch_ids.add(_stk_arch["id"])
+except Exception:
+    pass
+
 
 def detect_luxury_category(text: str, urls: Optional[List[str]] = None) -> str:
     """

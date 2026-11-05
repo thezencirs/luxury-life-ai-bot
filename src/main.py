@@ -44,6 +44,7 @@ def main() -> None:
     parser.add_argument("--only-if-telegram-pending", action="store_true", help="Sadece Telegram kuyruğunda yeni mesaj varsa üret")
     parser.add_argument("--setup-bot", action="store_true", help="@Luxurylifeaibot profil ve komutlarını yapılandır")
     parser.add_argument("--no-telegram-publish", action="store_true", help="Telegram gönderimini atla (yalnızca yerel test)")
+    parser.add_argument("--stock-batch", type=int, default=0, help="Pinterest & Lüks Portal ilhamlı milyoner stok videolarını (Otel, Araba, Malikane) toplu üret")
     args = parser.parse_args()
 
     out_dir = os.path.dirname(args.output) or "output"
@@ -52,6 +53,16 @@ def main() -> None:
     if args.setup_bot:
         cfg = configure_luxury_bot_profile()
         print(f"🤖 [@Luxurylifeaibot Profil Yapılandırması]: {cfg}")
+
+    if args.stock_batch > 0:
+        from pinterest_luxury_harvester import run_stock_video_batch_production
+        batch_res = run_stock_video_batch_production(
+            limit=args.stock_batch,
+            deliver_telegram=not args.no_telegram_publish,
+            sync_guzelai=True,
+        )
+        print(f"🏦 [Milyoner Stok Video Üretimi Tamamlandı]: {len(batch_res)} adet 2K stok video üretildi.")
+        return
 
     # Önce @Luxurylifeaibot üzerinde bekleyen kullanıcı mesajı / fotoğrafı / ürün linki var mı bak
     custom_concept = pop_next_telegram_custom_concept()

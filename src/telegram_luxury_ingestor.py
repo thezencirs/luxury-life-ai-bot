@@ -750,19 +750,22 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
     ]
 
     items = concept.get("items", {})
-    for idx, (slot_k, it) in enumerate(items.items(), start=1):
+    slot_entries = list(items.items())
+
+    def _prepare_single_slot_cutout(idx_and_pair):
+        idx, (slot_k, it) = idx_and_pair
         rel_cut = f"assets/items/{cid}_{slot_k}.png"
         abs_cut = BASE_DIR / rel_cut
         saved = False
 
-        # 1) Ürün URL'sinden kazınmış gerçek ürün görseli varsa onu kullan
+        # 1) Ürün URL'sinden veya Pinterest/Lüks siteden kazınmış gerçek görsel varsa onu kullan
         img_u = it.get("image_url", "")
-        if img_u and img_u.startswith("http"):
+        if img_u and img_u.startswith("http") and not abs_cut.exists():
             try:
-                ir = requests.get(img_u, timeout=12)
+                ir = requests.get(img_u, headers={"User-Agent": "Mozilla/5.0"}, timeout=12)
                 if ir.status_code == 200 and len(ir.content) > 1500:
                     raw_im = Image.open(BytesIO(ir.content)).convert("RGB")
-                    remove_white_studio_background(raw_im).save(abs_cut, format="PNG")
+                    _make_rounded_gold_photo_card(raw_im, crop_box=None, size=580).save(abs_cut, format="PNG")
                     saved = True
             except Exception:
                 pass
@@ -777,10 +780,10 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
             card_cut.save(abs_cut, format="PNG")
             saved = True
 
-        # 3) Bulut AI Makro Stüdyo Kartı (Kolda / Yüzde / Mankende Makro Ürün Çekimi)
+        # 3) Bulut AI Makro Stüdyo / Lüks Detay Kartı
         if not saved and not abs_cut.exists():
             if use_cloud_ai and os.environ.get("FAST_PROCEDURAL_CARDS", "0") != "1":
-                pack_prompt = it.get("en_packshot") or f"luxury {it.get('name', 'item')} worn on model in pure solid white studio #FFFFFF"
+                pack_prompt = it.get("en_packshot") or f"luxury {it.get('name', 'item')} editorial close-up photography"
                 ai_im = fetch_ai_luxury_image(pack_prompt, width=512, height=512, seed=seed_base + idx * 17)
                 if ai_im is not None:
                     _make_rounded_gold_photo_card(ai_im, crop_box=None, size=580).save(abs_cut, format="PNG")
@@ -789,12 +792,9 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
                 _render_procedural_luxury_packshot(it, idx).save(abs_cut, format="PNG")
 
         it["cutout_path"] = str(abs_cut)
+        return slot_k, str(abs_cut)
 
     # 3 Sahne Karesini (`model_frames`) Hazırla:
-    # Sahne 1 (step1): KOLDA, BİLEKTE VE YÜZDE MİKRO-SERGİ
-    # Sahne 2 (step2): MANKEN ÜZERİNDE BÜTÜNSEL LÜKS DURUŞ
-    # Sahne 3 (step3): YÜRÜRKEN FARK EDİLEN ZENGİN & LÜKS HAREKET
-    model_frames: List[str] = []
     zoom_modes = ["hero_fill", "full", "detail_focus"]
     base_prompt = concept.get("model_prompt_en", "")
     scene_prompts = concept.get("scene_prompts_en") or [
@@ -805,7 +805,7 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
 
     is_scenic_hotel_photo = bool(loaded_user_pils and concept.get("category") == "otel" and "santorini" in cid.lower())
 
-    for s_idx in range(1, 4):
+    def _prepare_single_scene_frame(s_idx: int) -> str:
         rel_frame = f"assets/{cid}_step{s_idx}.jpg"
         abs_frame = BASE_DIR / rel_frame
 
@@ -826,8 +826,6 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
                 )
                 if ai_scene is not None:
                     scene_9_16 = ai_scene.resize((1080, 1920), Image.Resampling.LANCZOS)
-                    # Kullanıcı kendi ürün fotoğrafını gönderdiyse, stüdyo manken sahnesinin sağ üst köşesine
-                    # 18K altın çerçeveli "Gönderilen Ürün Referansı" PiP kartı olarak da işle!
                     if loaded_user_pils:
                         ref_pil = loaded_user_pils[(s_idx - 1) % len(loaded_user_pils)]
                         pip_card = _make_rounded_gold_photo_card(ref_pil, crop_box=None, size=280)
@@ -843,8 +841,15 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
                     _format_user_photo_to_9_16_cinema(chosen_pil, zoom_mode=z_mode).save(abs_frame, format="JPEG", quality=96)
                 else:
                     _render_procedural_luxury_scene(concept, s_idx).save(abs_frame, format="JPEG", quality=95)
+        return str(abs_frame)
 
-        model_frames.append(str(abs_frame))
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=9) as pool:
+        cut_futures = [pool.submit(_prepare_single_slot_cutout, (idx, pair)) for idx, pair in enumerate(slot_entries, start=1)]
+        scene_futures = [pool.submit(_prepare_single_scene_frame, s_idx) for s_idx in range(1, 4)]
+        for f in cut_futures:
+            f.result()
+        model_frames = [f.result() for f in scene_futures]
 
     concept["model_frames"] = model_frames
     return concept

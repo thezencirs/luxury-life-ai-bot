@@ -172,12 +172,13 @@ def _build_luxury_go_html(item: Dict[str, Any]) -> bytes:
     return page.encode("utf-8")
 
 
-def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output") -> Dict[str, Any]:
+def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output", video_path: Optional[str] = None) -> Dict[str, Any]:
     """
     Üretilen 2K Luxury Reels videosunu, görsellerini ve 6 ürünün tüm detay/linklerini
     doğrudan `guzelai.com` (`thezencirs/guzelai`) üzerine işler.
     """
     now_str = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+    cid = str(concept.get("id", "lux_studio_01")).strip()
     cat = concept.get("category", "taki")
     items_dict = concept.get("items", {})
     verified_items: List[Dict[str, Any]] = []
@@ -244,16 +245,21 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output") 
         if _gh_put_file(f"public/pinterest-models/{m_fname}", Path(m_frames[0]).read_bytes(), f"feat(luxury): upload studio model {m_fname} to guzelai.com"):
             model_photo_url = f"/pinterest-models/{m_fname}"
 
-    # Story kolajını yükle
+    # Story kolajını yükle (hem kalıcı id adıyla hem latest olarak)
     collage_file = Path(out_dir) / "luxury_story_collage.jpg"
+    collage_web_url = "/data/latest_kombin_collage.jpg"
     if collage_file.exists():
-        _gh_put_file("public/data/latest_kombin_collage.jpg", collage_file.read_bytes(), f"chore(luxury): update latest collage on guzelai.com")
+        c_bytes = collage_file.read_bytes()
+        _gh_put_file("public/data/latest_kombin_collage.jpg", c_bytes, f"chore(luxury): update latest collage on guzelai.com")
+        if _gh_put_file(f"public/data/collages/{cid}.jpg", c_bytes, f"chore(luxury): archive collage {cid}.jpg on guzelai.com"):
+            collage_web_url = f"/data/collages/{cid}.jpg"
 
     # 2K Video dosyasını guzelai.com için hızlı açılan web-uyumlu (1080p faststart, ~6 MB) boyutta yükle
-    video_file = Path(out_dir) / "luxury_reel_final.mp4"
+    video_file = Path(video_path) if video_path and Path(video_path).exists() else (Path(out_dir) / "luxury_reel_final.mp4")
     video_uploaded = False
+    video_web_url = "/data/latest_kombin_video.mp4"
     if video_file.exists():
-        web_video_file = Path(out_dir) / "luxury_reel_web_guzelai.mp4"
+        web_video_file = Path(out_dir) / f"luxury_reel_web_{cid}.mp4"
         upload_target_file = video_file
         try:
             try:
@@ -281,11 +287,18 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output") 
             pass
 
         if upload_target_file.stat().st_size < 24 * 1024 * 1024:
+            v_bytes = upload_target_file.read_bytes()
             video_uploaded = _gh_put_file(
                 "public/data/latest_kombin_video.mp4",
-                upload_target_file.read_bytes(),
-                f"chore(luxury): publish luxury reel video to guzelai.com ({concept.get('id')})",
+                v_bytes,
+                f"chore(luxury): publish luxury reel video to guzelai.com ({cid})",
             )
+            if _gh_put_file(
+                f"public/data/videos/{cid}.mp4",
+                v_bytes,
+                f"chore(luxury): archive stock video {cid}.mp4 on guzelai.com",
+            ):
+                video_web_url = f"/data/videos/{cid}.mp4"
 
     total_val = sum(float(x.get("price_val", 0.0)) for x in verified_items)
     total_str = f"{total_val:,.0f}₺".replace(",", ".")
@@ -294,11 +307,11 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output") 
     short_seo_caption = build_pure_copy_paste_caption(concept)
 
     new_entry = {
-        "id": concept.get("id", "lux_studio_01"),
-        "archetype_id": concept.get("id", "lux_studio_01"),
+        "id": cid,
+        "archetype_id": cid,
         "gender_group": concept.get("gender_segment", "kadin"),
-        "segment_label": "💎 Luxury Life AI • Saf Beyaz Stüdyo Seçkisi",
-        "collection_badge": f"Luxury Life AI • {concept.get('location_name', 'Saf Beyaz Stüdyo')}",
+        "segment_label": "💎 Luxury Life AI • Milyoner & Lüks Yaşam Vitrin Seçkisi",
+        "collection_badge": f"Luxury Life AI • {concept.get('location_name', 'Lüks Yaşam & Stüdyo')}",
         "categories_included": [x["category"] for x in verified_items],
         "title": concept.get("title", "Lüks Seçki"),
         "viral_hook": concept.get("viral_hook", ""),
@@ -306,9 +319,9 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output") 
         "total_price_str": total_str,
         "total_price_val": total_val,
         "model_photo_url": model_photo_url,
-        "collage_url": "/data/latest_kombin_collage.jpg",
-        "pinterest_collage_url": "/data/latest_kombin_collage.jpg",
-        "video_url": "/data/latest_kombin_video.mp4",
+        "collage_url": collage_web_url,
+        "pinterest_collage_url": collage_web_url,
+        "video_url": video_web_url,
         "telegram_bot_url": "https://t.me/Luxurylifeaibot",
         "telegram_copy_text": short_seo_caption,
         "website_showcase_url": GUZELAI_SHOWCASE_URL,

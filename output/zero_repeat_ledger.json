@@ -2,22 +2,34 @@
   "used_outfit_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
     "lux_taki_vendome_gold_diamond_01",
-    "lux_taki_audemars_emerald_studio_02"
+    "lux_taki_audemars_emerald_studio_02",
+    "stock_otel_como_bosphorus_palace_01",
+    "stock_araba_monaco_billionaire_garage_01",
+    "stock_malikane_beverly_hills_billionaire_life_01"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
     "lux_taki_vendome_gold_diamond_01",
-    "lux_taki_audemars_emerald_studio_02"
+    "lux_taki_audemars_emerald_studio_02",
+    "stock_otel_como_bosphorus_palace_01",
+    "stock_araba_monaco_billionaire_garage_01",
+    "stock_malikane_beverly_hills_billionaire_life_01"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
     "lux_taki_vendome_gold_diamond_01_step1.jpg",
-    "lux_taki_audemars_emerald_studio_02_step1.jpg"
+    "lux_taki_audemars_emerald_studio_02_step1.jpg",
+    "stock_otel_como_bosphorus_palace_01_step1.jpg",
+    "stock_araba_monaco_billionaire_garage_01_step1.jpg",
+    "stock_malikane_beverly_hills_billionaire_life_01_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
     "lux_taki_vendome_gold_diamond_01",
-    "lux_taki_audemars_emerald_studio_02"
+    "lux_taki_audemars_emerald_studio_02",
+    "stock_otel_como_bosphorus_palace_01",
+    "stock_araba_monaco_billionaire_garage_01",
+    "stock_malikane_beverly_hills_billionaire_life_01"
   ],
   "history": [
     {
@@ -37,8 +49,26 @@
       "category": "taki",
       "title": "Haute Horlogerie Beyaz Stüdyo: 18K Pembe Altın Saat, Zümrüt Kesim Pırlanta & Bilek Sanatı ✨",
       "published_at_utc": "2026-11-05T09:13:04.433430Z"
+    },
+    {
+      "id": "stock_otel_como_bosphorus_palace_01",
+      "category": "otel",
+      "title": "Villa d'Este Lake Como & Four Seasons Boğaz: Milyoner Kral Dairesi, Özel Riva Yat & Sonsuzluk Havuzu 🏰🥂",
+      "published_at_utc": "2026-11-05T11:02:42.748242Z"
+    },
+    {
+      "id": "stock_araba_monaco_billionaire_garage_01",
+      "category": "araba",
+      "title": "Monaco Monte Carlo Milyoner Garajı: Rolls-Royce Spectre, Ferrari Roma Spider & Patek Philippe 🏎️💎",
+      "published_at_utc": "2026-11-05T11:07:54.088832Z"
+    },
+    {
+      "id": "stock_malikane_beverly_hills_billionaire_life_01",
+      "category": "otel",
+      "title": "Beverly Hills 120 Milyon $ Cam Malikane, Özel Gulfstream Jet & 85M Süperyat Milyoner Yaşamı 🏛️🛩️",
+      "published_at_utc": "2026-11-05T11:12:13.343351Z"
     }
   ],
   "last_category_index": 0,
-  "last_dispatch_ts": 1793869984.4334304
+  "last_dispatch_ts": 1793877133.3433516
 }
