@@ -1,19 +1,23 @@
 {
   "used_outfit_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
-    "lux_taki_vendome_gold_diamond_01"
+    "lux_taki_vendome_gold_diamond_01",
+    "lux_taki_audemars_emerald_studio_02"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
-    "lux_taki_vendome_gold_diamond_01"
+    "lux_taki_vendome_gold_diamond_01",
+    "lux_taki_audemars_emerald_studio_02"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
-    "lux_taki_vendome_gold_diamond_01_step1.jpg"
+    "lux_taki_vendome_gold_diamond_01_step1.jpg",
+    "lux_taki_audemars_emerald_studio_02_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
-    "lux_taki_vendome_gold_diamond_01"
+    "lux_taki_vendome_gold_diamond_01",
+    "lux_taki_audemars_emerald_studio_02"
   ],
   "history": [
     {
@@ -27,8 +31,14 @@
       "category": "taki",
       "title": "Place Vendôme Işıltısı: 18K Altın & Baget Pırlanta Katmanlama Sanatı ✨",
       "published_at_utc": "2026-11-04T22:57:28.664189Z"
+    },
+    {
+      "id": "lux_taki_audemars_emerald_studio_02",
+      "category": "taki",
+      "title": "Haute Horlogerie Beyaz Stüdyo: 18K Pembe Altın Saat, Zümrüt Kesim Pırlanta & Bilek Sanatı ✨",
+      "published_at_utc": "2026-11-05T08:57:43.380210Z"
     }
   ],
   "last_category_index": 0,
-  "last_dispatch_ts": 1793833048.6641896
+  "last_dispatch_ts": 1793869063.3802109
 }

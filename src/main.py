@@ -22,6 +22,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from agent_team_registry import get_active_agent_team_summary, run_agent_team_pipeline_audit
 from luxury_viral_concepts import select_luxury_concept
 from render_luxury_reels import render_luxury_graphmotion_reel
 from system_health_auditor import audit_luxury_system_health
@@ -63,6 +64,8 @@ def main() -> None:
     print(f"💎 [Seçilen Lüks Konsept]: {concept['id']} ({concept['category'].upper()}) — {concept['title']}")
 
     concept = ensure_concept_assets_ready(concept, use_cloud_ai=True)
+    agent_audit = run_agent_team_pipeline_audit(concept)
+    print(f"🤝 [8-Ajanlı Otonom Lüks Prodüksiyon Takımı Denetimi]: {agent_audit.get('active_agents_count', 8)}/8 Ajan Aktif | Durum: {agent_audit.get('overall_status', 'READY')}")
     render_info = render_luxury_graphmotion_reel(concept, output_mp4=args.output, watermark="@luxurylifeaibot")
     print(f"🎬 [2K GraphMotion Plus Reels Hazır]: {render_info}")
 

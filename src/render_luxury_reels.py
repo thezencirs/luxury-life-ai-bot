@@ -17,6 +17,11 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
 from luxury_audio_engine import generate_luxury_soundtrack
+from realistic_cinema_optics import (
+    apply_organic_camera_breathing,
+    apply_studio_contact_shadow_card,
+    enhance_frame_with_real_optics,
+)
 
 W, H = 1440, 2560
 SCALE = W / 1080.0
@@ -512,6 +517,7 @@ def render_luxury_graphmotion_reel(
         p_info = f"{it_data.get('price', '')}  |  {it_data.get('sku', '-')}"
         cdraw.text((bw // 2, bh - S(62)), b_name, fill=(18, 16, 20, 255), font=f_brand, anchor="mm")
         cdraw.text((bw // 2, bh - S(32)), p_info, fill=(154, 114, 42, 255), font=f_price, anchor="mm")
+        card_im = apply_studio_contact_shadow_card(card_im, elevation_px=S(10))
 
         prepared_cards.append({
             **scfg,
@@ -638,19 +644,21 @@ def render_luxury_graphmotion_reel(
             else:
                 base_sc = cur_frame_im.copy()
 
-            # Sahneye Özel Kamera Dinamiği (Sahne 3'te yürüyüş adımı ritmi + tracking push-in)
-            if stage_idx == 2:
-                zoom = 1.01 + 0.08 * ease_in_out_cubic(stage_p)
-                walk_bob_y = int(round(S(7) * math.sin(stage_local_t * math.pi * 3.4)))
-            else:
-                zoom = 1.00 + 0.055 * ease_in_out_cubic(stage_p)
-                walk_bob_y = 0
-
-            zw, zh = int(W * zoom), int(H * zoom)
-            zoomed = base_sc.resize((zw, zh), Image.Resampling.BILINEAR)
-            left = (zw - W) // 2
-            top = max(0, min(zh - H, (zh - H) // 2 + walk_bob_y))
-            cropped = zoomed.crop((left, top, left + W, top + H)).convert("RGBA")
+            # Sahneye Özel Organik El Kamerası Nefes Alma Salınımı + Gerçek Elmas/Altın Optik Parıltıları + Kodak Portra 35mm Sensör Dokusu
+            breathed_sc = apply_organic_camera_breathing(
+                base_sc,
+                t=stage_local_t,
+                stage_idx=stage_idx,
+                is_walking=(stage_idx == 2),
+            )
+            optical_sc = enhance_frame_with_real_optics(
+                breathed_sc,
+                t=t,
+                frame_idx=f_idx,
+                stage_idx=stage_idx,
+                enable_glints=True,
+            )
+            cropped = optical_sc.convert("RGBA")
 
             # Üst Stüdyo Reji Kartı + Alt Canlı Ürün Eşleştirme Vitrini (Live On-Body Product HUD)
             ov = Image.new("RGBA", (W, H), (0, 0, 0, 0))

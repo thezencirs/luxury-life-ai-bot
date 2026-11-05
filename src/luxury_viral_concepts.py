@@ -689,6 +689,16 @@ LUXURY_MASTER_ARCHETYPES: List[Dict[str, Any]] = [
     },
 ]
 
+try:
+    from luxury_creative_director_matrix import get_extended_studio_archetypes
+    _existing_arch_ids = {a["id"] for a in LUXURY_MASTER_ARCHETYPES}
+    for _ext_arch in get_extended_studio_archetypes():
+        if _ext_arch.get("id") and _ext_arch["id"] not in _existing_arch_ids:
+            LUXURY_MASTER_ARCHETYPES.append(_ext_arch)
+            _existing_arch_ids.add(_ext_arch["id"])
+except Exception:
+    pass
+
 
 def detect_luxury_category(text: str, urls: Optional[List[str]] = None) -> str:
     """
@@ -991,6 +1001,9 @@ def build_3stage_studio_scene_prompts(concept: Dict[str, Any]) -> List[str]:
     2) SAHNE 2 (step2): MANKEN ÜZERİNDE BÜTÜNSEL LÜKS DURUŞ (50mm f/1.4 Mid-Full On-Model Studio Exhibition)
     3) SAHNE 3 (step3): YÜRÜRKEN FARK EDİLEN ZENGİN & LÜKS HAREKET (35mm f/1.4 Full-Body Dynamic Catwalk Walk In-Motion)
     """
+    existing = concept.get("scene_prompts_en")
+    if isinstance(existing, list) and len(existing) >= 3:
+        return list(existing[:3])
     cat = concept.get("category", "taki")
     base_p = concept.get("model_prompt_en", "")
 
