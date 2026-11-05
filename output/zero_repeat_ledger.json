@@ -54,21 +54,27 @@
       "id": "stock_otel_como_bosphorus_palace_01",
       "category": "otel",
       "title": "Villa d'Este Lake Como & Four Seasons Boğaz: Milyoner Kral Dairesi, Özel Riva Yat & Sonsuzluk Havuzu 🏰🥂",
-      "published_at_utc": "2026-11-05T11:02:42.748242Z"
+      "published_at_utc": "2026-11-05T11:28:45.972606Z"
     },
     {
       "id": "stock_araba_monaco_billionaire_garage_01",
       "category": "araba",
       "title": "Monaco Monte Carlo Milyoner Garajı: Rolls-Royce Spectre, Ferrari Roma Spider & Patek Philippe 🏎️💎",
-      "published_at_utc": "2026-11-05T11:07:54.088832Z"
+      "published_at_utc": "2026-11-05T11:33:29.099688Z"
     },
     {
       "id": "stock_malikane_beverly_hills_billionaire_life_01",
       "category": "otel",
       "title": "Beverly Hills 120 Milyon $ Cam Malikane, Özel Gulfstream Jet & 85M Süperyat Milyoner Yaşamı 🏛️🛩️",
       "published_at_utc": "2026-11-05T11:12:13.343351Z"
+    },
+    {
+      "id": "stock_malikane_beverly_hills_billionaire_life_01",
+      "category": "otel",
+      "title": "Beverly Hills 120 Milyon $ Cam Malikane, Özel Gulfstream Jet & 85M Süperyat Milyoner Yaşamı 🏛️🛩️",
+      "published_at_utc": "2026-11-05T11:37:55.588656Z"
     }
   ],
   "last_category_index": 0,
-  "last_dispatch_ts": 1793877133.3433516
+  "last_dispatch_ts": 1793878675.5886562
 }

@@ -619,22 +619,125 @@ def _call_hf_flux_space(space_base: str, payload_data: list, timeout_sec: int = 
     return None
 
 
+def _extract_real_luxury_search_query(prompt: str) -> str:
+    p = (prompt or "").lower()
+    keyword_map = [
+        (("riva", "aquarama", "mahogany speedboat", "wooden speedboat"), "Riva Aquarama"),
+        (("villa d'este", "balcony", "caviar"), "Villa d Este Cernobbio Lake Como"),
+        (("infinity pool terrace", "bosphorus", "amalfi"), "Villa del Balbianello Lake Como"),
+        (("rolex", "day-date", "fluted bezel"), "Rolex Day-Date"),
+        (("patek philippe", "nautilus"), "Patek Philippe watch"),
+        (("audemars piguet", "royal oak", "tourbillon"), "Audemars Piguet Royal Oak"),
+        (("ferrari roma", "ferrari"), "Ferrari Roma"),
+        (("rolls-royce", "spectre", "spirit of ecstasy", "hotel de paris"), "Rolls-Royce Spectre Monaco"),
+        (("grande corniche", "coastal cliff", "cruising"), "Ferrari Monaco Monte Carlo"),
+        (("gulfstream", "private jet", "jet cabin"), "Gulfstream cabin"),
+        (("superyacht", "benetti", "85-meter", "aft teak deck"), "Superyacht Monaco"),
+        (("beverly hills", "bel-air", "glass mansion", "cantilevered infinity"), "Beverly Hills mansion"),
+        (("chandelier", "baccarat"), "Chandelier palace"),
+        (("penthouse", "minotti", "fendi casa", "calacatta marble coffee"), "Luxury penthouse interior"),
+        (("suitcase", "luggage", "horizon 55", "louis vuitton"), "Louis Vuitton trunk"),
+        (("sunglasses", "aviator", "cartier eyewear", "tom ford"), "Aviator sunglasses luxury"),
+        (("cashmere blazer", "brioni", "tailored blazer"), "Bespoke suit jacket"),
+        (("weekender", "leather travel bag", "hermes"), "Hermes leather bag"),
+        (("linen resort", "loro piana", "ivory silk"), "Lake Como villa garden"),
+    ]
+    for triggers, q_str in keyword_map:
+        if any(t in p for t in triggers):
+            return q_str
+    if "car" in p or "monaco" in p:
+        return "Rolls-Royce Spectre Monaco"
+    if "hotel" in p or "terrace" in p or "pool" in p:
+        return "Villa del Balbianello Lake Como"
+    if "watch" in p or "wrist" in p:
+        return "Rolex Day-Date"
+    return "Superyacht Monaco"
+
+
+def fetch_real_wikimedia_luxury_photo(prompt: str, width: int = 768, height: int = 1024, seed: int = 42) -> Optional[Image.Image]:
+    """
+    Küresel lüks fotoğraf arşivinden (Wikimedia Commons 4K File API) gerçek saray oteli,
+    Riva yat, Ferrari Roma, Rolls-Royce Spectre, Rolex/Patek/AP saat, özel jet ve süperyat
+    fotoğraflarını indirip sinematik (width, height) kadraja işler.
+    """
+    q = _extract_real_luxury_search_query(prompt)
+    hdrs = {"User-Agent": "LuxuryLifeAI/2.0 (https://guzelai.com; contact@guzelai.com)"}
+    for search_q in (q, "Villa del Balbianello Lake Como", "Rolls-Royce Spectre Monaco"):
+        try:
+            r = requests.get(
+                "https://commons.wikimedia.org/w/api.php",
+                params={
+                    "action": "query",
+                    "generator": "search",
+                    "gsrnamespace": 6,
+                    "gsrsearch": search_q,
+                    "gsrlimit": 10,
+                    "prop": "imageinfo",
+                    "iiprop": "url",
+                    "iiurlwidth": 1440,
+                    "format": "json",
+                },
+                headers=hdrs,
+                timeout=12,
+            )
+            if r.status_code != 200:
+                continue
+            pages = r.json().get("query", {}).get("pages", {})
+            urls: List[str] = []
+            for p_obj in pages.values():
+                iinfo = p_obj.get("imageinfo") or []
+                if iinfo:
+                    u = iinfo[0].get("thumburl") or iinfo[0].get("url") or ""
+                    if u and not u.lower().endswith((".svg", ".gif", ".tif", ".tiff", ".pdf")):
+                        urls.append(u)
+            if not urls:
+                continue
+            chosen_idx = abs(seed) % len(urls)
+            for attempt in range(min(3, len(urls))):
+                img_u = urls[(chosen_idx + attempt) % len(urls)]
+                ir = requests.get(img_u, headers=hdrs, timeout=15)
+                if ir.status_code == 200 and len(ir.content) > 8000:
+                    raw = Image.open(BytesIO(ir.content)).convert("RGB")
+                    # Aspect-fill center crop to (width, height)
+                    rw, rh = raw.size
+                    scale = max(width / float(rw), height / float(rh))
+                    nw, nh = max(width, int(rw * scale)), max(height, int(rh * scale))
+                    resized = raw.resize((nw, nh), Image.Resampling.LANCZOS)
+                    left = (nw - width) // 2
+                    top = (nh - height) // 2
+                    cropped = resized.crop((left, top, left + width, top + height))
+                    cropped = ImageEnhance.Contrast(cropped).enhance(1.07)
+                    cropped = ImageEnhance.Color(cropped).enhance(1.08)
+                    return cropped
+        except Exception:
+            continue
+    return None
+
+
 def fetch_ai_luxury_image(prompt: str, width: int = 768, height: int = 1024, seed: int = 42) -> Optional[Image.Image]:
-    studio_prompt = (
-        f"{prompt}, shot inside a bright pure solid white seamless cyclorama photography studio #FFFFFF "
-        f"with professional Profoto softbox lighting, 100% photorealistic real human and luxury photography, zero CGI"
+    p_low = (prompt or "").lower()
+    is_real_world_location = any(
+        loc_k in p_low
+        for loc_k in ("lake como", "monaco", "monte carlo", "beverly hills", "bel-air", "gulfstream", "superyacht", "bosphorus", "riva", "ferrari", "rolls-royce", "architectural digest")
     )
+    if is_real_world_location:
+        studio_prompt = f"{prompt}, 100% photorealistic 8k luxury editorial photography shot on Hasselblad H6D-100c, natural golden hour lighting, zero CGI"
+    else:
+        studio_prompt = (
+            f"{prompt}, shot inside a bright pure solid white seamless cyclorama photography studio #FFFFFF "
+            f"with professional Profoto softbox lighting, 100% photorealistic real human and luxury photography, zero CGI"
+        )
     w = max(512, min(1024, (width // 64) * 64))
     h = max(512, min(1344, (height // 64) * 64))
     safe_seed = int(abs(seed) % 2147483000)
 
     providers = [
-        ("https://black-forest-labs-flux-1-schnell.hf.space", [studio_prompt, safe_seed, False, w, h, 4]),
         ("https://multimodalart-flux-1-merged.hf.space", [studio_prompt, safe_seed, False, w, h, 3.5, 6]),
+        ("https://black-forest-labs-flux-1-schnell.hf.space", [studio_prompt, safe_seed, False, w, h, 4]),
     ]
     for space_url, p_data in providers:
         try:
-            img = _call_hf_flux_space(space_url, p_data, timeout_sec=65)
+            img = _call_hf_flux_space(space_url, p_data, timeout_sec=55)
             if img is not None:
                 if (img.width, img.height) != (width, height):
                     img = img.resize((width, height), Image.Resampling.LANCZOS)
@@ -642,10 +745,14 @@ def fetch_ai_luxury_image(prompt: str, width: int = 768, height: int = 1024, see
         except Exception:
             pass
 
+    real_photo = fetch_real_wikimedia_luxury_photo(prompt, width=width, height=height, seed=safe_seed)
+    if real_photo is not None:
+        return real_photo
+
     encoded = quote(studio_prompt)
     url = f"https://image.pollinations.ai/prompt/{encoded}?width={width}&height={height}&seed={safe_seed}&model=flux-realism&nologo=true"
     try:
-        r = requests.get(url, timeout=22)
+        r = requests.get(url, timeout=18)
         if r.status_code == 200 and len(r.content) > 4000:
             return Image.open(BytesIO(r.content)).convert("RGB")
     except Exception:
@@ -844,7 +951,7 @@ def ensure_concept_assets_ready(concept: Dict[str, Any], use_cloud_ai: bool = Tr
         return str(abs_frame)
 
     from concurrent.futures import ThreadPoolExecutor
-    with ThreadPoolExecutor(max_workers=9) as pool:
+    with ThreadPoolExecutor(max_workers=2) as pool:
         cut_futures = [pool.submit(_prepare_single_slot_cutout, (idx, pair)) for idx, pair in enumerate(slot_entries, start=1)]
         scene_futures = [pool.submit(_prepare_single_scene_frame, s_idx) for s_idx in range(1, 4)]
         for f in cut_futures:
