@@ -1,11 +1,6 @@
-name: "💎 Luxury Life AI (@Luxurylifeaibot) — 2K GraphMotion Plus Reels & 5-10 Dk Telegram Otomasyonu"
+name: "💎 Luxury Life AI — 2K GraphMotion Plus Reels Otomasyonu"
 
 on:
-  schedule:
-    # Her 5 dakikada bir @Luxurylifeaibot Telegram kuyruğunu kontrol eder; kullanıcı fotoğraf/video/ürün linki
-    # veya komut gönderdiyse anında 2K GraphMotion Plus Reels üretip 5-10 dk içinde Telegram'a teslim eder.
-    # Ayrıca Türkiye saatiyle 10:00 (07:00 UTC), 15:00 (12:00 UTC) ve 20:00 (17:00 UTC) Prime-Time kuşaklarında otomatik üretir.
-    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       category:
@@ -21,7 +16,7 @@ on:
           - otel
           - araba
       force_run:
-        description: "Telegram kuyruğu boş olsa bile hemen yeni 2K Reels üret (1 = Evet, 0 = Sadece Kuyruk Varsa)"
+        description: "Hemen yeni 2K Reels üret (1 = Evet, 0 = Sadece Kuyruk Varsa)"
         required: false
         default: "1"
 
@@ -59,66 +54,13 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: "💎 @Luxurylifeaibot Kuyruk Analizi, 2K GraphMotion Plus Reels Üretimi & 3-Mesajlı Telegram Teslimatı"
+      - name: "💎 2K GraphMotion Plus Reels Üretimi & Telegram Teslimatı"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '8874878004' }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           LUXURY_CATEGORY: ${{ github.event.inputs.category || 'otomatik' }}
           FORCE_RUN: ${{ github.event.inputs.force_run || '0' }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          HOUR_UTC=$(date -u +%H)
-          MIN_NUM=$((10#$(date -u +%M)))
-          IS_PRIMETIME=0
-          if [ "$MIN_NUM" -lt 5 ] && { [ "$HOUR_UTC" = "07" ] || [ "$HOUR_UTC" = "12" ] || [ "$HOUR_UTC" = "17" ]; }; then
-            IS_PRIMETIME=1
-          fi
-
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$FORCE_RUN" = "1" ] || [ "$IS_PRIMETIME" = "1" ]; then
-            python src/main.py --category "$LUXURY_CATEGORY" --output output/luxury_reel_final.mp4 --setup-bot
-          else
-            python src/main.py --category "$LUXURY_CATEGORY" --output output/luxury_reel_final.mp4 --only-if-telegram-pending
-          fi
-
-      - name: "📤 Üretilen 2K Reels Videosu, Kapak, Sistem Sağlığı Raporu ve Copy-Paste Metinlerini Artifact Olarak Kaydet"
-        if: always() && hashFiles('output/luxury_reel_final.mp4') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: luxurylifeai-2k-reel-${{ github.run_number }}
-          path: |
-            output/luxury_reel_final.mp4
-            output/hook_cover.jpg
-            output/luxury_story_collage.jpg
-            output/1_explanatory_analysis.txt
-            output/2_instagram_caption_copypaste.txt
-            output/3_product_links_copypaste.txt
-            output/luxury_concept_metadata.json
-            output/zero_repeat_ledger.json
-            output/system_health_report.json
-            output/system_health_report.md
-          retention-days: 7
-
-      - name: "💾 Telegram Abonelerini, Sistem Sağlığı Raporunu, Kuyruğu ve Lüks Defteri Depoya Kaydet"
-        if: always()
-        shell: bash
-        run: |
-          git config user.name "LuxuryLifeAIBot"
-          git config user.email "bot@luxurylifeai.com"
-          for f in \
-            assets/telegram_subscribers.json \
-            output/zero_repeat_ledger.json \
-            output/luxury_zero_repeat_ledger.json \
-            output/telegram_pending_queue.json \
-            output/telegram_luxury_queue.json \
-            output/system_health_report.json \
-            output/system_health_report.md; do
-            if [ -e "$f" ]; then
-              git add -f "$f" || true
-            fi
-          done
-          if ! git diff --staged --quiet; then
-            git commit -m "chore(luxurylifeai): sync telegram queue, health report and zero-repeat ledger [skip ci]" || true
-            git pull --rebase -X theirs origin main || true
-            git push origin main || true
-          fi
+          python src/main.py --category "$LUXURY_CATEGORY" --output output/luxury_reel_final.mp4

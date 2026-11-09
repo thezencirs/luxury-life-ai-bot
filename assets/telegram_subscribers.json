@@ -1,19 +1,4 @@
 {
-  "chats": {
-    "8874878004": {
-      "id": 8874878004,
-      "type": "private",
-      "title": "Güneş",
-      "username": "",
-      "updated_at": "2026-11-04T14:25:25"
-    },
-    "995164733": {
-      "id": 995164733,
-      "type": "private",
-      "title": "matrixaii",
-      "username": "matrixaii",
-      "updated_at": "2026-11-04T21:11:56"
-    }
-  },
-  "last_update_id": 562020115
+  "last_update_id": 0,
+  "chats": {}
 }
