@@ -3,7 +3,7 @@
   "max_possible_score": 100,
   "health_percentage": "%100",
   "status": "EXCELLENT (TAM SAĞLIKLI)",
-  "timestamp_utc": "2026-11-04T20:03:41.133522Z",
+  "timestamp_utc": "2026-11-05T09:13:05.370341Z",
   "checks": {
     "telegram_bot_api": {
       "score": 20,
@@ -16,7 +16,7 @@
       "max_score": 20,
       "status": "HEALTHY",
       "resolution": "1440x2560 (2K QHD+ @ 30 FPS)",
-      "video_size_kb": 9937.0
+      "video_size_kb": 44598.3
     },
     "three_message_legal_compliance": {
       "score": 20,

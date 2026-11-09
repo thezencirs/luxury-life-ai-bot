@@ -31,7 +31,9 @@ def tg_api(
     files: Optional[Dict[str, Any]] = None,
     token: Optional[str] = None,
 ) -> Dict[str, Any]:
-    tok = token or get_bot_token()
+    tok = (token or get_bot_token()).strip()
+    if not tok:
+        return {"ok": False, "error": "Telegram bot baglantisi devre disi (yeni bot bekleniyor)."}
     url = f"https://api.telegram.org/bot{tok}/{method}"
     try:
         if files:
@@ -126,7 +128,7 @@ def build_luxury_inline_keyboard(concept: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def load_target_chat_ids(concept: Dict[str, Any]) -> List[str]:
-    chat_ids: List[str] = ["995164733", "8874878004"]
+    chat_ids: List[str] = []
     env_cid = os.environ.get("TELEGRAM_CHAT_ID", DEFAULT_ADMIN_CHAT_ID).strip()
     for part in env_cid.replace(";", ",").split(","):
         p = part.strip()

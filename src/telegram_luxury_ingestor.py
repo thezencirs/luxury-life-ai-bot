@@ -29,8 +29,8 @@ from luxury_viral_concepts import (
     resolve_smart_collaboration_url,
 )
 
-DEFAULT_BOT_TOKEN = "9244899175:AAGEkK0KD_sMxMB_wJaS_4Mlrjh8IGLgr7c"
-DEFAULT_ADMIN_CHAT_ID = "8874878004"
+DEFAULT_BOT_TOKEN = ""
+DEFAULT_ADMIN_CHAT_ID = ""
 GITHUB_REPO_SLUG = os.environ.get("LUXURY_GITHUB_REPO", "thezencirs/luxury-life-ai-bot")
 
 TG_QUEUE_PATH = BASE_DIR / "output" / "telegram_luxury_queue.json"
@@ -44,6 +44,8 @@ def get_bot_token() -> str:
 
 def tg_call(method: str, payload: Optional[dict] = None, timeout: int = 20) -> dict:
     tok = get_bot_token()
+    if not tok:
+        return {"ok": False, "error": "Telegram bot baglantisi devre disi (yeni bot bekleniyor)."}
     try:
         r = requests.post(
             f"https://api.telegram.org/bot{tok}/{method}",
