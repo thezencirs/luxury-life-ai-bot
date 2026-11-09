@@ -1,6 +1,6 @@
 """
-Luxury Life AI (@Luxurylifeaibot) — Telegram Bot Yapılandırıcı & 3-Mesajlı (Açıklayıcı Analiz +
-Saf Açıklama Copy-Paste + Saf Ürün Linkleri Copy-Paste) 2K Reels Teslim Motoru
+Sesli Lüks Hayatlar (@Sesliluksbot) — Telegram Bot Yapılandırıcı, guzelai.com + @guzelaicom Pinterest
+Senkronizasyonu ve Sade 2K Reels + Kısa Instagram-SEO Copy-Paste Teslim Motoru
 """
 import json
 import os
@@ -46,18 +46,18 @@ def tg_api(
 
 
 def configure_luxury_bot_profile(token: Optional[str] = None) -> Dict[str, Any]:
-    """@Luxurylifeaibot adını, açıklamasını ve hızlı lüks üretim komutlarını Telegram'a kaydeder."""
+    """@Sesliluksbot adını, açıklamasını ve hızlı lüks üretim komutlarını Telegram'a kaydeder."""
     tok = token or get_bot_token()
     results = {}
     results["setMyName"] = tg_api(
         "setMyName",
-        {"name": "Luxury Life AI • 2K Reels & Stil (@luxurylifeaibot)"},
+        {"name": "Sesli Lüks Hayatlar • 2K Reels (@Sesliluksbot)"},
         token=tok,
     )
     results["setMyShortDescription"] = tg_api(
         "setMyShortDescription",
         {
-            "short_description": "💎 Takı, Makyaj, Old Money Kombin, Lüks Otel & Supercar 2K GraphMotion Reels Otomasyonu"
+            "short_description": "💎 Çok Açılı Milyoner Yaşam, Pırlanta, Saat, Otel & Supercar 2K Reels • guzelai.com & @guzelaicom"
         },
         token=tok,
     )
@@ -65,10 +65,10 @@ def configure_luxury_bot_profile(token: Optional[str] = None) -> Dict[str, Any]:
         "setMyDescription",
         {
             "description": (
-                "💎 Luxury Life AI (@luxurylifeaibot) — 2K Lüks Yaşam Instagram Reels Otomasyonu\n\n"
-                "• 📸 Bota takı, makyaj, kombin, otel veya lüks araba fotoğrafı, videosu ya da ürün linki gönderin.\n"
-                "• 🎬 Gönderdiğiniz tüm görüntü ve yazıları otomatik tetikleyici olarak kullanır; yazım hatalarını düzeltir, doğru açı ve mekanla 2K GraphMotion Plus Reels hazırlar.\n"
-                "• 📋 1) Açıklayıcı Analiz, 2) Saf Copy-Paste Açıklama (#reklam #işbirliğiyoktur) ve 3) Saf Copy-Paste Ürün Linkleri sunar."
+                "💎 Sesli Lüks Hayatlar (@Sesliluksbot) — 2K Lüks & Milyoner Yaşam Reels Otomasyonu\n\n"
+                "• 🌐 Tüm videolar, çok açılı fotoğraflar ve doğrulanmış mağaza linkleri: https://guzelai.com/#kombinler\n"
+                "• 📌 Pinterest Vitrini: https://tr.pinterest.com/guzelaicom/\n"
+                "• 🎬 Bota fotoğraf, video veya ürün linki gönderin; çok açılı tam ekran 2K Reels videonuzu ve saf Instagram-SEO copy-paste açıklamanızı anında teslim alın."
             )
         },
         token=tok,
@@ -77,13 +77,14 @@ def configure_luxury_bot_profile(token: Optional[str] = None) -> Dict[str, Any]:
         "setMyCommands",
         {
             "commands": [
-                {"command": "start", "description": "Komuta merkezini ve kullanım rehberini aç"},
+                {"command": "start", "description": "Hazır 2K milyoner stok videolarını ve vitrini al"},
+                {"command": "stok", "description": "Son üretilen çok açılı 2K lüks stok videolarını gönder"},
                 {"command": "uret", "description": "Sıradaki lüks kategoride anında 2K Reels üret"},
-                {"command": "taki", "description": "💎 Mücevher & Saat (Place Vendôme) 2K Reels üret"},
-                {"command": "makyaj", "description": "💄 Lüks Makyaj & Parfüm (Paris Vanity) 2K Reels üret"},
-                {"command": "kombin", "description": "🧥 Old Money Kombin (Milano) 2K Reels üret"},
-                {"command": "otel", "description": "🏨 Ultra Lüks Otel & Tatil (Boğaz/Como) 2K Reels üret"},
-                {"command": "araba", "description": "🏎️ Süper Spor Otomobil (Monaco GP) 2K Reels üret"},
+                {"command": "taki", "description": "💎 Mücevher & Saat 2K Reels üret"},
+                {"command": "makyaj", "description": "💄 Lüks Makyaj & Parfüm 2K Reels üret"},
+                {"command": "kombin", "description": "🧥 Old Money Kombin 2K Reels üret"},
+                {"command": "otel", "description": "🏨 Ultra Lüks Otel & Yat 2K Reels üret"},
+                {"command": "araba", "description": "🏎️ Süper Spor Otomobil 2K Reels üret"},
             ]
         },
         token=tok,
@@ -129,7 +130,7 @@ def build_luxury_inline_keyboard(concept: Dict[str, Any]) -> Dict[str, Any]:
 
 def load_target_chat_ids(concept: Dict[str, Any]) -> List[str]:
     chat_ids: List[str] = []
-    env_cid = os.environ.get("TELEGRAM_CHAT_ID", DEFAULT_ADMIN_CHAT_ID).strip()
+    env_cid = os.environ.get("TELEGRAM_CHAT_ID", f"{DEFAULT_ADMIN_CHAT_ID},995164733").strip()
     for part in env_cid.replace(";", ",").split(","):
         p = part.strip()
         if p and p not in chat_ids:
@@ -138,6 +139,19 @@ def load_target_chat_ids(concept: Dict[str, Any]) -> List[str]:
     req_cid = str(concept.get("requester_chat_id", "")).strip()
     if req_cid and req_cid not in chat_ids:
         chat_ids.append(req_cid)
+
+    # @Sesliluksbot getUpdates üzerinden yeni yazan/başlatan kullanıcıları anında keşfet
+    try:
+        upd_res = tg_api("getUpdates", {"timeout": 1})
+        if upd_res.get("ok"):
+            for u in upd_res.get("result") or []:
+                msg = u.get("message") or u.get("channel_post") or (u.get("callback_query") or {}).get("message") or {}
+                c_obj = msg.get("chat") or {}
+                c_id = str(c_obj.get("id", "")).strip()
+                if c_id and c_id not in chat_ids:
+                    chat_ids.append(c_id)
+    except Exception:
+        pass
 
     if SUBSCRIBERS_FILE.exists():
         try:
@@ -154,28 +168,38 @@ def deliver_luxury_package_to_telegram(
     concept: Dict[str, Any],
     out_dir: str = "output",
     token: Optional[str] = None,
+    video_path: Optional[str] = None,
+    sync_web_and_pinterest: bool = True,
 ) -> Dict[str, Any]:
     """
-    Hazırlanan 2K Lüks Paketi @Luxurylifeaibot üzerinden kullanıcıya gönderir:
-    - Görsel 1: 2K Viral Hook Kapak Fotoğrafı (hook_cover.jpg)
-    - Görsel 2: 9:16 Lüks Story & Moodboard Kolajı (luxury_story_collage.jpg)
-    - Video: 2K GraphMotion Plus Reels Videosu (luxury_reel_final.mp4) + Mağaza Link Butonları
-    - Mesaj 1 (Açıklayıcı Yazı — Copy-Paste Harici): Viral kaydetme oranı analizi, kamera açısı, mekan, model rejisi ve kullanım rehberi
-    - Mesaj 2 (Açıklama Copy-Paste): %100 saf Instagram Reels açıklaması (#reklam #işbirliğiyoktur dahil)
-    - Mesaj 3 (Linkler Copy-Paste): %100 saf birebir ürün ve iş birliği linkleri (#reklam #işbirliğiyoktur dahil)
+    Hazırlanan 2K Lüks Paketi:
+    1) `guzelai.com` (`https://guzelai.com/#kombinler` + `/go/{sku}`) üzerine işler,
+    2) `@guzelaicom` Pinterest hesabına (`https://tr.pinterest.com/guzelaicom/` + `pinterest-rss.xml`) yayınlar,
+    3) `@Sesliluksbot` üzerinden SADECE 2K Video + Kısa Instagram-SEO Copy-Paste Açıklama olarak teslim eder.
     """
     tok = token or get_bot_token()
     out_p = Path(out_dir)
     os.makedirs(out_p, exist_ok=True)
 
-    # 1) Önce videoyu, görselleri ve 6 ürünün tüm detay/mağaza linklerini guzelai.com'a işle
+    resolved_vid_p = Path(video_path) if video_path and Path(video_path).exists() else (out_p / "luxury_reel_final.mp4")
+
+    # 1) Önce videoyu, çok açılı görselleri ve 6 ürünün tüm detay/mağaza linklerini guzelai.com'a ve @guzelaicom Pinterest'e işle
     guzelai_sync_res: Dict[str, Any] = {}
-    try:
-        from guzelai_web_sync import publish_luxury_to_guzelai
-        guzelai_sync_res = publish_luxury_to_guzelai(concept, out_dir=out_dir)
-        print(f"🌐 [guzelai.com Vitrin & Link Senkronizasyonu]: {guzelai_sync_res}")
-    except Exception as gz_err:
-        print(f"[guzelai.com Senkronizasyon Uyarısı]: {gz_err}")
+    pinterest_sync_res: Dict[str, Any] = {}
+    if sync_web_and_pinterest:
+        try:
+            from guzelai_web_sync import publish_luxury_to_guzelai
+            guzelai_sync_res = publish_luxury_to_guzelai(concept, out_dir=out_dir, video_path=str(resolved_vid_p))
+            print(f"🌐 [guzelai.com Vitrin & Link Senkronizasyonu]: {guzelai_sync_res}")
+        except Exception as gz_err:
+            print(f"[guzelai.com Senkronizasyon Uyarısı]: {gz_err}")
+
+        try:
+            from pinterest_luxury_publisher import publish_luxury_to_pinterest
+            pinterest_sync_res = publish_luxury_to_pinterest(concept, out_dir=out_dir)
+            print(f"📌 [@guzelaicom Pinterest Yayın Durumu]: {pinterest_sync_res.get('status')} -> {pinterest_sync_res.get('pin_title', concept.get('title'))}")
+        except Exception as pin_err:
+            print(f"[@guzelaicom Pinterest Uyarısı]: {pin_err}")
 
     explanatory_msg = build_explanatory_director_message(concept)
     caption_copy_paste = build_pure_copy_paste_caption(concept)
@@ -189,18 +213,20 @@ def deliver_luxury_package_to_telegram(
         encoding="utf-8",
     )
 
-    video_path = out_p / "luxury_reel_final.mp4"
     reply_markup_json = json.dumps(build_luxury_inline_keyboard(concept))
 
     chat_ids = load_target_chat_ids(concept)
     delivery_report: Dict[str, Any] = {}
 
     for cid in chat_ids:
-        res_chat: Dict[str, Any] = {"guzelai_published": guzelai_sync_res.get("guzelai_published", False)}
+        res_chat: Dict[str, Any] = {
+            "guzelai_published": guzelai_sync_res.get("guzelai_published", False),
+            "pinterest_status": pinterest_sync_res.get("status", "ready"),
+        }
 
-        # Telegram için SADECE 2K Video + Kısa Instagram-SEO Copy-Paste Açıklama gönder (yazıya boğma!)
-        if video_path.exists():
-            with open(video_path, "rb") as vf:
+        # Telegram (@Sesliluksbot) için SADECE 2K Video + Kısa Instagram-SEO Copy-Paste Açıklama gönder (yazıya boğma!)
+        if resolved_vid_p.exists():
+            with open(resolved_vid_p, "rb") as vf:
                 r_vid = tg_api(
                     "sendVideo",
                     data={
@@ -214,6 +240,8 @@ def deliver_luxury_package_to_telegram(
                     token=tok,
                 )
                 res_chat["video"] = r_vid.get("ok", False)
+                if not r_vid.get("ok"):
+                    res_chat["tg_note"] = r_vid.get("description", "")
 
         r_cap = tg_api(
             "sendMessage",
@@ -227,7 +255,7 @@ def deliver_luxury_package_to_telegram(
         res_chat["caption_copypaste"] = r_cap.get("ok", False)
 
         delivery_report[cid] = res_chat
-        print(f"✅ [@Luxurylifeaibot Sade Teslimat Tamamlandı -> {cid}]: {res_chat}")
+        print(f"✅ [@Sesliluksbot Teslimat Durumu -> {cid}]: {res_chat}")
 
     # Sıfır-Tekrar Çift Kilidini (output/zero_repeat_ledger.json Yerel + GitHub API) atomik olarak kilitle
     mark_concept_used(concept, sync_github=True)

@@ -1,6 +1,6 @@
-# 💎 Luxury Life AI (`@Luxurylifeaibot`) — 2K GraphMotion Plus Instagram Reels & Telegram Otomasyonu
+# 💎 Sesli Lüks Hayatlar (`@Sesliluksbot`) — Çok Açılı 2K Lüks Sinema Reels, `guzelai.com` & `@guzelaicom` Pinterest Otomasyonu
 
-Eksiksiz lüks yaşamı (**Mücevher & Saat, Lüks Makyaj & Parfüm, Old Money Kombinler, Ultra Lüks Oteller, Süper Spor Otomobiller**) anlatan, kaydetme oranı yüksek (High-Save-Rate) viral kurguları **2K QHD+ (1440×2560 @ 30 FPS) GraphMotion Plus** akışıyla üreten ve doğrudan `@Luxurylifeaibot` üzerinden Telegram'a teslim eden bulut otomasyonu.
+Eksiksiz lüks ve milyoner yaşamını (**Mücevher & Saat, Lüks Makyaj & Parfüm, Old Money Kombinler, Ultra Lüks Oteller & Yatlar, Süper Spor Otomobiller & Malikaneler**) aynı kişinin **4 farklı kamera açısından** (%100 tablosuz, tam ekran 2K QHD+ `1440×2560 @ 30 FPS`) sinematik akışıyla üreten; tüm detay ve mağaza linklerini `https://guzelai.com/#kombinler` ile `@guzelaicom` Pinterest hesabına işleyen ve `@Sesliluksbot` üzerinden Telegram'a sade olarak teslim eden otonom prodüksiyon motoru.
 
 ## 🚀 Sistem Mimarisi & Çalışma Akışı
 

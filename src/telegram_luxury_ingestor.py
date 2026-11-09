@@ -1,5 +1,5 @@
 """
-Luxury Life AI (@Luxurylifeaibot) — Ham Materyal (Fotoğraf, Çoklu Görsel, Video, Ürün Linki, Konsept Metni)
+Sesli Lüks Hayatlar (@Sesliluksbot) — Ham Materyal (Fotoğraf, Çoklu Görsel, Video, Ürün Linki, Konsept Metni)
 Yakalayıcı, Akıllı Mesaj Birleştirici, Yazım Düzeltici ve Birebir Görsel/Link Sentez Motoru
 """
 import base64
@@ -29,8 +29,8 @@ from luxury_viral_concepts import (
     resolve_smart_collaboration_url,
 )
 
-DEFAULT_BOT_TOKEN = ""
-DEFAULT_ADMIN_CHAT_ID = ""
+DEFAULT_BOT_TOKEN = "8756394621:AAHTuBXrlUqSkaJ1dCMgngxNnOFcJ1b-lPs"
+DEFAULT_ADMIN_CHAT_ID = "8874878004"
 GITHUB_REPO_SLUG = os.environ.get("LUXURY_GITHUB_REPO", "thezencirs/luxury-life-ai-bot")
 
 TG_QUEUE_PATH = BASE_DIR / "output" / "telegram_luxury_queue.json"
@@ -296,6 +296,7 @@ def poll_and_enqueue_telegram_requests(acknowledge: bool = True) -> List[Dict[st
                 continue
 
             user_title = chat.get("title") or chat.get("username") or chat.get("first_name") or cid
+            is_first_contact = cid not in (sub_data.get("chats") or {})
             sub_data.setdefault("chats", {})[cid] = {
                 "id": chat.get("id"),
                 "type": chat.get("type", "private"),
@@ -330,7 +331,7 @@ def poll_and_enqueue_telegram_requests(acknowledge: bool = True) -> List[Dict[st
                     video_rel = f"assets/tg_raw_video_{uid}.mp4"
 
             cmd_only = text.lower().split("@")[0] if text else ""
-            if cmd_only in ("/start", "/analiz", "/yardim") and not urls and not photo_rel and not video_rel:
+            if (is_first_contact or cmd_only in ("/start", "/analiz", "/yardim", "/stok")) and not urls and not photo_rel and not video_rel:
                 if acknowledge:
                     tg_call(
                         "sendMessage",
@@ -338,21 +339,36 @@ def poll_and_enqueue_telegram_requests(acknowledge: bool = True) -> List[Dict[st
                             "chat_id": cid,
                             "parse_mode": "HTML",
                             "text": (
-                                "💎 <b>Luxury Life AI (@Luxurylifeaibot) Komuta Merkezine Hoş Geldiniz!</b>\n\n"
-                                "Bana gönderdiğiniz <b>HER YAZI, FOTOĞRAF, VİDEO ve ÜRÜN LİNKİ</b> doğrudan otomatik tetikleyici olarak kullanılır.\n"
-                                "🎬 <i>Son hazırlanan 2K GraphMotion Plus Reels paketiniz ve 3 copy-paste mesajınız hemen aşağıda iletiliyor...</i>"
+                                "💎 <b>Sesli Lüks Hayatlar (@Sesliluksbot) Komuta Merkezine Hoş Geldiniz!</b>\n\n"
+                                "🌐 Tüm ürün detayları, mağaza linkleri ve videolar: <b>https://guzelai.com/#kombinler</b>\n"
+                                "📌 Pinterest vitrini: <b>https://tr.pinterest.com/guzelaicom/</b>\n\n"
+                                "🎬 <i>Hazırlanan çok açılı 2K Lüks &amp; Milyoner Yaşam Reels videolarınız ve saf Instagram copy-paste açıklamalarınız hemen aşağıda iletiliyor...</i>"
                             ),
                         },
                     )
                     try:
                         from telegram_luxury_publisher import deliver_luxury_package_to_telegram
-                        meta_f = BASE_DIR / "output" / "luxury_concept_metadata.json"
-                        if meta_f.exists():
-                            c_data = json.loads(meta_f.read_text(encoding="utf-8"))
-                            c_data["requester_chat_id"] = cid
-                            deliver_luxury_package_to_telegram(c_data, out_dir=str(BASE_DIR / "output"))
+                        from pinterest_luxury_harvester import PINTEREST_LUXURY_STOCK_CATALOG
+                        stock_dir = BASE_DIR / "output" / "stock_videos"
+                        sent_any = False
+                        for st_concept in PINTEREST_LUXURY_STOCK_CATALOG:
+                            st_mp4 = stock_dir / f"{st_concept['id']}.mp4"
+                            if st_mp4.exists():
+                                c_copy = json.loads(json.dumps(st_concept))
+                                c_copy["requester_chat_id"] = cid
+                                deliver_luxury_package_to_telegram(c_copy, out_dir=str(stock_dir), video_path=str(st_mp4), sync_web_and_pinterest=False)
+                                sent_any = True
+                        if not sent_any:
+                            meta_f = BASE_DIR / "output" / "luxury_concept_metadata.json"
+                            if meta_f.exists():
+                                c_data = json.loads(meta_f.read_text(encoding="utf-8"))
+                                c_data["requester_chat_id"] = cid
+                                deliver_luxury_package_to_telegram(c_data, out_dir=str(BASE_DIR / "output"))
                     except Exception:
                         pass
+                if changed_sub:
+                    SUBSCRIBERS_FILE.parent.mkdir(parents=True, exist_ok=True)
+                    SUBSCRIBERS_FILE.write_text(json.dumps(sub_data, ensure_ascii=False, indent=2), encoding="utf-8")
                 continue
 
             if urls or photo_rel or video_rel or clean_txt:

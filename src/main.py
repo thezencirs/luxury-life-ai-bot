@@ -77,8 +77,8 @@ def main() -> None:
     concept = ensure_concept_assets_ready(concept, use_cloud_ai=True)
     agent_audit = run_agent_team_pipeline_audit(concept)
     print(f"🤝 [8-Ajanlı Otonom Lüks Prodüksiyon Takımı Denetimi]: {agent_audit.get('active_agents_count', 8)}/8 Ajan Aktif | Durum: {agent_audit.get('overall_status', 'READY')}")
-    render_info = render_luxury_graphmotion_reel(concept, output_mp4=args.output, watermark="@luxurylifeaibot")
-    print(f"🎬 [2K GraphMotion Plus Reels Hazır]: {render_info}")
+    render_info = render_luxury_graphmotion_reel(concept, output_mp4=args.output, watermark="@guzelaicom")
+    print(f"🎬 [2K Çok Açılı Lüks Sinema Reels Hazır]: {render_info}")
 
     if not args.no_telegram_publish:
         deliver_luxury_package_to_telegram(concept, out_dir=out_dir)

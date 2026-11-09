@@ -1,5 +1,5 @@
 {
-  "updated_at": "05.11.2026 17:46",
+  "updated_at": "09.11.2026 20:39",
   "total_stock_videos": 3,
   "stock_videos": [
     {
@@ -11,19 +11,25 @@
       "stock_collage_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\stock_videos\\stock_otel_como_bosphorus_palace_01_collage.jpg",
       "stock_caption_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\stock_videos\\stock_otel_como_bosphorus_palace_01_caption.txt",
       "guzelai_url": "https://guzelai.com/#kombinler",
+      "pinterest_url": "https://tr.pinterest.com/guzelaicom/",
+      "telegram_bot": "@Sesliluksbot",
       "telegram_delivery": {
-        "995164733": {
-          "guzelai_published": true,
-          "video": true,
-          "caption_copypaste": true
-        },
         "8874878004": {
-          "guzelai_published": true,
-          "video": true,
-          "caption_copypaste": true
+          "guzelai_published": false,
+          "pinterest_status": "published_cdp",
+          "video": false,
+          "tg_note": "Bad Request: chat not found",
+          "caption_copypaste": false
+        },
+        "995164733": {
+          "guzelai_published": false,
+          "pinterest_status": "published_cdp",
+          "video": false,
+          "tg_note": "Bad Request: chat not found",
+          "caption_copypaste": false
         }
       },
-      "created_at": "05.11.2026 17:34"
+      "created_at": "09.11.2026 20:29"
     },
     {
       "id": "stock_araba_monaco_billionaire_garage_01",
@@ -34,19 +40,25 @@
       "stock_collage_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\stock_videos\\stock_araba_monaco_billionaire_garage_01_collage.jpg",
       "stock_caption_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\stock_videos\\stock_araba_monaco_billionaire_garage_01_caption.txt",
       "guzelai_url": "https://guzelai.com/#kombinler",
+      "pinterest_url": "https://tr.pinterest.com/guzelaicom/",
+      "telegram_bot": "@Sesliluksbot",
       "telegram_delivery": {
-        "995164733": {
-          "guzelai_published": true,
-          "video": true,
-          "caption_copypaste": true
-        },
         "8874878004": {
           "guzelai_published": true,
-          "video": true,
-          "caption_copypaste": true
+          "pinterest_status": "published_cdp",
+          "video": false,
+          "tg_note": "Bad Request: chat not found",
+          "caption_copypaste": false
+        },
+        "995164733": {
+          "guzelai_published": true,
+          "pinterest_status": "published_cdp",
+          "video": false,
+          "tg_note": "Bad Request: chat not found",
+          "caption_copypaste": false
         }
       },
-      "created_at": "05.11.2026 17:40"
+      "created_at": "09.11.2026 20:34"
     },
     {
       "id": "stock_malikane_beverly_hills_billionaire_life_01",
@@ -57,19 +69,25 @@
       "stock_collage_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\stock_videos\\stock_malikane_beverly_hills_billionaire_life_01_collage.jpg",
       "stock_caption_path": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\stock_videos\\stock_malikane_beverly_hills_billionaire_life_01_caption.txt",
       "guzelai_url": "https://guzelai.com/#kombinler",
+      "pinterest_url": "https://tr.pinterest.com/guzelaicom/",
+      "telegram_bot": "@Sesliluksbot",
       "telegram_delivery": {
-        "995164733": {
-          "guzelai_published": true,
-          "video": true,
-          "caption_copypaste": true
-        },
         "8874878004": {
           "guzelai_published": true,
-          "video": true,
-          "caption_copypaste": true
+          "pinterest_status": "published_cdp",
+          "video": false,
+          "tg_note": "Bad Request: chat not found",
+          "caption_copypaste": false
+        },
+        "995164733": {
+          "guzelai_published": true,
+          "pinterest_status": "published_cdp",
+          "video": false,
+          "tg_note": "Bad Request: chat not found",
+          "caption_copypaste": false
         }
       },
-      "created_at": "05.11.2026 17:46"
+      "created_at": "09.11.2026 20:39"
     }
   ]
 }

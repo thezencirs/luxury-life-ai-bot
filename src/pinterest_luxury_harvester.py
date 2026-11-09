@@ -15,10 +15,16 @@ import json
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 STOCK_VAULT_DIR = BASE_DIR / "output" / "stock_videos"
@@ -506,6 +512,9 @@ BILLIONAIRE_STOCK_ARCHETYPES: List[Dict[str, Any]] = [
 ]
 
 
+PINTEREST_LUXURY_STOCK_CATALOG = BILLIONAIRE_STOCK_ARCHETYPES
+
+
 def get_billionaire_stock_archetypes() -> List[Dict[str, Any]]:
     return json.loads(json.dumps(BILLIONAIRE_STOCK_ARCHETYPES))
 
@@ -514,11 +523,13 @@ def run_stock_video_batch_production(
     limit: int = 3,
     deliver_telegram: bool = True,
     sync_guzelai: bool = True,
+    force_rerender: bool = False,
 ) -> List[Dict[str, Any]]:
     """
     Pinterest & Lüks Portal ilhamlı milyoner/milyarder yaşam tarzı stok videolarını
     (`otel`, `araba`, `malikane`) sırayla 2K QHD+ olarak üretir, `output/stock_videos/`
-    kasasına kaydeder, `guzelai.com` vitrinine işler ve `@Luxurylifeaibot` üzerinden gönderir.
+    kasasına kaydeder, `guzelai.com` vitrinine + `@guzelaicom` Pinterest hesabına işler
+    ve `@Sesliluksbot` üzerinden gönderir.
     """
     from luxury_viral_concepts import VIRAL_RETENTION_FRAMEWORKS, build_pure_copy_paste_caption
     from render_luxury_reels import render_luxury_graphmotion_reel
@@ -537,40 +548,50 @@ def run_stock_video_batch_production(
         concept["harvested_inspiration"] = inspiration_meta
 
         print(f"\n======================================================================")
-        print(f"🏦 [STOK VİDEO {idx}/{len(archetypes)} ÜRETİLİYOR]: {cid} — {concept['title']}")
+        print(f"🏦 [STOK VİDEO {idx}/{len(archetypes)} İŞLENİYOR]: {cid} — {concept['title']}")
         print(f"🔎 [İlham Kaynağı]: {concept.get('inspiration_source')}")
         print(f"======================================================================")
 
-        # 1) Görselleri (6 altın çerçeveli detay kartı + 3 2K milyoner yaşam sahnesi) paralel hazırla
-        concept = ensure_concept_assets_ready(concept, use_cloud_ai=True)
-
-        # 2) 2K QHD+ (1440x2560 @ 30fps) temiz (manken/sahne üzerinde üst yazısız, sadece alt 2 kartlı) videoyu üret
-        render_res = render_luxury_graphmotion_reel(
-            concept=concept,
-            output_mp4="output/luxury_reel_final.mp4",
-            watermark="@luxurylifeaibot",
-        )
-
-        # 3) Üretilen videoyu ve kopyala-yapıştır açıklamasını stok kasasına (`output/stock_videos/`) arşivle
         stock_mp4_path = STOCK_VAULT_DIR / f"{cid}.mp4"
         stock_jpg_path = STOCK_VAULT_DIR / f"{cid}_collage.jpg"
         stock_txt_path = STOCK_VAULT_DIR / f"{cid}_caption.txt"
 
-        if Path("output/luxury_reel_final.mp4").exists():
-            shutil.copy2("output/luxury_reel_final.mp4", stock_mp4_path)
-        if Path("output/luxury_story_collage.jpg").exists():
-            shutil.copy2("output/luxury_story_collage.jpg", stock_jpg_path)
+        # 1) Görselleri (çok açılı insan/yaşam kareleri) hazırla
+        concept = ensure_concept_assets_ready(concept, use_cloud_ai=True)
+
+        # 2) Eğer 2K stok video henüz yoksa veya yeniden render istendiyse üret
+        if force_rerender or not stock_mp4_path.exists() or stock_mp4_path.stat().st_size < 500_000:
+            render_res = render_luxury_graphmotion_reel(
+                concept=concept,
+                output_mp4="output/luxury_reel_final.mp4",
+                watermark="@guzelaicom",
+            )
+            if Path("output/luxury_reel_final.mp4").exists():
+                shutil.copy2("output/luxury_reel_final.mp4", stock_mp4_path)
+            if Path("output/luxury_story_collage.jpg").exists():
+                shutil.copy2("output/luxury_story_collage.jpg", stock_jpg_path)
+        else:
+            shutil.copy2(stock_mp4_path, "output/luxury_reel_final.mp4")
+            if stock_jpg_path.exists():
+                shutil.copy2(stock_jpg_path, "output/luxury_story_collage.jpg")
 
         caption_txt = build_pure_copy_paste_caption(concept)
         stock_txt_path.write_text(caption_txt, encoding="utf-8")
 
-        # 4) guzelai.com'a işle ve @Luxurylifeaibot üzerinden Telegram'a gönder
+        # 4) guzelai.com'a + @guzelaicom Pinterest'e işle ve @Sesliluksbot üzerinden Telegram'a gönder
         tg_res: Dict[str, Any] = {}
         if deliver_telegram:
-            tg_res = deliver_luxury_package_to_telegram(concept, out_dir="output")
+            tg_res = deliver_luxury_package_to_telegram(
+                concept,
+                out_dir="output",
+                video_path=str(stock_mp4_path),
+                sync_web_and_pinterest=sync_guzelai,
+            )
         elif sync_guzelai:
             from guzelai_web_sync import publish_luxury_to_guzelai
+            from pinterest_luxury_publisher import publish_luxury_to_pinterest
             publish_luxury_to_guzelai(concept, out_dir="output", video_path=str(stock_mp4_path))
+            publish_luxury_to_pinterest(concept, out_dir="output")
 
         entry_summary = {
             "id": cid,
@@ -581,6 +602,8 @@ def run_stock_video_batch_production(
             "stock_collage_path": str(stock_jpg_path),
             "stock_caption_path": str(stock_txt_path),
             "guzelai_url": "https://guzelai.com/#kombinler",
+            "pinterest_url": "https://tr.pinterest.com/guzelaicom/",
+            "telegram_bot": "@Sesliluksbot",
             "telegram_delivery": tg_res,
             "created_at": datetime.datetime.now().strftime("%d.%m.%Y %H:%M"),
         }

@@ -1,6 +1,8 @@
-name: "💎 Luxury Life AI — 2K GraphMotion Plus Reels Otomasyonu"
+name: "💎 Sesli Lüks Hayatlar (@Sesliluksbot) — 2K Reels, guzelai.com & @guzelaicom Pinterest Otomasyonu"
 
 on:
+  schedule:
+    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
       category:

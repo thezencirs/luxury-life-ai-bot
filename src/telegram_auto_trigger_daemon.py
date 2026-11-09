@@ -29,7 +29,7 @@ from telegram_luxury_ingestor import (
 
 
 def run_daemon() -> None:
-    print("💎 [@Luxurylifeaibot 7/24 Canlı Tetikleme Daemon'u Başlatıldı] Mesaj ve görüntüler dinleniyor...")
+    print("💎 [@Sesliluksbot 7/24 Canlı Tetikleme Daemon'u Başlatıldı] Mesaj ve görüntüler dinleniyor...", flush=True)
     py_exe = sys.executable
 
     while True:

@@ -237,21 +237,27 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output", 
         if _gh_put_file(f"public/go/{sku}.html", go_bytes, f"feat(go): deploy guzelai.com/go/{sku} luxury redirect"):
             uploaded_redirects.append(guzelai_url)
 
-    # Model fotoğrafını yükle
+    # Tüm çok açılı (4 açı) insan ve yaşam fotoğraflarını guzelai.com'a yükle
     m_frames = concept.get("model_frames") or []
     model_photo_url = "/data/latest_kombin_collage.jpg"
-    if m_frames and os.path.exists(m_frames[0]):
-        m_fname = os.path.basename(m_frames[0])
-        if _gh_put_file(f"public/pinterest-models/{m_fname}", Path(m_frames[0]).read_bytes(), f"feat(luxury): upload studio model {m_fname} to guzelai.com"):
-            model_photo_url = f"/pinterest-models/{m_fname}"
+    multi_angle_web_urls: List[str] = []
+    for idx_f, mf_path in enumerate(m_frames):
+        if mf_path and os.path.exists(mf_path):
+            m_fname = os.path.basename(mf_path)
+            if _gh_put_file(f"public/pinterest-models/{m_fname}", Path(mf_path).read_bytes(), f"feat(luxury): upload multi-angle photo {m_fname} to guzelai.com"):
+                web_u = f"/pinterest-models/{m_fname}"
+                multi_angle_web_urls.append(web_u)
+                if idx_f == 0:
+                    model_photo_url = web_u
 
-    # Story kolajını yükle (hem kalıcı id adıyla hem latest olarak)
-    collage_file = Path(out_dir) / "luxury_story_collage.jpg"
-    collage_web_url = "/data/latest_kombin_collage.jpg"
-    if collage_file.exists():
-        c_bytes = collage_file.read_bytes()
-        _gh_put_file("public/data/latest_kombin_collage.jpg", c_bytes, f"chore(luxury): update latest collage on guzelai.com")
-        if _gh_put_file(f"public/data/collages/{cid}.jpg", c_bytes, f"chore(luxury): archive collage {cid}.jpg on guzelai.com"):
+    # Karmaşık tablo yerine doğrudan net ve tam ekran kahraman kareyi vitrin/Pinterest görseli olarak yükle
+    hero_clean_file = Path(m_frames[0]) if (m_frames and os.path.exists(m_frames[0])) else (Path(out_dir) / "luxury_story_collage.jpg")
+    collage_web_url = model_photo_url if model_photo_url != "/data/latest_kombin_collage.jpg" else "/data/latest_kombin_collage.jpg"
+    if hero_clean_file.exists():
+        c_bytes = hero_clean_file.read_bytes()
+        _gh_put_file("public/data/latest_kombin_collage.jpg", c_bytes, f"chore(luxury): update latest clean hero visual on guzelai.com")
+        _gh_put_file("public/data/latest_pinterest_collage.jpg", c_bytes, f"chore(pinterest): update @guzelaicom latest pinterest visual on guzelai.com")
+        if _gh_put_file(f"public/data/collages/{cid}.jpg", c_bytes, f"chore(luxury): archive hero visual {cid}.jpg on guzelai.com"):
             collage_web_url = f"/data/collages/{cid}.jpg"
 
     # 2K Video dosyasını guzelai.com için hızlı açılan web-uyumlu (1080p faststart, ~6 MB) boyutta yükle
@@ -319,10 +325,11 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output", 
         "total_price_str": total_str,
         "total_price_val": total_val,
         "model_photo_url": model_photo_url,
+        "multi_angle_photos": multi_angle_web_urls,
         "collage_url": collage_web_url,
         "pinterest_collage_url": collage_web_url,
         "video_url": video_web_url,
-        "telegram_bot_url": "https://t.me/Luxurylifeaibot",
+        "telegram_bot_url": "https://t.me/Sesliluksbot",
         "telegram_copy_text": short_seo_caption,
         "website_showcase_url": GUZELAI_SHOWCASE_URL,
         "verification_summary": {
@@ -337,9 +344,11 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output", 
             "tiktok": "https://www.tiktok.com/@guzelaicom",
             "youtube_shorts": "https://www.youtube.com/@guzelaicom/shorts",
             "x_twitter": "https://x.com/guzelaicom",
-            "pinterest": "https://tr.pinterest.com/thezencirs/guzelaicom/",
+            "pinterest": "https://tr.pinterest.com/guzelaicom/",
+            "pinterest_board": "https://tr.pinterest.com/thezencirs/guzelaicom/",
             "threads": "https://www.threads.net/@guzelaicom",
             "whatsapp_channel": "https://whatsapp.com/channel/0029VbDetYc3mFYDwZSry016",
+            "telegram_bot": "https://t.me/Sesliluksbot",
         },
         "items": verified_items,
     }
@@ -371,9 +380,54 @@ def publish_luxury_to_guzelai(concept: Dict[str, Any], out_dir: str = "output", 
         f"feat(guzelai): publish luxury video & 6 verified links ({new_entry['id']}) to guzelai.com",
     )
 
+    # @guzelaicom Pinterest RSS 2.0 Otomatik Pin Beslemesini (https://guzelai.com/pinterest-rss.xml) güncelle
+    rss_items_xml: List[str] = []
+    rfc822_now = datetime.datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT")
+    for b_item in updated_broadcasts[:12]:
+        b_id = html.escape(str(b_item.get("id", "lux")))
+        b_title = html.escape(str(b_item.get("title", "Lüks Seçki"))[:98])
+        b_desc = html.escape(str(b_item.get("telegram_copy_text") or b_item.get("viral_hook") or b_title)[:480])
+        b_img_rel = str(b_item.get("model_photo_url") or b_item.get("collage_url") or "/data/latest_pinterest_collage.jpg")
+        b_img_abs = html.escape(f"https://guzelai.com{b_img_rel}" if b_img_rel.startswith("/") else b_img_rel)
+        b_items_list = b_item.get("items") or []
+        b_first_sku = str(b_items_list[0].get("sku", "")) if b_items_list else ""
+        b_link = html.escape(f"https://guzelai.com/go/{b_first_sku}" if b_first_sku else GUZELAI_SHOWCASE_URL)
+        rss_items_xml.append(
+            f"""    <item>
+      <title>{b_title}</title>
+      <link>{b_link}</link>
+      <guid isPermaLink="false">guzelaicom-luxury-{b_id}</guid>
+      <pubDate>{rfc822_now}</pubDate>
+      <description>{b_desc}</description>
+      <enclosure url="{b_img_abs}" type="image/jpeg" />
+      <media:content url="{b_img_abs}" type="image/jpeg" medium="image" />
+    </item>"""
+        )
+
+    rss_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GüzelAI.com (@guzelaicom) — Lüks Yaşam, Pırlanta, Otel &amp; Kombin Vitrini</title>
+    <link>https://guzelai.com/#kombinler</link>
+    <description>GüzelAI.com (@guzelaicom) doğrulamalı lüks yaşam, mücevher, saat, süper spor otomobil ve otel seçkileri.</description>
+    <language>tr-TR</language>
+    <lastBuildDate>{rfc822_now}</lastBuildDate>
+    <atom:link href="https://guzelai.com/pinterest-rss.xml" rel="self" type="application/rss+xml" />
+{chr(10).join(rss_items_xml)}
+  </channel>
+</rss>"""
+    pinterest_rss_ok = _gh_put_file(
+        "public/pinterest-rss.xml",
+        rss_xml.encode("utf-8"),
+        f"feat(pinterest): update @guzelaicom pinterest-rss.xml feed ({new_entry['id']})",
+    )
+
     return {
         "guzelai_published": feed_ok,
+        "pinterest_rss_published": pinterest_rss_ok,
+        "pinterest_rss_url": "https://guzelai.com/pinterest-rss.xml",
         "showcase_url": GUZELAI_SHOWCASE_URL,
         "video_uploaded": video_uploaded,
+        "multi_angle_photos_uploaded": len(multi_angle_web_urls),
         "redirect_urls": uploaded_redirects,
     }

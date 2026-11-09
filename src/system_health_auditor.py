@@ -30,14 +30,14 @@ def audit_luxury_system_health(out_dir: str = "output") -> Dict[str, Any]:
 
     # 1. Telegram Bot API Sağlığı (20 Puan)
     me = tg_call("getMe", timeout=10)
-    bot_ok = bool(me.get("ok")) and (me.get("result") or {}).get("username", "").lower() == "luxurylifeaibot"
+    bot_ok = bool(me.get("ok")) and (me.get("result") or {}).get("username", "").lower() == "sesliluksbot"
     s1 = 20 if bot_ok else 15
     total_score += s1
     checks["telegram_bot_api"] = {
         "score": s1,
         "max_score": 20,
         "status": "HEALTHY" if bot_ok else "DEGRADED",
-        "bot_username": "@Luxurylifeaibot",
+        "bot_username": "@Sesliluksbot",
     }
 
     # 2. 2K (1440x2560) Video, Kapak ve Story Kolajı Sağlığı (20 Puan)
