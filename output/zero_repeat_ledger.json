@@ -8,7 +8,8 @@
     "stock_malikane_beverly_hills_billionaire_life_01",
     "lux_taki_bespoke_ed008",
     "lux_makyaj_paris_vanity_glass_skin_01",
-    "lux_kombin_milano_cashmere_espresso_01"
+    "lux_kombin_milano_cashmere_espresso_01",
+    "lux_araba_monaco_porsche_gt3_driver_01"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -19,7 +20,8 @@
     "stock_malikane_beverly_hills_billionaire_life_01",
     "lux_taki_bespoke_ed008",
     "lux_makyaj_paris_vanity_glass_skin_01",
-    "lux_kombin_milano_cashmere_espresso_01"
+    "lux_kombin_milano_cashmere_espresso_01",
+    "lux_araba_monaco_porsche_gt3_driver_01"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -33,7 +35,8 @@
     "jet_heiress_angle1.jpg",
     "lux_taki_bespoke_ed008_step1.jpg",
     "lux_makyaj_paris_vanity_glass_skin_01_step1.jpg",
-    "lux_kombin_milano_cashmere_espresso_01_step1.jpg"
+    "lux_kombin_milano_cashmere_espresso_01_step1.jpg",
+    "lux_araba_monaco_porsche_gt3_driver_01_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -44,7 +47,8 @@
     "stock_malikane_beverly_hills_billionaire_life_01",
     "lux_taki_bespoke_ed008",
     "lux_makyaj_paris_vanity_glass_skin_01",
-    "lux_kombin_milano_cashmere_espresso_01"
+    "lux_kombin_milano_cashmere_espresso_01",
+    "lux_araba_monaco_porsche_gt3_driver_01"
   ],
   "history": [
     {
@@ -100,8 +104,14 @@
       "category": "kombin",
       "title": "Via Monte Napoleone Milano: Kaşmir, İpek & Espresso Süet 'Quiet Luxury' Kurgusu 🧥",
       "published_at_utc": "2026-11-10T16:50:28.607812Z"
+    },
+    {
+      "id": "lux_araba_monaco_porsche_gt3_driver_01",
+      "category": "araba",
+      "title": "Monaco Casino Meydanı: Porsche 911 GT3 Touring & 'Gentleman Driver' 6 Parça Stili 🏎️",
+      "published_at_utc": "2026-11-10T22:12:12.891110Z"
     }
   ],
-  "last_category_index": 3,
-  "last_dispatch_ts": 1794329428.6078103
+  "last_category_index": 4,
+  "last_dispatch_ts": 1794348732.891108
 }
