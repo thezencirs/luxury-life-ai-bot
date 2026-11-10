@@ -5,7 +5,8 @@
     "lux_taki_audemars_emerald_studio_02",
     "stock_otel_como_bosphorus_palace_01",
     "stock_araba_monaco_billionaire_garage_01",
-    "stock_malikane_beverly_hills_billionaire_life_01"
+    "stock_malikane_beverly_hills_billionaire_life_01",
+    "lux_taki_bespoke_ed008"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -13,7 +14,8 @@
     "lux_taki_audemars_emerald_studio_02",
     "stock_otel_como_bosphorus_palace_01",
     "stock_araba_monaco_billionaire_garage_01",
-    "stock_malikane_beverly_hills_billionaire_life_01"
+    "stock_malikane_beverly_hills_billionaire_life_01",
+    "lux_taki_bespoke_ed008"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -24,7 +26,8 @@
     "stock_malikane_beverly_hills_billionaire_life_01_step1.jpg",
     "como_heiress_angle1.jpg",
     "billionaire_hero_angle1.jpg",
-    "jet_heiress_angle1.jpg"
+    "jet_heiress_angle1.jpg",
+    "lux_taki_bespoke_ed008_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -32,7 +35,8 @@
     "lux_taki_audemars_emerald_studio_02",
     "stock_otel_como_bosphorus_palace_01",
     "stock_araba_monaco_billionaire_garage_01",
-    "stock_malikane_beverly_hills_billionaire_life_01"
+    "stock_malikane_beverly_hills_billionaire_life_01",
+    "lux_taki_bespoke_ed008"
   ],
   "history": [
     {
@@ -69,15 +73,15 @@
       "id": "stock_malikane_beverly_hills_billionaire_life_01",
       "category": "otel",
       "title": "Beverly Hills 120 Milyon $ Cam Malikane, Özel Gulfstream Jet & 85M Süperyat Milyoner Yaşamı 🏛️🛩️",
-      "published_at_utc": "2026-11-05T14:46:51.705225Z"
+      "published_at_utc": "2026-11-09T17:39:49.726218Z"
     },
     {
-      "id": "stock_malikane_beverly_hills_billionaire_life_01",
-      "category": "otel",
-      "title": "Beverly Hills 120 Milyon $ Cam Malikane, Özel Gulfstream Jet & 85M Süperyat Milyoner Yaşamı 🏛️🛩️",
-      "published_at_utc": "2026-11-09T17:39:49.726218Z"
+      "id": "lux_taki_bespoke_ed008",
+      "category": "taki",
+      "title": "Haute Joaillerie Beyaz Stüdyo: 18K Pembe Altın & Zümrüt Kesim Pırlanta Bilek Kurgusu ✨",
+      "published_at_utc": "2026-11-10T01:15:56.546225Z"
     }
   ],
-  "last_category_index": 0,
-  "last_dispatch_ts": 1794245989.726219
+  "last_category_index": 1,
+  "last_dispatch_ts": 1794273356.5462227
 }
