@@ -1179,30 +1179,31 @@ def build_explanatory_director_message(concept: Dict[str, Any]) -> str:
 
 def build_pure_copy_paste_caption(concept: Dict[str, Any]) -> str:
     """
-    Kısa, alakasız dolgu cümlelerinden arındırılmış, Instagram Arama (SEO) uyumlu
-    ve tüm detay/linkleri guzelai.com vitrinine yönlendiren SAF COPY-PASTE açıklama metni.
+    Kısa, alakasız dolgu cümlelerinden arındırılmış, Instagram Arama (SEO) uyumlu,
+    tüm detay/linkleri guzelai.com vitrinine yönlendiren ve yürürlükteki mevzuata
+    (6502 sayılı TKHK, T.C. Ticaret Bakanlığı Reklam Kurulu Kılavuzu ve Yapay Zekâ Şeffaflık İlkeleri)
+    tam uyumlu kapsamlı kısa yasal uyarı içeren SAF COPY-PASTE açıklama metni.
     Kesinlikle ekstra sarmalayıcı başlık içermez.
     """
     title = concept.get("title", "").strip()
-    items = concept.get("items", {})
-    hashtags = concept.get("hashtags", "#luxurylife #oldmoney #quietluxury #reklam #işbirliğiyoktur")
+    model_name = concept.get("guzelai_model_name", "Valentina Cruz (guzelai.com)")
+    hashtags = concept.get("hashtags", "#luxurylife #oldmoney #quietluxury #guzelaicom #reklam #işbirliğiyoktur")
 
-    item_lines = []
-    for idx, (slot_k, it) in enumerate(items.items(), start=1):
-        lbl = it.get("category_label", "Detay")
-        brand = str(it.get("brand", "Lüks Marka")).split("/")[0].strip()
-        name = it.get("name", "Ürün")
-        sku = it.get("sku", "-")
-        item_lines.append(f"• {lbl}: {brand} – {name} (Kod: {sku})")
+    legal_short_comprehensive = (
+        "⚖️ Yasal Uyarı & Şeffaflık Bildirimi: Bu paylaşım herhangi bir marka veya kurum ile ücretli ortaklık, "
+        "sponsorluk ya da ticari iş birliği içermez; tamamen editoryal lüks yaşam/stil ilhamı ve bilgilendirme amaçlıdır. "
+        f"Videoda yer alan manken ({model_name}) ve sahneler guzelai.com yapay zekâ (AI) teknolojisiyle üretilmiş "
+        "kurgusal/sentetik medya olup gerçek kişileri temsil etmez. Görselde marka/ürün detayı yer aldığından "
+        "6502 sayılı Kanun ve T.C. Ticaret Bakanlığı Reklam Kurulu mevzuatı gereği zorunlu "
+        "#reklam #işbirliğideğil #işbirliğiyoktur #yapayzeka etiketleri eklenmiştir."
+    )
 
     lines = [
         f"{title}",
+        f"🤖 Dijital AI Manken: {model_name} • 🌐 Tüm ürün detayları ve mağaza linkleri: guzelai.com/#kombinler",
         "",
-        "Videodaki tüm ürünlerin detaylı incelemesi ve mağaza linkleri: guzelai.com/#kombinler",
+        legal_short_comprehensive,
         "",
-        *item_lines,
-        "",
-        "İş birliği yoktur, lüks stil önerisidir #reklam #işbirliğiyoktur",
         hashtags,
     ]
     return "\n".join(lines).strip()

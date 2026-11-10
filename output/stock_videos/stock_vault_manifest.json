@@ -1,5 +1,5 @@
 {
-  "updated_at": "09.11.2026 20:39",
+  "updated_at": "10.11.2026 08:34",
   "total_stock_videos": 3,
   "stock_videos": [
     {
@@ -15,21 +15,20 @@
       "telegram_bot": "@Sesliluksbot",
       "telegram_delivery": {
         "8874878004": {
-          "guzelai_published": false,
+          "guzelai_published": true,
           "pinterest_status": "published_cdp",
           "video": false,
           "tg_note": "Bad Request: chat not found",
           "caption_copypaste": false
         },
         "995164733": {
-          "guzelai_published": false,
+          "guzelai_published": true,
           "pinterest_status": "published_cdp",
-          "video": false,
-          "tg_note": "Bad Request: chat not found",
-          "caption_copypaste": false
+          "video": true,
+          "caption_copypaste": true
         }
       },
-      "created_at": "09.11.2026 20:29"
+      "created_at": "10.11.2026 08:18"
     },
     {
       "id": "stock_araba_monaco_billionaire_garage_01",
@@ -53,12 +52,11 @@
         "995164733": {
           "guzelai_published": true,
           "pinterest_status": "published_cdp",
-          "video": false,
-          "tg_note": "Bad Request: chat not found",
-          "caption_copypaste": false
+          "video": true,
+          "caption_copypaste": true
         }
       },
-      "created_at": "09.11.2026 20:34"
+      "created_at": "10.11.2026 08:26"
     },
     {
       "id": "stock_malikane_beverly_hills_billionaire_life_01",
@@ -82,12 +80,11 @@
         "995164733": {
           "guzelai_published": true,
           "pinterest_status": "published_cdp",
-          "video": false,
-          "tg_note": "Bad Request: chat not found",
-          "caption_copypaste": false
+          "video": true,
+          "caption_copypaste": true
         }
       },
-      "created_at": "09.11.2026 20:39"
+      "created_at": "10.11.2026 08:34"
     }
   ]
 }

@@ -48,13 +48,15 @@ def build_luxury_pinterest_pin_data(concept: Dict[str, Any]) -> Dict[str, Any]:
     hero_price = str(first_item.get("price", "")).strip()
     hero_sku = str(first_item.get("sku", "")).strip()
 
+    model_name = str(concept.get("guzelai_model_name", "guzelai.com AI Manken")).strip()
+
     desc_lines = [
         f"✨ {raw_title} ({loc})",
-        f"💎 Öne Çıkan: {hero_brand} – {hero_name} ({hero_price})",
+        f"👗 Manken: {model_name} | 💎 {hero_brand} – {hero_name} ({hero_price})",
         "🌐 Tüm Videolar, Çok Açılı Görseller & Mağaza Linkleri: https://guzelai.com/#kombinler",
         "📲 Telegram: https://t.me/Sesliluksbot",
-        "⚠️ İş birliği yoktur, lüks yaşam ve stil seçkisidir (#reklam #işbirliğiyoktur).",
-        "#lüksyaşam #oldmoney #milyoner #pırlanta #luksaraba #luksotel #guzelaicom #reklam",
+        "⚖️ Yasal Uyarı: Ücretli ortaklık/sponsorluk içermez; editoryal ilham amaçlıdır. Görseldeki manken guzelai.com AI teknolojisiyle üretilmiş kurgusal medyadır. 6502 sayılı Kanun gereği #reklam #işbirliğideğil #işbirliğiyoktur #yapayzeka",
+        "#lüksyaşam #oldmoney #milyoner #guzelaicom",
     ]
     description = "\n".join(desc_lines)[:495]
 

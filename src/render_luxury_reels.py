@@ -17,6 +17,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
 from luxury_audio_engine import generate_luxury_soundtrack
+from flow_video_engine import render_flow_living_frame, render_flow_optical_transition
 from realistic_cinema_optics import (
     apply_organic_camera_breathing,
     apply_studio_contact_shadow_card,
@@ -516,7 +517,7 @@ def render_luxury_graphmotion_reel(
             "card_im": card_im,
         })
 
-    # Sahne karelerini (Aynı İnsanın 4 Farklı Açıdan 2K Çekimi) yükle
+    # Sahne karelerini (Aynı guzelai.com Mankeninin 4 Farklı Açıdan 2K Çekimi) yükle
     scene_frames: List[Image.Image] = []
     for fp in concept.get("model_frames", []):
         if os.path.exists(fp):
@@ -526,7 +527,12 @@ def render_luxury_graphmotion_reel(
     if not scene_frames:
         scene_frames = [bg_stage.convert("RGB")] * 4
 
-    # Kapak görseli olarak da tablo/kutu karmaşası olmadan doğrudan 1. açıyı (veya en çarpıcı açıyı) kaydet
+    # Flow Video Sentez Motoru için 900x1600 yüksek hız tamponları
+    scene_frames_flow: List[Image.Image] = [
+        im.resize((900, 1600), Image.Resampling.LANCZOS) for im in scene_frames
+    ]
+
+    # Kapak görseli olarak da tablo/kutu karmaşası olmadan doğrudan 1. açıyı kaydet
     cover_path = os.path.join(out_dir, "hook_cover.jpg")
     scene_frames[0].save(cover_path, "JPEG", quality=97, subsampling=0)
     story_path = os.path.join(out_dir, "luxury_story_collage.jpg")
@@ -552,26 +558,36 @@ def render_luxury_graphmotion_reel(
         t = f_idx / float(FPS)
 
         # 0.00s - 13.50s: SIFIR TABLO / SIFIR KUTU KARMAŞASI!
-        # Baştan sona aynı insanın 4 farklı açıdan (boynundaki pahalı kolye, bilekteki saat/direksiyon, lüks araba, lüks yat) tam ekran 2K sineması!
+        # Baştan sona guzelai.com mankeninin 4 farklı açıdan Flow Video Sentezi (3B Derinlik Paralaksı + Canlı Nefes/Saç/Elbise/Su/Işık Hareketi)
         stage_idx = min(num_angles - 1, int(t // angle_dur))
         stage_local_t = t - (stage_idx * angle_dur)
+        local_p = min(1.0, max(0.0, stage_local_t / max(0.01, angle_dur)))
 
-        cur_frame_im = scene_frames[stage_idx]
-        if stage_idx < num_angles - 1 and stage_local_t > (angle_dur - 0.36):
-            blend_p = ease_in_out_cubic((stage_local_t - (angle_dur - 0.36)) / 0.36)
-            base_sc = Image.blend(cur_frame_im, scene_frames[stage_idx + 1], blend_p)
-        else:
-            base_sc = cur_frame_im.copy()
-
-        # Her açıda organik sinema kamerası hareketi + boyundaki pırlanta kolye/saat üzerinde gerçek optik yıldız parıltıları + Kodak Portra film dokusu
-        breathed_sc = apply_organic_camera_breathing(
-            base_sc,
-            t=stage_local_t,
-            stage_idx=stage_idx,
-            is_walking=(stage_idx == num_angles - 1),
+        cur_flow_im = render_flow_living_frame(
+            scene_frames_flow[stage_idx],
+            local_p=local_p,
+            t_sec=t,
+            angle_idx=stage_idx,
+            target_w=W,
+            target_h=H,
         )
+        if stage_idx < num_angles - 1 and stage_local_t > (angle_dur - 0.42):
+            blend_p = ease_in_out_cubic((stage_local_t - (angle_dur - 0.42)) / 0.42)
+            next_flow_im = render_flow_living_frame(
+                scene_frames_flow[stage_idx + 1],
+                local_p=0.05 * blend_p,
+                t_sec=t,
+                angle_idx=stage_idx + 1,
+                target_w=W,
+                target_h=H,
+            )
+            base_sc = render_flow_optical_transition(cur_flow_im, next_flow_im, blend_p, target_w=W, target_h=H)
+        else:
+            base_sc = cur_flow_im
+
+        # Boyundaki pırlanta kolye/saat üzerinde gerçek optik yıldız parıltıları + Kodak Portra film dokusu
         optical_sc = enhance_frame_with_real_optics(
-            breathed_sc,
+            base_sc,
             t=t,
             frame_idx=f_idx,
             stage_idx=stage_idx,
