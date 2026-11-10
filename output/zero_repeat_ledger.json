@@ -7,7 +7,8 @@
     "stock_araba_monaco_billionaire_garage_01",
     "stock_malikane_beverly_hills_billionaire_life_01",
     "lux_taki_bespoke_ed008",
-    "lux_makyaj_paris_vanity_glass_skin_01"
+    "lux_makyaj_paris_vanity_glass_skin_01",
+    "lux_kombin_milano_cashmere_espresso_01"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -17,7 +18,8 @@
     "stock_araba_monaco_billionaire_garage_01",
     "stock_malikane_beverly_hills_billionaire_life_01",
     "lux_taki_bespoke_ed008",
-    "lux_makyaj_paris_vanity_glass_skin_01"
+    "lux_makyaj_paris_vanity_glass_skin_01",
+    "lux_kombin_milano_cashmere_espresso_01"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -30,7 +32,8 @@
     "billionaire_hero_angle1.jpg",
     "jet_heiress_angle1.jpg",
     "lux_taki_bespoke_ed008_step1.jpg",
-    "lux_makyaj_paris_vanity_glass_skin_01_step1.jpg"
+    "lux_makyaj_paris_vanity_glass_skin_01_step1.jpg",
+    "lux_kombin_milano_cashmere_espresso_01_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -40,7 +43,8 @@
     "stock_araba_monaco_billionaire_garage_01",
     "stock_malikane_beverly_hills_billionaire_life_01",
     "lux_taki_bespoke_ed008",
-    "lux_makyaj_paris_vanity_glass_skin_01"
+    "lux_makyaj_paris_vanity_glass_skin_01",
+    "lux_kombin_milano_cashmere_espresso_01"
   ],
   "history": [
     {
@@ -90,8 +94,14 @@
       "category": "makyaj",
       "title": "Hôtel Plaza Athénée Vanity: 6 Adımda 'Old Money Glass Skin' & Kadife Dudak Sırrı 💄",
       "published_at_utc": "2026-11-10T08:51:07.570333Z"
+    },
+    {
+      "id": "lux_kombin_milano_cashmere_espresso_01",
+      "category": "kombin",
+      "title": "Via Monte Napoleone Milano: Kaşmir, İpek & Espresso Süet 'Quiet Luxury' Kurgusu 🧥",
+      "published_at_utc": "2026-11-10T16:50:28.607812Z"
     }
   ],
-  "last_category_index": 2,
-  "last_dispatch_ts": 1794300667.5703301
+  "last_category_index": 3,
+  "last_dispatch_ts": 1794329428.6078103
 }
