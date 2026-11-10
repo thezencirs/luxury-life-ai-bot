@@ -6,7 +6,8 @@
     "stock_otel_como_bosphorus_palace_01",
     "stock_araba_monaco_billionaire_garage_01",
     "stock_malikane_beverly_hills_billionaire_life_01",
-    "lux_taki_bespoke_ed008"
+    "lux_taki_bespoke_ed008",
+    "lux_makyaj_paris_vanity_glass_skin_01"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -15,7 +16,8 @@
     "stock_otel_como_bosphorus_palace_01",
     "stock_araba_monaco_billionaire_garage_01",
     "stock_malikane_beverly_hills_billionaire_life_01",
-    "lux_taki_bespoke_ed008"
+    "lux_taki_bespoke_ed008",
+    "lux_makyaj_paris_vanity_glass_skin_01"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -27,7 +29,8 @@
     "como_heiress_angle1.jpg",
     "billionaire_hero_angle1.jpg",
     "jet_heiress_angle1.jpg",
-    "lux_taki_bespoke_ed008_step1.jpg"
+    "lux_taki_bespoke_ed008_step1.jpg",
+    "lux_makyaj_paris_vanity_glass_skin_01_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -36,7 +39,8 @@
     "stock_otel_como_bosphorus_palace_01",
     "stock_araba_monaco_billionaire_garage_01",
     "stock_malikane_beverly_hills_billionaire_life_01",
-    "lux_taki_bespoke_ed008"
+    "lux_taki_bespoke_ed008",
+    "lux_makyaj_paris_vanity_glass_skin_01"
   ],
   "history": [
     {
@@ -80,8 +84,14 @@
       "category": "taki",
       "title": "Haute Joaillerie Beyaz Stüdyo: 18K Pembe Altın & Zümrüt Kesim Pırlanta Bilek Kurgusu ✨",
       "published_at_utc": "2026-11-10T01:15:56.546225Z"
+    },
+    {
+      "id": "lux_makyaj_paris_vanity_glass_skin_01",
+      "category": "makyaj",
+      "title": "Hôtel Plaza Athénée Vanity: 6 Adımda 'Old Money Glass Skin' & Kadife Dudak Sırrı 💄",
+      "published_at_utc": "2026-11-10T08:51:07.570333Z"
     }
   ],
-  "last_category_index": 1,
-  "last_dispatch_ts": 1794273356.5462227
+  "last_category_index": 2,
+  "last_dispatch_ts": 1794300667.5703301
 }
