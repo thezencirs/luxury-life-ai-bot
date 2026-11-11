@@ -9,7 +9,8 @@
     "lux_taki_bespoke_ed008",
     "lux_makyaj_paris_vanity_glass_skin_01",
     "lux_kombin_milano_cashmere_espresso_01",
-    "lux_araba_monaco_porsche_gt3_driver_01"
+    "lux_araba_monaco_porsche_gt3_driver_01",
+    "lux_otel_como_villa_white_resort_02"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -21,7 +22,8 @@
     "lux_taki_bespoke_ed008",
     "lux_makyaj_paris_vanity_glass_skin_01",
     "lux_kombin_milano_cashmere_espresso_01",
-    "lux_araba_monaco_porsche_gt3_driver_01"
+    "lux_araba_monaco_porsche_gt3_driver_01",
+    "lux_otel_como_villa_white_resort_02"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -36,7 +38,8 @@
     "lux_taki_bespoke_ed008_step1.jpg",
     "lux_makyaj_paris_vanity_glass_skin_01_step1.jpg",
     "lux_kombin_milano_cashmere_espresso_01_step1.jpg",
-    "lux_araba_monaco_porsche_gt3_driver_01_step1.jpg"
+    "lux_araba_monaco_porsche_gt3_driver_01_step1.jpg",
+    "lux_otel_como_villa_white_resort_02_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -48,7 +51,8 @@
     "lux_taki_bespoke_ed008",
     "lux_makyaj_paris_vanity_glass_skin_01",
     "lux_kombin_milano_cashmere_espresso_01",
-    "lux_araba_monaco_porsche_gt3_driver_01"
+    "lux_araba_monaco_porsche_gt3_driver_01",
+    "lux_otel_como_villa_white_resort_02"
   ],
   "history": [
     {
@@ -110,8 +114,14 @@
       "category": "araba",
       "title": "Monaco Casino Meydanı: Porsche 911 GT3 Touring & 'Gentleman Driver' 6 Parça Stili 🏎️",
       "published_at_utc": "2026-11-10T22:12:12.891110Z"
+    },
+    {
+      "id": "lux_otel_como_villa_white_resort_02",
+      "category": "otel",
+      "title": "Villa d'Este & Bodrum Beyaz Resort Stüdyosu: Tatil Süiti, Bilekte Kelepçe & Resort Yürüyüşü 🌅",
+      "published_at_utc": "2026-11-11T02:08:09.257056Z"
     }
   ],
   "last_category_index": 4,
-  "last_dispatch_ts": 1794348732.891108
+  "last_dispatch_ts": 1794362889.257053
 }
