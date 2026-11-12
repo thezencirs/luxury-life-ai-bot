@@ -12,7 +12,8 @@
     "lux_araba_monaco_porsche_gt3_driver_01",
     "lux_otel_como_villa_white_resort_02",
     "lux_otel_bespoke_ed013",
-    "lux_otel_bespoke_ed014"
+    "lux_otel_bespoke_ed014",
+    "lux_otel_bespoke_ed015"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -27,7 +28,8 @@
     "lux_araba_monaco_porsche_gt3_driver_01",
     "lux_otel_como_villa_white_resort_02",
     "lux_otel_bespoke_ed013",
-    "lux_otel_bespoke_ed014"
+    "lux_otel_bespoke_ed014",
+    "lux_otel_bespoke_ed015"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -45,7 +47,8 @@
     "lux_araba_monaco_porsche_gt3_driver_01_step1.jpg",
     "lux_otel_como_villa_white_resort_02_step1.jpg",
     "lux_otel_bespoke_ed013_step1.jpg",
-    "lux_otel_bespoke_ed014_step1.jpg"
+    "lux_otel_bespoke_ed014_step1.jpg",
+    "lux_otel_bespoke_ed015_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -60,7 +63,8 @@
     "lux_araba_monaco_porsche_gt3_driver_01",
     "lux_otel_como_villa_white_resort_02",
     "lux_otel_bespoke_ed013",
-    "lux_otel_bespoke_ed014"
+    "lux_otel_bespoke_ed014",
+    "lux_otel_bespoke_ed015"
   ],
   "history": [
     {
@@ -140,8 +144,14 @@
       "category": "otel",
       "title": "Lake Como & Beyaz Stüdyo: Alacakaranlık Terası & 6 Lüks Tatil Detayı 🌅",
       "published_at_utc": "2026-11-11T17:45:53.378240Z"
+    },
+    {
+      "id": "lux_otel_bespoke_ed015",
+      "category": "otel",
+      "title": "Resort Beyaz Stüdyo: 6 Parça Yaz & Tatil Lüksü 🏨",
+      "published_at_utc": "2026-11-12T00:07:54.468283Z"
     }
   ],
   "last_category_index": 4,
-  "last_dispatch_ts": 1794419153.3782387
+  "last_dispatch_ts": 1794442074.4682803
 }
