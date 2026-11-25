@@ -56,7 +56,8 @@
     "lux_otel_bespoke_ed055",
     "lux_otel_bespoke_ed056",
     "lux_otel_bespoke_ed057",
-    "lux_otel_bespoke_ed058"
+    "lux_otel_bespoke_ed058",
+    "lux_otel_bespoke_ed059"
   ],
   "used_concept_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -115,7 +116,8 @@
     "lux_otel_bespoke_ed055",
     "lux_otel_bespoke_ed056",
     "lux_otel_bespoke_ed057",
-    "lux_otel_bespoke_ed058"
+    "lux_otel_bespoke_ed058",
+    "lux_otel_bespoke_ed059"
   ],
   "used_model_frames": [
     "lux_otel_santorini_oia_caldera_twilight_step1.jpg",
@@ -177,7 +179,8 @@
     "lux_otel_bespoke_ed055_step1.jpg",
     "lux_otel_bespoke_ed056_step1.jpg",
     "lux_otel_bespoke_ed057_step1.jpg",
-    "lux_otel_bespoke_ed058_step1.jpg"
+    "lux_otel_bespoke_ed058_step1.jpg",
+    "lux_otel_bespoke_ed059_step1.jpg"
   ],
   "published_ids": [
     "lux_otel_santorini_oia_caldera_twilight",
@@ -236,7 +239,8 @@
     "lux_otel_bespoke_ed055",
     "lux_otel_bespoke_ed056",
     "lux_otel_bespoke_ed057",
-    "lux_otel_bespoke_ed058"
+    "lux_otel_bespoke_ed058",
+    "lux_otel_bespoke_ed059"
   ],
   "history": [
     {
@@ -580,8 +584,14 @@
       "category": "otel",
       "title": "Lake Como & Beyaz Stüdyo: Alacakaranlık Terası & 6 Lüks Tatil Detayı 🌅",
       "published_at_utc": "2026-11-24T18:42:08.682415Z"
+    },
+    {
+      "id": "lux_otel_bespoke_ed059",
+      "category": "otel",
+      "title": "Resort Beyaz Stüdyo: 6 Parça Yaz & Tatil Lüksü 🏨",
+      "published_at_utc": "2026-11-25T03:00:11.536868Z"
     }
   ],
   "last_category_index": 4,
-  "last_dispatch_ts": 1795545728.6824114
+  "last_dispatch_ts": 1795575611.536863
 }
