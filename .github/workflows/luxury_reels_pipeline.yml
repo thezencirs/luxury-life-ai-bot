@@ -1,24 +1,13 @@
-name: "💎 Sesli Lüks Hayatlar (@Sesliluksbot) — 2K Reels, guzelai.com & @guzelaicom Pinterest Otomasyonu"
+name: "💎 GüzelAI.com (@Sesliluksbot) — TR • EU • US Takı & Kozmetik GraphMotion 3.0 (9:16 Dikey) Otomasyonu"
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    # Her sabah saat 09:00 TSİ (06:00 UTC) — Günde 1 Özgün 9:16 Dikey Takı & Kozmetik Reklam Paketi
+    - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
-      category:
-        description: "Lüks Yaşam Kategorisi (otomatik / taki / makyaj / kombin / otel / araba)"
-        required: false
-        default: "otomatik"
-        type: choice
-        options:
-          - otomatik
-          - taki
-          - makyaj
-          - kombin
-          - otel
-          - araba
-      force_run:
-        description: "Hemen yeni 2K Reels üret (1 = Evet, 0 = Sadece Kuyruk Varsa)"
+      force_publish:
+        description: "Yeni 9:16 Dikey TR/EU/US Takı & Kozmetik GraphMotion 3.0 Reklamı Üret ve Yayınla (1 = Evet)"
         required: false
         default: "1"
 
@@ -26,13 +15,13 @@ permissions:
   contents: write
 
 concurrency:
-  group: luxurylifeai-reels-pipeline
+  group: guzelai-treuus-jewelry-cosmetics-graphmotion3
   cancel-in-progress: false
 
 jobs:
-  produce-and-deliver-luxury-reel:
+  produce-and-deliver-graphmotion3-ad:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: "📥 Depoyu İndir (Checkout)"
@@ -46,7 +35,7 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: "🎬 FFmpeg ve 2K Sinema Font Kütüphanelerini Kur"
+      - name: "🎬 FFmpeg ve Sinema Font Kütüphanelerini Kur"
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-liberation
@@ -56,13 +45,11 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: "💎 2K GraphMotion Plus Reels Üretimi & Telegram Teslimatı"
+      - name: "💎 GraphMotion 3.0 TR/EU/US Takı & Kozmetik 9:16 Dikey Reklam Üretimi & Telegram/Web/Pinterest Yayını (Instagram Kilitli/Kapalı)"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '995164733' }}
           GH_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
-          LUXURY_CATEGORY: ${{ github.event.inputs.category || 'otomatik' }}
-          FORCE_RUN: ${{ github.event.inputs.force_run || '0' }}
-          EVENT_NAME: ${{ github.event_name }}
+          ENABLE_INSTAGRAM_PUBLISHING: "0"
         run: |
-          python src/main.py --category "$LUXURY_CATEGORY" --output output/luxury_reel_final.mp4
+          python src/daily_0900_omnichannel_publisher.py --force-publish --skip-ig-upload
