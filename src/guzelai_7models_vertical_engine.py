@@ -38,10 +38,13 @@ import shutil
 import subprocess
 import sys
 import time
+from io import BytesIO
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import quote
 
 import numpy as np
+import requests
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -58,9 +61,84 @@ sys.path.insert(0, str(BASE_DIR / "src"))
 if KOMBIN_BOT_SRC.exists():
     sys.path.insert(0, str(KOMBIN_BOT_SRC))
 
-from autonomous_creation_factory import cloud_fetch_ai_image
 from luxury_audio_engine import generate_luxury_soundtrack
 from realistic_cinema_optics import enhance_frame_with_real_optics
+
+
+def _call_hf_flux_space(space_base: str, payload_data: list, timeout_sec: int = 75) -> Optional[Image.Image]:
+    post_r = requests.post(
+        f"{space_base}/gradio_api/call/infer",
+        json={"data": payload_data},
+        timeout=25,
+    )
+    if post_r.status_code != 200:
+        return None
+    event_id = post_r.json().get("event_id")
+    if not event_id:
+        return None
+    sse_r = requests.get(f"{space_base}/gradio_api/call/infer/{event_id}", timeout=timeout_sec)
+    if sse_r.status_code != 200:
+        return None
+    img_url = None
+    for line in sse_r.text.splitlines():
+        if line.startswith("data:"):
+            raw_json = line[len("data:"):].strip()
+            try:
+                parsed = json.loads(raw_json)
+                if isinstance(parsed, list) and parsed and isinstance(parsed[0], dict):
+                    img_url = parsed[0].get("url")
+                    if not img_url and parsed[0].get("path"):
+                        img_url = f"{space_base}/gradio_api/file={parsed[0]['path']}"
+                    if img_url:
+                        break
+            except Exception:
+                continue
+    if not img_url:
+        return None
+    dl = requests.get(img_url, timeout=35)
+    if dl.status_code == 200 and len(dl.content) > 5000:
+        return Image.open(BytesIO(dl.content)).convert("RGB")
+    return None
+
+
+def cloud_fetch_ai_image(prompt: str, width: int, height: int, seed: int) -> Optional[Image.Image]:
+    """
+    Argon'suz GitHub Actions (ubuntu-latest) bulut ortamında doğrudan FLUX.1 ile
+    9:16 dikey fotogerçekçi görsel sentezler.
+    """
+    w = max(512, min(1024, (width // 64) * 64))
+    h = max(512, min(1344, (height // 64) * 64))
+    safe_seed = int(abs(seed) % 2147483000)
+
+    providers = [
+        ("https://black-forest-labs-flux-1-schnell.hf.space", [prompt, safe_seed, False, w, h, 4]),
+        ("https://multimodalart-flux-1-merged.hf.space", [prompt, safe_seed, False, w, h, 3.5, 6]),
+    ]
+    for space_url, p_data in providers:
+        for attempt in range(1, 3):
+            try:
+                img = _call_hf_flux_space(space_url, p_data)
+                if img is not None:
+                    if (img.width, img.height) != (width, height):
+                        img = img.resize((width, height), Image.Resampling.LANCZOS)
+                    return img
+            except Exception:
+                time.sleep(2 * attempt)
+
+    try:
+        poll_url = (
+            f"https://image.pollinations.ai/prompt/{quote(prompt)}"
+            f"?width={w}&height={h}&seed={safe_seed}&model=flux&nologo=true"
+        )
+        r = requests.get(poll_url, timeout=45)
+        if r.status_code == 200 and len(r.content) > 10000:
+            img = Image.open(BytesIO(r.content)).convert("RGB")
+            if (img.width, img.height) != (width, height):
+                img = img.resize((width, height), Image.Resampling.LANCZOS)
+            return img
+    except Exception:
+        pass
+    return None
 
 VERTICAL_W = 1080
 VERTICAL_H = 1920
