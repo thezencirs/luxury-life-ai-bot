@@ -1,0 +1,237 @@
+{
+  "engine": "guzelai_zero_flow_vertical_9_16_7models",
+  "used_scenario_ids": [
+    "vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite",
+    "vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek",
+    "vert916_otel_aura_kaya_como_villa_deste_royal_terrace",
+    "vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera",
+    "vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus",
+    "vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite",
+    "vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek",
+    "vert916_otel_valentina_cruz_como_villa_deste_royal_terrace",
+    "vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera",
+    "vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus",
+    "gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11",
+    "gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12",
+    "gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13"
+  ],
+  "used_photo_hashes": [],
+  "last_model_index": 5,
+  "last_category_index": 4,
+  "model_usage_counts": {
+    "valentina-cruz": 2,
+    "guzelai-leyla-001": 2,
+    "aura-kaya": 2,
+    "selene-noir": 2,
+    "chloe-bennett": 2,
+    "scarlett-vance": 2,
+    "kenzo-takahashi": 1
+  },
+  "history": [
+    {
+      "scenario_id": "vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite",
+      "created_at": "2026-11-17T13:52:00",
+      "category": "makyaj",
+      "model_id": "valentina-cruz",
+      "model_name": "Valentina Cruz",
+      "location_name": "Ritz Paris Place Vendôme Kraliyet Makyaj Süiti",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite\\vert916_makyaj_valentina_cruz_paris_vendome_dior_lamer_suite_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek",
+      "created_at": "2026-11-18T09:00:02",
+      "category": "taki",
+      "model_id": "guzelai-leyla-001",
+      "model_name": "Leyla",
+      "location_name": "Hôtel de Paris Monte-Carlo & Place du Casino",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek\\vert916_taki_guzelai_leyla_001_monaco_casino_square_cartier_patek_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_otel_aura_kaya_como_villa_deste_royal_terrace",
+      "created_at": "2026-11-19T09:00:03",
+      "category": "otel",
+      "model_id": "aura-kaya",
+      "model_name": "Aura Kaya",
+      "location_name": "Villa d'Este Cernobbio • Como Gölü Kraliyet Terası",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace\\vert916_otel_aura_kaya_como_villa_deste_royal_terrace_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera",
+      "created_at": "2026-11-20T09:07:59",
+      "category": "araba",
+      "model_id": "selene-noir",
+      "model_name": "Selene Noir",
+      "location_name": "Monte-Carlo Larvotto & Grande Corniche Sahil Yolu",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera\\vert916_araba_selene_noir_monaco_ferrari_roma_spider_riviera_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus",
+      "created_at": "2026-11-21T09:00:02",
+      "category": "yasam",
+      "model_id": "chloe-bennett",
+      "model_name": "Chloe Bennett",
+      "location_name": "Bebek Tarihi Boğaziçi Yalısı Özel İskelesi & Riva Yat",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_chloe_bennett_bebek_yalisi_riva_aquarama_bosphorus_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite",
+      "created_at": "2026-11-22T09:00:03",
+      "category": "makyaj",
+      "model_id": "scarlett-vance",
+      "model_name": "Scarlett Vance",
+      "location_name": "Ritz Paris Place Vendôme Kraliyet Makyaj Süiti",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite\\vert916_makyaj_scarlett_vance_paris_vendome_dior_lamer_suite_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek",
+      "created_at": "2026-11-23T09:00:02",
+      "category": "taki",
+      "model_id": "kenzo-takahashi",
+      "model_name": "Kenzo Takahashi",
+      "location_name": "Hôtel de Paris Monte-Carlo & Place du Casino",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek\\vert916_taki_kenzo_takahashi_monaco_casino_square_cartier_patek_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_otel_valentina_cruz_como_villa_deste_royal_terrace",
+      "created_at": "2026-11-24T09:00:03",
+      "category": "otel",
+      "model_id": "valentina-cruz",
+      "model_name": "Valentina Cruz",
+      "location_name": "Villa d'Este Cernobbio • Como Gölü Kraliyet Terası",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace\\vert916_otel_valentina_cruz_como_villa_deste_royal_terrace_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera",
+      "created_at": "2026-11-25T09:00:03",
+      "category": "araba",
+      "model_id": "guzelai-leyla-001",
+      "model_name": "Leyla",
+      "location_name": "Monte-Carlo Larvotto & Grande Corniche Sahil Yolu",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera\\vert916_araba_guzelai_leyla_001_monaco_ferrari_roma_spider_riviera_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus",
+      "created_at": "2026-11-26T09:00:02",
+      "category": "yasam",
+      "model_id": "aura-kaya",
+      "model_name": "Aura Kaya",
+      "location_name": "Bebek Tarihi Boğaziçi Yalısı Özel İskelesi & Riva Yat",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus\\vert916_yasam_aura_kaya_bebek_yalisi_riva_aquarama_bosphorus_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical)"
+    },
+    {
+      "scenario_id": "gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11",
+      "created_at": "2026-11-26T09:08:49",
+      "category": "taki",
+      "region_badge": "🇹🇷 TR • 🇪🇺 EU • 🇺🇸 US VIRAL AD",
+      "pinterest_trend_tag": "🔥 PINTEREST VIRAL • +142% KAYDETME",
+      "model_id": "selene-noir",
+      "model_name": "Selene Noir",
+      "location_name": "Miami Design District • Cannes Croisette • Bodrum Yalıkavak Marina VIP",
+      "elite_poster_9_16": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11_elite_ad_poster_9_16.jpg",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11\\gm3_treuus_selene_noir_tr_eu_us_tiffany_dior_zen_fi_20261126_11_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical GraphMotion 3.0)"
+    },
+    {
+      "scenario_id": "gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12",
+      "created_at": "2026-11-27T09:00:02",
+      "category": "makyaj",
+      "region_badge": "🇹🇷 TR • 🇪🇺 EU • 🇺🇸 US BEAUTY & JEWELRY",
+      "pinterest_trend_tag": "🔥 PINTEREST #1 TREND • SCENT & GOLD STACK",
+      "model_id": "chloe-bennett",
+      "model_name": "Chloe Bennett",
+      "location_name": "New York Fifth Avenue • Paris Place Vendôme • İstanbul Nişantaşı",
+      "elite_poster_9_16": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12_elite_ad_poster_9_16.jpg",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12\\gm3_treuus_chloe_bennett_tr_eu_us_bulgari_kurkdjian_c_20261127_12_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical GraphMotion 3.0)"
+    },
+    {
+      "scenario_id": "gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13",
+      "created_at": "2026-11-28T09:00:02",
+      "category": "taki",
+      "region_badge": "🇹🇷 TR • 🇪🇺 EU • 🇺🇸 US HIGH SAVES",
+      "pinterest_trend_tag": "🔥 PINTEREST TOP SAVED • QUIET LUXURY GLOW",
+      "model_id": "scarlett-vance",
+      "model_name": "Scarlett Vance",
+      "location_name": "Beverly Hills Rodeo Drive • Milano Via Monte Napoleone • İstanbul Zorlu VIP",
+      "elite_poster_9_16": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13_elite_ad_poster_9_16.jpg",
+      "vertical_photos": [
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13_vertical_9_16_angle1.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13_vertical_9_16_angle2.jpg",
+        "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13_vertical_9_16_angle3.jpg"
+      ],
+      "vertical_video": "C:\\Users\\zenci\\.gemini\\antigravity\\scratch\\luxury-life-ai-bot\\output\\vertical_creations\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13\\gm3_treuus_scarlett_vance_tr_eu_us_vancleef_charlottet_20261128_13_1080x1920.mp4",
+      "resolution": "1080x1920 (9:16 Strict Vertical GraphMotion 3.0)"
+    }
+  ],
+  "last_campaign_index": 2
+}
