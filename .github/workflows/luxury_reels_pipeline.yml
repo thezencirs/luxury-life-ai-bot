@@ -2,7 +2,7 @@ name: "💎 GüzelAI.com (@Sesliluksbot) — TR • EU • US Takı & Kozmetik G
 
 on:
   schedule:
-    # Her sabah saat 09:00 TSİ (06:00 UTC) — Günde 1 Özgün 9:16 Dikey Takı & Kozmetik Reklam Paketi
+    # Her sabah saat 09:00 TSİ (06:00 UTC) — Argon'suz GitHub Actions Bulut Otomasyonu
     - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
@@ -45,7 +45,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: "💎 GraphMotion 3.0 TR/EU/US Takı & Kozmetik 9:16 Dikey Reklam Üretimi & Telegram/Web/Pinterest Yayını (Instagram Kilitli/Kapalı)"
+      - name: "💎 GraphMotion 3.0 TR/EU/US Takı & Kozmetik 9:16 Dikey Reklam Üretimi & Telegram/Web/Pinterest Yayını (Argon'suz Bulut & Instagram Kapalı)"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '995164733' }}
@@ -53,3 +53,20 @@ jobs:
           ENABLE_INSTAGRAM_PUBLISHING: "0"
         run: |
           python src/daily_0900_omnichannel_publisher.py --force-publish --skip-ig-upload
+
+      - name: "💾 Sıfır-Tekrar Defteri ve Günlük Kanal Aktivite Raporunu GitHub Deposuna Kaydet"
+        if: ${{ always() }}
+        run: |
+          git config user.name "GuzelAI GraphMotion 3.0 Bot"
+          git config user.email "bot@guzelai.com"
+          for f in \
+            output/vertical_7models_zero_repeat_ledger.json \
+            output/daily_omnichannel_published_ledger.json \
+            output/reports/agent_self_activity_ledger.json \
+            output/reports/daily_channel_activity_report_latest.md \
+            output/reports/daily_channel_activity_report_latest.json; do
+            if [ -e "$f" ]; then
+              git add -f "$f" || true
+            fi
+          done
+          git diff --staged --quiet || (git commit -m "chore(graphmotion3): persist 7-model zero-repeat ledger & daily channel report [skip ci]" && (git pull --rebase origin main || true) && git push)
